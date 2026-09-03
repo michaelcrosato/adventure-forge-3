@@ -366,6 +366,14 @@ function actionEvent(world, state, actionId) {
       ? "Mooring is secure; the boat will hold."
       : "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired.";
   }
+  if (
+    actionId === "enter_house" &&
+    state.inventory.includes("lantern") &&
+    state.flags.includes("mooring_return_used") &&
+    !state.flags.includes("mooring_secured")
+  ) {
+    return "Door opens. Mooring unsecured; the recovery return was used without securing it, so the boat may not hold. Continue with the basic beacon route.";
+  }
   if (actionId === "enter_house" && state.inventory.includes("lantern")) {
     if (state.flags.includes("mooring_secured")) {
       return state.flags.includes("boat_signaled")
