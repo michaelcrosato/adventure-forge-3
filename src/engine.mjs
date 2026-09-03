@@ -724,6 +724,11 @@ export function observation(world, state, event = null) {
           ? "Radio channel already confirmed;"
           : "Radio channel already confirmed; take the oil when ready;",
       );
+    } else if (state.inventory.includes("oil") && !state.flags.includes("radio_checked")) {
+      roomText = roomText.replace(
+        "check radio if needed before taking the oil;",
+        "Oil is ready; fill the lantern before climbing;",
+      );
     } else if (state.flags.includes("lantern_filled")) {
       const radioStatus = state.flags.includes("radio_checked")
         ? "Radio channel already confirmed;"
