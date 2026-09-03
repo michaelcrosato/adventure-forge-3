@@ -509,7 +509,9 @@ function actionEvent(world, state, actionId) {
     const rescueCue = state.flags.includes("mooring_secured")
       ? "Moored boat can still be rescued."
       : "The basic beacon route can still rescue the boat.";
-    return `Return for missing oil; if the lantern is missing too, collect both before returning to the tower. ${rescueCue}`;
+    return state.inventory.includes("lantern")
+      ? `Return for missing oil; collect it before returning to the tower. ${rescueCue}`
+      : `Return for missing oil; if the lantern is missing too, collect both before returning to the tower. ${rescueCue}`;
   }
   if (actionId === "close_storm_shutters") {
     if (state.turn === world.maxTurns - 1) {
