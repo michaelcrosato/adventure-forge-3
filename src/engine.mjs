@@ -359,7 +359,8 @@ function actionEvent(world, state, actionId) {
   if (
     actionId === "enter_house" &&
     state.inventory.includes("lantern") &&
-    state.flags.includes("mooring_return_used")
+    state.flags.includes("mooring_return_used") &&
+    state.flags.includes("mooring_secured")
   ) {
     return state.flags.includes("boat_signaled")
       ? "Mooring is secure; the boat will hold."
