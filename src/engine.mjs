@@ -453,6 +453,9 @@ function actionEvent(world, state, actionId) {
     return "Workshop beside the keeper's room; current is not restored; take and install the switchboard fuse, then use the service ladder.";
   }
   if (actionId === "close_storm_shutters") {
+    if (state.turn === world.maxTurns - 1) {
+      return "Storm shutters barred too late; no turn remains to light the beacon.";
+    }
     return state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")
       ? "Storm shutters barred; beam tuning is complete. The sheltered finish is ready."
       : "Bar storm shutters. Finish remaining trim or alignment before another turn; the beam holds through rescue.";
