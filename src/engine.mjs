@@ -380,7 +380,29 @@ function actionEvent(world, state, actionId) {
         ? "Door opens. Mooring is secure; the boat will hold. Signal already confirmed its hold; radio checks confirm the channel if desired."
         : "Door opens. Mooring is secure; the boat will hold; no return is needed. Next step (optional): signal the boat from the keeper's room for a confirmed channel. For reference, general status rule: if mooring unsecured, boat may not hold; once secure, boat holds.";
     }
-    return "Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. Return to the jetty to secure it before lighting.";
+    const enteredState = { ...state, room: "keeper_room" };
+    const canReturnNow = legalActions(world, enteredState).includes("return_for_mooring");
+    if (canReturnNow) {
+      return "Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. Return to the jetty to secure it before lighting.";
+    }
+
+    const hasLog = state.flags.includes("read_log");
+    const hasOil = state.inventory.includes("oil");
+    const canTakeOil = legalActions(world, enteredState).includes("take_oil");
+    const setupFlags = hasLog ? state.flags : [...state.flags, "read_log"];
+    const setupInventory = !hasOil && canTakeOil ? [...state.inventory, "oil"] : state.inventory;
+    const canReturnAfterSetup = legalActions(world, {
+      ...enteredState,
+      flags: setupFlags,
+      inventory: setupInventory,
+    }).includes("return_for_mooring");
+    if (canReturnAfterSetup) {
+      const setup = [];
+      if (!hasLog) setup.push("read the wall log");
+      if (!hasOil) setup.push("take the oil");
+      return `Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. ${setup.join(" and ")}; then return to the jetty to secure it before lighting.`;
+    }
+    return "Door opens. Mooring unsecured; the recovery return is no longer available, so continue with the basic beacon route.";
   }
   if (actionId === "secure_mooring") {
     return "Mooring secure: the boat will hold without signaling; stronger rescue on its own. Basic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly. Stronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. Keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
