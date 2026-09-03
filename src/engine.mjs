@@ -603,6 +603,12 @@ export function observation(world, state, event = null) {
             ? "Tide chart recorded; wall log pending;"
             : "Wall log and tide chart are pending;";
     roomText = roomText.replace("Log and tide chart are recorded;", logTideStatus);
+    if (state.flags.includes("radio_checked")) {
+      roomText = roomText.replace(
+        "tower relay can confirm the radio channel after the lantern is filled if needed.",
+        "Radio channel already confirmed;",
+      );
+    }
     if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
       roomText = roomText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
