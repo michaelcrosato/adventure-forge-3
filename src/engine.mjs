@@ -619,6 +619,11 @@ export function observation(world, state, event = null) {
     state.flags.includes("tide_chart_read")
   ) {
     roomText = roomText.replace("Read remaining clues.", "Log and tide clues are recorded.");
+  } else if (state.room === "jetty" && state.flags.includes("mooring_secured")) {
+    roomText = roomText.replace(
+      "secure the line before entering if you want the boat to hold while you work.",
+      "the mooring is secure; enter when ready—the boat will hold while you work.",
+    );
   }
   const beaconFinishers =
     state.turn === world.maxTurns - 1
