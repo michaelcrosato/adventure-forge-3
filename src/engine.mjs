@@ -636,6 +636,11 @@ export function observation(world, state, event = null) {
             ? "Beam tuning is complete; light now or wait for the horn if time allows."
             : "Beam tuning is complete; light the beacon when ready.",
       );
+    } else if (state.flags.includes("tide_waited")) {
+      roomText = roomText.replace(
+        "Finish any trim or alignment before spending a turn to wait.",
+        "Horn timing is recorded; finish the remaining beam tuning before lighting.",
+      );
     }
   } else if (state.room === "keeper_room") {
     const clueStatus =
