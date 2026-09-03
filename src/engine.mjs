@@ -513,6 +513,13 @@ function actionEvent(world, state, actionId) {
   ) {
     return "Unpowered stair: switchboard still needs repair below. The confirmed channel is already prepared; fill the lantern, return to install the fuse, then climb again.";
   }
+  if (
+    actionId === "climb_tower" &&
+    state.flags.includes("radio_checked") &&
+    state.flags.includes("tower_return_used")
+  ) {
+    return "Unpowered stair: switchboard still needs repair below. The confirmed channel is already prepared; fill the lantern, return to install the fuse, then climb again.";
+  }
   if (actionId === "climb_tower" && state.flags.includes("chronometer_wound")) {
     return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Chronometer already wound for the precision rescue.";
   }
