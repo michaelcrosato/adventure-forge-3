@@ -539,6 +539,13 @@ function actionEvent(world, state, actionId) {
       return `Unpowered stair: fill the lantern if you have oil; after filling, return to ${missingPreparation.join(", ")}, wind the chronometer, then repair the switchboard before climbing again.`;
     }
   }
+  if (
+    actionId === "return_keeper_after_fill" &&
+    state.flags.includes("lantern_filled") &&
+    state.flags.includes("radio_checked")
+  ) {
+    return "Lantern already filled; return to the workshop, install the fuse, then climb again. Confirmed channel is already prepared.";
+  }
   if (actionId === "return_keeper_after_fill" && state.flags.includes("lantern_filled")) {
     return state.flags.includes("chronometer_wound")
       ? "Lantern already filled; return to the workshop, install the fuse, then climb again. Chronometer timing is already prepared."
