@@ -707,6 +707,17 @@ export function observation(world, state, event = null) {
             ? "Tide chart recorded; read the wall log."
           : null;
     if (clueStatus !== null) roomText = roomText.replace("Read remaining clues.", clueStatus);
+    if (state.flags.includes("lantern_filled")) {
+      const radioStatus = state.flags.includes("radio_checked")
+        ? "Radio channel already confirmed;"
+        : availableActions.includes("check_storm_radio")
+          ? "Lantern filled; check the radio now if time allows;"
+          : "Lantern filled; radio check can wait until the boat and clues are ready;";
+      roomText = roomText.replace(
+        "check radio if needed before taking the oil;",
+        radioStatus,
+      );
+    }
     if (state.flags.includes("read_log") || state.flags.includes("tide_chart_read")) {
       const hasReadLog = state.flags.includes("read_log");
       const hasTideChart = state.flags.includes("tide_chart_read");
