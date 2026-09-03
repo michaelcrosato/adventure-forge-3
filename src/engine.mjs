@@ -967,6 +967,7 @@ export function modelTurnInput(world, view) {
     view.turn[0] === view.turn[1] - 1;
   let modelText = view.text;
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
+  const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
   if (typeof modelText === "string") {
     if (visibleFacts.some((fact) => /boat signaled to hold/i.test(fact))) {
       modelText = modelText.replace(
@@ -981,6 +982,15 @@ export function modelTurnInput(world, view) {
           "Radio channel already confirmed;",
         )
         .replace(/check radio if needed;\s*/i, "");
+    }
+    if (
+      visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
+      visibleActionIds.has("climb_repaired_stairs")
+    ) {
+      modelText = modelText.replace(
+        "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
+        "Use the repaired stair now; fill the lantern in the tower if needed.",
+      );
     }
   }
   const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
