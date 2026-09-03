@@ -603,6 +603,18 @@ export function observation(world, state, event = null) {
             ? "Tide chart recorded; wall log pending;"
             : "Wall log and tide chart are pending;";
     roomText = roomText.replace("Log and tide chart are recorded;", logTideStatus);
+    const tuningStatus =
+      state.flags.includes("lens_aligned") && !state.flags.includes("wick_trimmed")
+        ? "Lens aligned; trim the wick before lighting if desired, or light the aligned beacon."
+        : state.flags.includes("wick_trimmed") && !state.flags.includes("lens_aligned")
+          ? "Wick trimmed; align the beacon lens before lighting if desired, or light the clean flame."
+          : null;
+    if (tuningStatus !== null) {
+      roomText = roomText.replace(
+        "Aligned by hand if needed; charred wick can be trimmed before lighting the beacon if needed.",
+        tuningStatus,
+      );
+    }
     if (state.flags.includes("radio_checked")) {
       roomText = roomText.replace(
         "tower relay can confirm the radio channel after the lantern is filled if needed.",
