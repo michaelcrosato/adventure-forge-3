@@ -401,10 +401,10 @@ function actionEvent(world, state, actionId) {
   ) {
     return "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it before taking oil (costs one turn).";
   }
-  if (
-    actionId === "check_tower_radio" &&
-    !(state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited"))
-  ) {
+  if (actionId === "check_tower_radio") {
+    if (state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited")) {
+      return "Channel is clear; confirmed channel earns the strongest rescue. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn. Bar storm shutters before this check if needed: close for a sheltered finish.";
+    }
     return "Channel is clear; this enables the strongest rescue outcome. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn.";
   }
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
