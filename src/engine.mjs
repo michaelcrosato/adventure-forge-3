@@ -907,6 +907,10 @@ export function observation(world, state, event = null) {
     id,
     id === "climb_tower" && state.flags.includes("radio_checked")
       ? "Climb the unpowered stair; confirmed channel is ready; fill the lantern, then repair the switchboard"
+      : id === "climb_tower" && state.flags.includes("chronometer_wound")
+      ? "Climb the unpowered stair; chronometer is already wound; fill the lantern, then repair the switchboard"
+      : id === "climb_tower" && state.flags.includes("tower_return_used")
+      ? "Climb the unpowered stair; early chronometer timing is closed; fill the lantern, then repair the switchboard"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
