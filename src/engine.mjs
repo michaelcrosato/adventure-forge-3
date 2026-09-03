@@ -609,6 +609,12 @@ export function observation(world, state, event = null) {
         "Radio channel already confirmed;",
       );
     }
+    if (state.flags.includes("shutters_closed")) {
+      roomText = roomText.replace(
+        "Bar shutters: sheltered finish",
+        "Shutters barred: sheltered finish ready",
+      );
+    }
     if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
       roomText = roomText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
