@@ -580,9 +580,11 @@ export function modelTurnInput(world, view) {
   const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
   );
-  const lastEvent = view.event?.startsWith("Hand lantern filled;")
-    ? "Lantern filled; either tuning choice is optional; both together earn the strongest rescue."
-    : view.event;
+  const lastEvent = view.event?.startsWith("Mooring secure:")
+    ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue. Basic rescue: skip signaling and light directly. Stronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
+    : view.event?.startsWith("Hand lantern filled;")
+      ? "Lantern filled; either tuning choice is optional; both together earn the strongest rescue."
+      : view.event;
   return {
     goal: world.objective,
     t: view.turn,
