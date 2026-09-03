@@ -613,6 +613,12 @@ export function observation(world, state, event = null) {
             : "Beam tuning is complete; light the beacon when ready.",
       );
     }
+  } else if (
+    state.room === "keeper_room" &&
+    state.flags.includes("read_log") &&
+    state.flags.includes("tide_chart_read")
+  ) {
+    roomText = roomText.replace("Read remaining clues.", "Log and tide clues are recorded.");
   }
   const beaconFinishers =
     state.turn === world.maxTurns - 1
