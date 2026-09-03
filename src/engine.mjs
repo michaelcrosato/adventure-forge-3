@@ -405,7 +405,7 @@ function actionEvent(world, state, actionId) {
     actionId === "check_tower_radio" &&
     !(state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited"))
   ) {
-    return "Channel is clear. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn.";
+    return "Channel is clear; this enables the strongest rescue outcome. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn.";
   }
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
     return "Workshop beside the keeper's room; current is not restored; take and install the switchboard fuse, then use the service ladder.";
