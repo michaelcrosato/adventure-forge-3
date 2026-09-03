@@ -696,6 +696,11 @@ export function observation(world, state, event = null) {
           ? "Horn timing is recorded; light the available rescue beacon now; remaining tuning is optional."
           : "Horn timing is recorded; finish the remaining beam tuning before lighting.",
       );
+    } else if (!availableActions.includes("wait_for_horn")) {
+      roomText = roomText.replace(
+        "Finish any trim or alignment before spending a turn to wait.",
+        "Finish any trim or alignment before lighting.",
+      );
     }
   } else if (state.room === "keeper_room") {
     const clueStatus =
