@@ -482,6 +482,26 @@ function actionEvent(world, state, actionId) {
   if (actionId === "climb_tower" && state.flags.includes("tower_return_used")) {
     return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Early chronometer timing is no longer available after the repair return.";
   }
+  if (actionId === "climb_tower" && state.flags.includes("radio_checked")) {
+    return "Unpowered stair: switchboard still needs repair below. The confirmed channel is already prepared; fill the lantern, return to install the fuse, then climb again.";
+  }
+  if (
+    actionId === "climb_tower" &&
+    !state.flags.includes("chronometer_wound") &&
+    !state.flags.includes("tower_return_used")
+  ) {
+    const missingPreparation = [];
+    if (!state.flags.includes("read_log")) missingPreparation.push("read the wall log");
+    if (!state.flags.includes("tide_chart_read")) missingPreparation.push("study the tide chart");
+    if (!state.flags.includes("boat_signaled")) {
+      missingPreparation.push(
+        state.flags.includes("mooring_secured") ? "signal the boat" : "secure and signal the boat",
+      );
+    }
+    if (missingPreparation.length > 0) {
+      return `Unpowered stair: fill the lantern if you have oil; after filling, return to ${missingPreparation.join(", ")}, wind the chronometer, then repair the switchboard before climbing again.`;
+    }
+  }
   if (actionId === "return_keeper_after_fill" && !state.flags.includes("lantern_filled")) {
     return state.flags.includes("chronometer_wound")
       ? "Descend before filling: switchboard still needs repair below. Return to the workshop, install the fuse, then climb again. Chronometer timing is already prepared."
