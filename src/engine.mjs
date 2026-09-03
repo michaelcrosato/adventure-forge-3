@@ -425,6 +425,11 @@ function actionEvent(world, state, actionId) {
   if (actionId === "climb_tower" && state.flags.includes("tower_return_used")) {
     return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Early chronometer timing is no longer available after the repair return.";
   }
+  if (actionId === "return_keeper_after_fill" && !state.flags.includes("lantern_filled")) {
+    return state.flags.includes("chronometer_wound")
+      ? "Descend before filling: switchboard still needs repair below. Return to the workshop, install the fuse, then climb again. Chronometer timing is already prepared."
+      : "Descend before filling: switchboard still needs repair below. Return to the workshop, install the fuse, then climb again. This repair return closes early chronometer timing.";
+  }
   if (actionId === "take_oil") {
     return "You take the sealed oil flask; fill the hand lantern before lighting, whether you climb now or later.";
   }
