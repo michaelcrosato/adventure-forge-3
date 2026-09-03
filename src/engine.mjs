@@ -682,6 +682,10 @@ export function observation(world, state, event = null) {
     beaconFinishers.length === 0
   ) {
     roomText = roomText.replace(
+      "Beam tuning is complete; light now.",
+      "Beam tuning is complete; no rescue remains; leave if possible.",
+    );
+    roomText = roomText.replace(
       "Last turn: light now.",
       "Last turn: no rescue remains; leave if possible.",
     );
