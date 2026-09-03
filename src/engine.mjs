@@ -832,7 +832,9 @@ export function observation(world, state, event = null) {
         : availableActions;
   const actions = visibleActions.map((id) => [
     id,
-    id === "wait_for_horn" && state.turn < world.maxTurns - 1
+    id === "check_storm_radio" && state.flags.includes("lantern_filled")
+      ? "Check the storm radio after filling (costs one turn)"
+      : id === "wait_for_horn" && state.turn < world.maxTurns - 1
       ? "Wait for the horn; timing bonus; costs one turn; light next turn (never on last turn)"
       : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
         ? "Return—secure the mooring before lighting; recovery remains open afterward"
