@@ -506,6 +506,13 @@ function actionEvent(world, state, actionId) {
       ? "Storm shutters barred; beam tuning is complete. The sheltered finish is ready."
       : "Bar storm shutters. Finish remaining trim or alignment before another turn; the beam holds through rescue.";
   }
+  if (
+    actionId === "climb_tower" &&
+    state.flags.includes("radio_checked") &&
+    state.flags.includes("chronometer_wound")
+  ) {
+    return "Unpowered stair: switchboard still needs repair below. The confirmed channel is already prepared; fill the lantern, return to install the fuse, then climb again.";
+  }
   if (actionId === "climb_tower" && state.flags.includes("chronometer_wound")) {
     return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Chronometer already wound for the precision rescue.";
   }
