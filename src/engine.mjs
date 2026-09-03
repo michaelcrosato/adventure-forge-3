@@ -652,6 +652,16 @@ export function observation(world, state, event = null) {
           world.actions[id].effects.some((effect) => effect.end === "beacon"),
         )
       : [];
+  if (
+    state.room === "tower" &&
+    state.turn === world.maxTurns - 1 &&
+    beaconFinishers.length === 0
+  ) {
+    roomText = roomText.replace(
+      "Last turn: light now.",
+      "Last turn: no rescue remains; leave if possible.",
+    );
+  }
   const lastTurnExit =
     state.turn === world.maxTurns - 1 && beaconFinishers.length === 0
       ? availableActions.filter((id) => id === "leave_island")
