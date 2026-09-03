@@ -760,7 +760,12 @@ export function observation(world, state, event = null) {
         radioStatus,
       );
     }
-    if (state.flags.includes("read_log") || state.flags.includes("tide_chart_read")) {
+    if (state.flags.includes("mooring_secured")) {
+      roomText = roomText.replace(
+        "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
+        "Mooring is secure; the boat will hold.",
+      );
+    } else if (state.flags.includes("read_log") || state.flags.includes("tide_chart_read")) {
       const hasReadLog = state.flags.includes("read_log");
       const hasTideChart = state.flags.includes("tide_chart_read");
       const mooringStatus = state.flags.includes("mooring_secured")
