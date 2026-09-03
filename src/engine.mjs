@@ -419,6 +419,12 @@ function actionEvent(world, state, actionId) {
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
     return "Workshop beside the keeper's room; current is not restored; take and install the switchboard fuse, then use the service ladder.";
   }
+  if (actionId === "climb_tower" && state.flags.includes("chronometer_wound")) {
+    return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Chronometer already wound for the precision rescue.";
+  }
+  if (actionId === "climb_tower" && state.flags.includes("tower_return_used")) {
+    return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Early chronometer timing is no longer available after the repair return.";
+  }
   if (actionId === "take_oil") {
     return "You take the sealed oil flask; fill the hand lantern before lighting, whether you climb now or later.";
   }
