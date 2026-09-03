@@ -689,6 +689,14 @@ export function observation(world, state, event = null) {
       "Last turn: light now.",
       "Last turn: no rescue remains; leave if possible.",
     );
+    roomText = roomText.replace(
+      "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared. Bar shutters: sheltered finish",
+      "No beacon finish remains.",
+    );
+    roomText = roomText.replace(
+      "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared. Shutters barred: sheltered finish ready",
+      "No beacon finish remains.",
+    );
   }
   const lastTurnExit =
     state.turn === world.maxTurns - 1 && beaconFinishers.length === 0
