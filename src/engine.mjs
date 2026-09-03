@@ -592,6 +592,19 @@ function endingView(world, state) {
 export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
   const availableActions = legalActions(world, state);
+  const roomText =
+    state.room === "tower" &&
+    state.flags.includes("wick_trimmed") &&
+    state.flags.includes("lens_aligned")
+      ? room.text.replace(
+          "Finish any trim or alignment before spending a turn to wait.",
+          state.turn === world.maxTurns - 1
+            ? "Beam tuning is complete; light now."
+            : availableActions.includes("wait_for_horn")
+              ? "Beam tuning is complete; light now or wait for the horn if time allows."
+              : "Beam tuning is complete; light the beacon when ready.",
+        )
+      : room.text;
   const beaconFinishers =
     state.turn === world.maxTurns - 1
       ? availableActions.filter((id) =>
@@ -618,7 +631,7 @@ export function observation(world, state, event = null) {
   ]);
   const payload = {
     at: [state.room, room.title],
-    text: room.text,
+    text: roomText,
     turn: [state.turn, world.maxTurns],
     score: state.score,
     ...(state.inventory.length ? { inv: state.inventory } : {}),
