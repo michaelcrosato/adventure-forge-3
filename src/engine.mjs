@@ -423,6 +423,12 @@ function actionEvent(world, state, actionId) {
   }
   if (actionId === "signal_boat") {
     if (state.inventory.includes("oil") || state.flags.includes("radio_checked")) {
+      const pendingClues = [];
+      if (!state.flags.includes("read_log")) pendingClues.push("read the wall log");
+      if (!state.flags.includes("tide_chart_read")) pendingClues.push("study the tide chart");
+      if (pendingClues.length > 0) {
+        return `Ring the bell; supply boat holds position. ${pendingClues.join(" and ")} before climbing.`;
+      }
       return "Ring the bell; supply boat holds position.";
     }
     const hasLog = state.flags.includes("read_log");
