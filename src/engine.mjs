@@ -767,6 +767,8 @@ export function observation(world, state, event = null) {
     id,
     id === "wait_for_horn" && state.turn < world.maxTurns - 1
       ? "Wait for the horn; timing bonus; costs one turn; light next turn (never on last turn)"
+      : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
+        ? "Return—secure the mooring before lighting; recovery remains open afterward"
       : event !== null && id === "light_all_ready_beacon" && state.flags.includes("tide_waited")
         ? "Light the tuned beacon with the horn bonus"
       : world.actions[id].label,
