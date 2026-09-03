@@ -916,6 +916,10 @@ export function observation(world, state, event = null) {
             !state.flags.includes("tide_chart_read") ||
             !state.flags.includes("boat_signaled"))
       ? "Climb the unpowered stair; fill the lantern, then finish keeper preparation before repairing the switchboard"
+      : id === "return_keeper_for_lantern" && state.inventory.includes("oil")
+      ? "Descend to fetch the missing lantern; oil is already carried"
+      : id === "return_keeper_from_tower" && state.inventory.includes("lantern")
+      ? "Descend to fetch the missing oil; lantern is already carried"
       : id === "check_tower_radio" &&
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned")
