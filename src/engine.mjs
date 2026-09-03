@@ -613,12 +613,16 @@ export function observation(world, state, event = null) {
             : "Beam tuning is complete; light the beacon when ready.",
       );
     }
-  } else if (
-    state.room === "keeper_room" &&
-    state.flags.includes("read_log") &&
-    state.flags.includes("tide_chart_read")
-  ) {
-    roomText = roomText.replace("Read remaining clues.", "Log and tide clues are recorded.");
+  } else if (state.room === "keeper_room") {
+    const clueStatus =
+      state.flags.includes("read_log") && state.flags.includes("tide_chart_read")
+        ? "Log and tide clues are recorded."
+        : state.flags.includes("read_log")
+          ? "Wall log recorded; read the tide chart."
+          : state.flags.includes("tide_chart_read")
+            ? "Tide chart recorded; read the wall log."
+            : null;
+    if (clueStatus !== null) roomText = roomText.replace("Read remaining clues.", clueStatus);
   } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {
     const missingSupplies =
       !state.inventory.includes("lantern") && !state.flags.includes("lantern_filled") ||
