@@ -707,7 +707,12 @@ export function observation(world, state, event = null) {
             ? "Tide chart recorded; read the wall log."
           : null;
     if (clueStatus !== null) roomText = roomText.replace("Read remaining clues.", clueStatus);
-    if (state.flags.includes("lantern_filled")) {
+    if (state.flags.includes("mooring_return_used") && !state.flags.includes("mooring_secured")) {
+      roomText = roomText.replace(
+        "Signal the boat first if needed; check radio if needed before taking the oil;",
+        "Mooring is unsecured; use the basic beacon route;",
+      );
+    } else if (state.flags.includes("lantern_filled")) {
       const radioStatus = state.flags.includes("radio_checked")
         ? "Radio channel already confirmed;"
         : availableActions.includes("check_storm_radio")
