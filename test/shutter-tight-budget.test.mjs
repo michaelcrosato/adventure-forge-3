@@ -1,0 +1,9 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { loadWorld } from "../src/engine.mjs";
+
+test("storm-shutter feedback keeps a tighter event budget", async () => {
+  const world = await loadWorld();
+
+  assert.ok(world.actions.close_storm_shutters.text.length < 115);
+});

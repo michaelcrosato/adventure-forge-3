@@ -1,0 +1,1661 @@
+{
+  "id": "signal-house",
+  "title": "The Signal House",
+  "objective": "Relight the beacon within 24 turns; optional preparation earns a stronger rescue.",
+  "start": "jetty",
+  "maxTurns": 24,
+  "rooms": {
+    "jetty": {
+      "title": "Storm Jetty",
+      "text": "Rain needles the water. A signal tower overlooks the house. Take the lantern if it remains; secure the line before entering if you want the boat to hold while you work.",
+      "actions": [
+        "take_lantern",
+        "secure_mooring",
+        "enter_house",
+        "leave_island"
+      ]
+    },
+    "keeper_room": {
+      "title": "Keeper's Room",
+      "text": "Use what remains. Hand lantern will need oil before climbing unless already filled. Read remaining clues. Signal the boat first if needed; check radio if needed before taking the oil; after the lantern is filled, only with time. Use repaired stair once current is restored and supplies are ready. Read the log, take oil, then return to secure the mooring before studying tide. Wind after tide.",
+      "actions": [
+        "read_log",
+        "signal_boat",
+        "study_tide_chart",
+        "wind_chronometer",
+        "check_storm_radio",
+        "take_oil",
+        "go_jetty",
+        "return_for_mooring",
+        "go_workshop",
+        "climb_repaired_stairs",
+        "climb_tower",
+        "leave_island"
+      ]
+    },
+    "workshop": {
+      "title": "Workshop",
+      "text": "If the fuse remains uninstalled, install it before leaving; the service ladder opens. If you already carry both lantern and oil, install the fuse instead of backtracking; after installation, climb the service ladder; return only for missing supplies or unfinished keeper-room prep. Missing supplies? Emergency release returns to the keeper's room.",
+      "actions": [
+        "take_fuse",
+        "install_fuse",
+        "return_keeper_after_repair",
+        "climb_service_ladder",
+        "return_keeper_from_workshop"
+      ]
+    },
+    "tower": {
+      "title": "Lantern Room",
+      "text": "Aligned by hand if needed; charred wick can be trimmed before lighting the beacon if needed. Log and tide chart are recorded; tower relay can confirm the radio channel after the lantern is filled if needed. Finish any trim or alignment before spending a turn to wait. Last turn: light now. Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared. Bar shutters: sheltered finish",
+      "actions": [
+        "fill_lantern",
+        "trim_wick",
+        "align_lens",
+        "close_storm_shutters",
+        "check_tower_radio",
+        "light_beacon",
+        "light_moored_beacon",
+        "light_moored_tide_beacon",
+        "light_moored_tide_tuned_beacon",
+        "light_moored_aligned_trimmed_beacon",
+        "light_signaled_beacon",
+        "light_recovered_beacon",
+        "light_recovered_tuned_beacon",
+        "light_trimmed_beacon",
+        "light_aligned_beacon",
+        "light_aligned_trimmed_beacon",
+        "light_sheltered_radio_beacon",
+        "light_radio_rescue_beacon",
+        "light_sheltered_chronometer_beacon",
+        "light_chronometer_beacon",
+        "light_rescue_beacon",
+        "light_horn_timed_beacon",
+        "light_timed_beacon",
+        "light_all_ready_beacon",
+        "wait_for_horn",
+        "return_keeper_from_tower",
+        "return_keeper_after_fill",
+        "return_keeper_for_lantern"
+      ]
+    }
+  },
+  "items": {
+    "lantern": "brass lantern",
+    "oil": "sealed oil flask",
+    "fuse": "ceramic fuse"
+  },
+  "actions": {
+    "take_lantern": {
+      "label": "Take the brass lantern",
+      "when": [
+        {
+          "lacks": "lantern"
+        }
+      ],
+      "text": "You take the lantern from a hook; secure the mooring line before entering when able; signal the boat from the keeper's room.",
+      "effects": [
+        {
+          "take": "lantern"
+        },
+        {
+          "score": 1
+        }
+      ]
+    },
+    "secure_mooring": {
+      "label": "Secure the supply boat's mooring",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "notFlag": "mooring_secured"
+        }
+      ],
+      "text": "Mooring secure—opening the way to a stronger rescue. Choose: signal it from the keeper's room for a confirmed channel, or keep the mooring secured and light for the boat directly.",
+      "effects": [
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "The supply boat's mooring is secure."
+        }
+      ]
+    },
+    "enter_house": {
+      "label": "Enter the keeper's house",
+      "when": [
+        {
+          "any": [
+            {
+              "has": "lantern"
+            },
+            {
+              "notFlag": "jetty_return_used"
+            }
+          ]
+        }
+      ],
+      "text": "Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. If the lantern is still outside, return to the jetty for it.",
+      "effects": [
+        {
+          "move": "keeper_room"
+        }
+      ]
+    },
+    "leave_island": {
+      "label": "Abandon the station",
+      "text": "You wave the waiting boat on; abandoning the dark station.",
+      "effects": [
+        {
+          "end": "left"
+        }
+      ]
+    },
+    "read_log": {
+      "label": "Read the wall log",
+      "when": [
+        {
+          "notFlag": "read_log"
+        }
+      ],
+      "text": "Replace the fuse, fill the hand lantern, then touch its flame to the beacon. The keeper's sequence can strengthen the rescue.",
+      "effects": [
+        {
+          "flag": "read_log"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Log: replace the fuse; fill the lantern; light the beacon."
+        }
+      ]
+    },
+    "study_tide_chart": {
+      "label": "Study the tide chart",
+      "when": [
+        {
+          "notFlag": "tide_chart_read"
+        }
+      ],
+      "text": "Safe window for a stronger rescue: light the beacon before the next high tide.",
+      "effects": [
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Tide chart: light the beacon before the next high tide."
+        }
+      ]
+    },
+    "signal_boat": {
+      "label": "Signal the secured boat to hold position",
+      "when": [
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "notFlag": "boat_signaled"
+        }
+      ],
+      "text": "Ring the bell; supply boat holds position. If needed, read the log and tide chart before checking the storm radio.",
+      "effects": [
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Boat signaled to hold."
+        }
+      ]
+    },
+    "wind_chronometer": {
+      "label": "Wind the tower chronometer (costs one turn; optional precision prep)",
+      "when": [
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "notFlag": "tower_return_used"
+        },
+        {
+          "notFlag": "radio_checked"
+        },
+        {
+          "notFlag": "chronometer_wound"
+        }
+      ],
+      "text": "You wind the brass chronometer against the tide chart before climbing. Its chime can time the cleanest beam.",
+      "effects": [
+        {
+          "flag": "chronometer_wound"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Tower chronometer wound for precision."
+        }
+      ]
+    },
+    "check_storm_radio": {
+      "label": "Check the storm radio before taking oil (costs one turn)",
+      "when": [
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "lacks": "oil"
+        },
+        {
+          "notFlag": "radio_checked"
+        }
+      ],
+      "text": "The channel is clear; the supply boat holds position. This confirmed channel can guide the strongest rescue.",
+      "effects": [
+        {
+          "flag": "radio_checked"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Radio channel clear."
+        }
+      ]
+    },
+    "take_oil": {
+      "label": "Take the oil flask",
+      "when": [
+        {
+          "lacks": "oil"
+        },
+        {
+          "notFlag": "lantern_filled"
+        }
+      ],
+      "text": "You take the sealed oil flask; it belongs in the hand lantern before climbing.",
+      "effects": [
+        {
+          "take": "oil"
+        }
+      ]
+    },
+    "go_jetty": {
+      "label": "Return to the jetty for the missing lantern",
+      "text": "You return to the jetty to fetch the missing lantern before re-entering.",
+      "when": [
+        {
+          "lacks": "lantern"
+        },
+        {
+          "notFlag": "jetty_return_used"
+        }
+      ],
+      "effects": [
+        {
+          "move": "jetty"
+        },
+        {
+          "flag": "jetty_return_used"
+        }
+      ]
+    },
+    "return_for_mooring": {
+      "label": "Return—secure the mooring before tide study; recovery remains open afterward",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "any": [
+            {
+              "notFlag": "workshop_return_used"
+            },
+            {
+              "all": [
+                {
+                  "flag": "workshop_return_used"
+                },
+                {
+                  "has": "oil"
+                },
+                {
+                  "notFlag": "tide_chart_read"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "notFlag": "mooring_secured"
+        },
+        {
+          "notFlag": "mooring_return_used"
+        }
+      ],
+      "text": "Return to the jetty after reading the log; secure the supply boat's mooring, then re-enter the keeper's house.",
+      "effects": [
+        {
+          "move": "jetty"
+        },
+        {
+          "flag": "mooring_return_used"
+        },
+        {
+          "remember": "Mooring recovery used; boat safety restored."
+        }
+      ]
+    },
+    "go_workshop": {
+      "label": "Enter the workshop",
+      "text": "If current is not restored, install the switchboard fuse to restore tower power; otherwise return to the keeper's room for missing supplies.",
+      "when": [
+        {
+          "any": [
+            {
+              "notFlag": "fuse_installed"
+            },
+            {
+              "lacks": "lantern"
+            },
+            {
+              "all": [
+                {
+                  "lacks": "oil"
+                },
+                {
+                  "notFlag": "lantern_filled"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "notFlag": "supply_return_used"
+        }
+      ],
+      "effects": [
+        {
+          "move": "workshop"
+        }
+      ]
+    },
+    "climb_tower": {
+      "label": "Climb the unpowered stair (repair first is faster; fill after repair to keep chronometer timing; wind the tower chronometer before early fill)",
+      "text": "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Chronometer-timed rescue: wind it before this early fill; repair return closes that option.",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "has": "oil"
+        },
+        {
+          "notFlag": "fuse_installed"
+        }
+      ],
+      "effects": [
+        {
+          "move": "tower"
+        }
+      ]
+    },
+    "climb_repaired_stairs": {
+      "label": "Climb to the lantern room",
+      "when": [
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "has": "lantern"
+        },
+        {
+          "any": [
+            {
+              "has": "oil"
+            },
+            {
+              "flag": "lantern_filled"
+            }
+          ]
+        }
+      ],
+      "text": "Repaired stair to lantern room; fill the lantern if it still holds oil, then continue the beacon work above.",
+      "effects": [
+        {
+          "move": "tower"
+        }
+      ]
+    },
+    "take_fuse": {
+      "label": "Take the ceramic fuse",
+      "when": [
+        {
+          "lacks": "fuse"
+        },
+        {
+          "notFlag": "fuse_installed"
+        }
+      ],
+      "text": "You take the dry fuse from the drawer; install it in the switchboard before leaving.",
+      "effects": [
+        {
+          "take": "fuse"
+        }
+      ]
+    },
+    "install_fuse": {
+      "label": "Install the fuse in the switchboard",
+      "when": [
+        {
+          "has": "fuse"
+        },
+        {
+          "notFlag": "fuse_installed"
+        }
+      ],
+      "text": "The fuse seats with a clean click. Current reaches the tower; climb the service ladder.",
+      "effects": [
+        {
+          "remove": "fuse"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "score": 2
+        },
+        {
+          "remember": "Tower current restored."
+        }
+      ]
+    },
+    "climb_service_ladder": {
+      "label": "Climb the service ladder to the tower",
+      "when": [
+        {
+          "flag": "fuse_installed"
+        }
+      ],
+      "text": "Current restored; climb the service ladder to the tower; return below if supplies are missing: carry the lantern and oil, or fill the lantern first.",
+      "effects": [
+        {
+          "move": "tower"
+        }
+      ]
+    },
+    "return_keeper_from_workshop": {
+      "label": "Return to the keeper's room",
+      "text": "Tower work remains ahead—workshop stays behind. If the fuse is already installed—service ladder is done—take oil if needed; use repaired stair—otherwise return to the workshop to take and install it.",
+      "when": [
+        {
+          "lacks": "fuse"
+        },
+        {
+          "notFlag": "workshop_return_used"
+        }
+      ],
+      "effects": [
+        {
+          "move": "keeper_room"
+        },
+        {
+          "unflag": "jetty_return_used"
+        },
+        {
+          "flag": "workshop_return_used"
+        }
+      ]
+    },
+    "return_keeper_after_repair": {
+      "label": "Use the emergency release to fetch missing supplies",
+      "when": [
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "any": [
+            {
+              "lacks": "lantern"
+            },
+            {
+              "lacks": "oil"
+            }
+          ]
+        },
+        {
+          "notFlag": "lantern_filled"
+        },
+        {
+          "notFlag": "repair_return_used"
+        }
+      ],
+      "text": "Emergency release sends you to the keeper's room. Take missing oil if needed; jetty return too if lantern's gone; use repaired stair. Moored boat can still be rescued.",
+      "effects": [
+        {
+          "move": "keeper_room"
+        },
+        {
+          "unflag": "jetty_return_used"
+        },
+        {
+          "flag": "repair_return_used"
+        },
+        {
+          "flag": "supply_return_used"
+        },
+        {
+          "remember": "Emergency supply route: recover missing supplies, then use the repaired stair."
+        }
+      ]
+    },
+    "fill_lantern": {
+      "label": "Fill the lantern with oil",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "has": "oil"
+        },
+        {
+          "notFlag": "lantern_filled"
+        }
+      ],
+      "text": "Small flame holds steady. If repair remains (switchboard fuse), return below; else trim the wick or align the beacon lens before lighting the beacon.",
+      "effects": [
+        {
+          "remove": "oil"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "unflag": "tower_return_used"
+        },
+        {
+          "score": 2
+        },
+        {
+          "remember": "Hand lantern filled; beacon remains dark."
+        }
+      ]
+    },
+    "trim_wick": {
+      "label": "Trim wick; tune before last turn",
+      "when": [
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        }
+      ],
+      "text": "Clean, steady flame; align the beacon lens before lighting the beacon if it is not already aligned.",
+      "effects": [
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Wick trimmed for a clean beam."
+        }
+      ]
+    },
+    "align_lens": {
+      "label": "Align lens; tune by last turn",
+      "when": [
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "notFlag": "lens_aligned"
+        }
+      ],
+      "text": "Beam will hold true. If it is not already trimmed, trim the wick before lighting the beacon.",
+      "effects": [
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "The beacon lens is aligned with the channel."
+        }
+      ]
+    },
+    "light_beacon": {
+      "label": "Light the storm beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "notFlag": "mooring_secured"
+        },
+        {
+          "notFlag": "lens_aligned"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        },
+        {
+          "notFlag": "boat_signaled"
+        }
+      ],
+      "text": "The great lens catches. A white beam cuts across the storm.",
+      "effects": [
+        {
+          "score": 5
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_moored_beacon": {
+      "label": "Light the beacon for the secured boat",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "notFlag": "tide_chart_read"
+        },
+        {
+          "notFlag": "boat_signaled"
+        },
+        {
+          "notFlag": "lens_aligned"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        }
+      ],
+      "text": "The beacon catches; the secured mooring holds. A white beam cuts through the storm as the boat turns safely toward the station.",
+      "effects": [
+        {
+          "score": 6
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_signaled_beacon": {
+      "label": "Light the beacon for the waiting boat",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "notFlag": "supply_return_used"
+        },
+        {
+          "notFlag": "lens_aligned"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        }
+      ],
+      "text": "The beacon catches and the waiting boat answers with three bright horn blasts across the storm.",
+      "effects": [
+        {
+          "score": 5
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_recovered_beacon": {
+      "label": "Light the beacon after the emergency recovery",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "supply_return_used"
+        },
+        {
+          "any": [
+            {
+              "notFlag": "read_log"
+            },
+            {
+              "notFlag": "tide_chart_read"
+            }
+          ]
+        },
+        {
+          "notFlag": "lens_aligned"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        }
+      ],
+      "text": "Emergency recovery pays off: the beacon catches. The waiting boat answers; the secured mooring carries the rescue through the storm.",
+      "effects": [
+        {
+          "score": 6
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_recovered_tuned_beacon": {
+      "label": "Light the tuned beacon after recovery",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "supply_return_used"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "any": [
+            {
+              "notFlag": "read_log"
+            },
+            {
+              "all": [
+                {
+                  "flag": "read_log"
+                },
+                {
+                  "flag": "tide_waited"
+                },
+                {
+                  "notFlag": "tide_chart_read"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "notFlag": "tide_chart_read"
+        },
+        {
+          "notFlag": "radio_checked"
+        },
+        {
+          "notFlag": "chronometer_wound"
+        }
+      ],
+      "text": "The recovered lantern burns cleanly through the aligned lens. The waiting boat answers; secured mooring carries the rescue through the storm.",
+      "effects": [
+        {
+          "score": 8
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_trimmed_beacon": {
+      "label": "Light the storm beacon with the clean flame",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "notFlag": "lens_aligned"
+        }
+      ],
+      "text": "The clean flame catches the great lens. A bright beam cuts across the storm.",
+      "effects": [
+        {
+          "score": 5
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_aligned_beacon": {
+      "label": "Light the aligned storm beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        }
+      ],
+      "text": "The aligned lens catches the flame. A true white beam cuts across the storm and holds on the channel.",
+      "effects": [
+        {
+          "score": 5
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_aligned_trimmed_beacon": {
+      "label": "Light the aligned beacon with the clean flame",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "notFlag": "mooring_secured"
+        },
+        {
+          "notFlag": "boat_signaled"
+        }
+      ],
+      "text": "The aligned lens catches the clean flame. A true white beam cuts across the storm and holds on the channel.",
+      "effects": [
+        {
+          "score": 6
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_moored_tide_beacon": {
+      "label": "Light the beacon on the marked tide",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "notFlag": "boat_signaled"
+        },
+        {
+          "notFlag": "lens_aligned"
+        },
+        {
+          "notFlag": "wick_trimmed"
+        }
+      ],
+      "text": "The marked tide guides the secured boat. The beacon cuts through the storm; the mooring holds. The boat turns safely toward the station.",
+      "effects": [
+        {
+          "score": 7
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_moored_aligned_trimmed_beacon": {
+      "label": "Light the tuned beacon for the secured boat",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "notFlag": "tide_chart_read"
+        },
+        {
+          "notFlag": "boat_signaled"
+        }
+      ],
+      "text": "Secured mooring steadies the rescue; the aligned lens catches the clean flame. The true beam holds across the storm; the boat turns safely toward the station.",
+      "effects": [
+        {
+          "score": 7
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_moored_tide_tuned_beacon": {
+      "label": "Light the marked-tide tuned beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "mooring_secured"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "notFlag": "boat_signaled"
+        }
+      ],
+      "text": "The marked tide meets the tuned lens; the secured mooring holds. A clean beam cuts across the storm; the boat turns safely toward the station.",
+      "effects": [
+        {
+          "score": 8
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_all_ready_beacon": {
+      "label": "Light the tuned beacon without timing bonus (valid fallback rescue; wait for horn bonus when available; tuned prepared channel still earns a stronger rescue)",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "any": [
+            {
+              "notFlag": "tide_waited"
+            },
+            {
+              "notFlag": "tide_chart_read"
+            }
+          ]
+        },
+        {
+          "notFlag": "radio_checked"
+        },
+        {
+          "notFlag": "supply_return_used"
+        },
+        {
+          "notFlag": "chronometer_wound"
+        }
+      ],
+      "text": "The aligned lens catches the clean flame. Three bright horn blasts answer; the true beam guides the waiting boat into the channel.",
+      "effects": [
+        {
+          "score": 7
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_timed_beacon": {
+      "label": "Light the perfectly timed beacon for the waiting boat",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "notFlag": "tide_waited"
+        },
+        {
+          "notFlag": "read_log"
+        }
+      ],
+      "text": "Perfect tide: the aligned lens catches the clean flame. Three bright horn blasts answer. The waiting boat clears the channel before it turns.",
+      "effects": [
+        {
+          "score": 8
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_horn_timed_beacon": {
+      "label": "Light the horn-timed beacon for the waiting boat",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "tide_waited"
+        },
+        {
+          "notFlag": "read_log"
+        }
+      ],
+      "text": "The next horn sounds as the aligned lens catches the clean flame. The waiting boat answers before the channel turns.",
+      "effects": [
+        {
+          "score": 8
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_rescue_beacon": {
+      "label": "Light the rescue beacon on the marked tide",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "notFlag": "radio_checked"
+        },
+        {
+          "notFlag": "chronometer_wound"
+        }
+      ],
+      "text": "The keeper's sequence meets the tide mark: the clean flame fills the aligned lens. The waiting boat answers and turns safely into the channel.",
+      "effects": [
+        {
+          "score": 9
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_radio_rescue_beacon": {
+      "label": "Light the confirmed-channel rescue beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "radio_checked"
+        },
+        {
+          "notFlag": "shutters_closed"
+        }
+      ],
+      "text": "Radio confirms a clear channel with the keeper's sequence and tide mark. The clean flame fills the aligned lens. The waiting boat turns safely into the channel.",
+      "effects": [
+        {
+          "score": 10
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_sheltered_radio_beacon": {
+      "label": "Light the sheltered confirmed-channel beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "radio_checked"
+        },
+        {
+          "flag": "chronometer_wound"
+        },
+        {
+          "flag": "tide_waited"
+        },
+        {
+          "flag": "shutters_closed"
+        }
+      ],
+      "text": "Clear channel; barred shutters hush gusts. Three bright horn blasts answer; the clean flame fills the aligned lens. The waiting boat turns safely into the channel.",
+      "effects": [
+        {
+          "score": 12
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "light_chronometer_beacon": {
+      "label": "Light the chronometer-timed rescue beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "chronometer_wound"
+        },
+        {
+          "flag": "tide_waited"
+        },
+        {
+          "notFlag": "shutters_closed"
+        },
+        {
+          "notFlag": "radio_checked"
+        }
+      ],
+      "text": "Chronometer chimes on the marked tide. Three bright horn blasts answer; the clean flame fills the aligned lens. The waiting boat turns safely into the channel.",
+      "effects": [
+        {
+          "score": 10
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "close_storm_shutters": {
+      "label": "Optional: close storm shutters (bar them; costs one turn; never on the last turn; finish trim/alignment first)",
+      "when": [
+        {
+          "flag": "chronometer_wound"
+        },
+        {
+          "flag": "tide_waited"
+        },
+        {
+          "any": [
+            {
+              "notFlag": "radio_checked"
+            },
+            {
+              "flag": "supply_return_used"
+            }
+          ]
+        },
+        {
+          "notFlag": "shutters_closed"
+        }
+      ],
+      "text": "Bar storm shutters. Finish remaining trim or alignment before another turn; the beam holds through rescue.",
+      "effects": [
+        {
+          "flag": "shutters_closed"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "Storm shutters barred for a steady beam."
+        }
+      ]
+    },
+    "light_sheltered_chronometer_beacon": {
+      "label": "Light the sheltered chronometer rescue beacon",
+      "when": [
+        {
+          "has": "lantern"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "flag": "lens_aligned"
+        },
+        {
+          "flag": "wick_trimmed"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "chronometer_wound"
+        },
+        {
+          "flag": "tide_waited"
+        },
+        {
+          "flag": "shutters_closed"
+        },
+        {
+          "notFlag": "radio_checked"
+        }
+      ],
+      "text": "Barred shutters hush gusts as the chronometer chimes on the marked tide. The clean flame fills the aligned lens. The waiting boat turns safely into the channel.",
+      "effects": [
+        {
+          "score": 11
+        },
+        {
+          "end": "beacon"
+        }
+      ]
+    },
+    "wait_for_horn": {
+      "label": "Wait after fill/after beam tuning: timing bonus; never on the last turn; one turn remaining: light now",
+      "when": [
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "notFlag": "tide_waited"
+        }
+      ],
+      "text": "Spend one turn; horn earns a small rescue bonus; can unlock the horn-timed finish when the tide mark is recorded without the wall log. With the log, marked-tide rescue fallback. Finish any trim or alignment before lighting if needed; remaining turn matters. Never wait on the last turn. Light next turn.",
+      "effects": [
+        {
+          "flag": "tide_waited"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "You waited through one boat horn."
+        }
+      ]
+    },
+    "check_tower_radio": {
+      "label": "Check the tower relay for a clear channel (tune first; costs one turn; before last turn only; never on last turn)",
+      "beforeLastTurn": true,
+      "when": [
+        {
+          "flag": "boat_signaled"
+        },
+        {
+          "flag": "read_log"
+        },
+        {
+          "flag": "tide_chart_read"
+        },
+        {
+          "flag": "lantern_filled"
+        },
+        {
+          "flag": "fuse_installed"
+        },
+        {
+          "notFlag": "radio_checked"
+        }
+      ],
+      "text": "Channel is clear. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn. Bar storm shutters before this check if needed: close for a sheltered finish.",
+      "effects": [
+        {
+          "flag": "radio_checked"
+        },
+        {
+          "score": 1
+        },
+        {
+          "remember": "The coast station confirms the channel is clear."
+        }
+      ]
+    },
+    "return_keeper_from_tower": {
+      "label": "Descend to fetch the missing oil",
+      "text": "Return for missing oil; if the lantern is missing too, collect both before returning to the tower. Moored boat can still be rescued.",
+      "when": [
+        {
+          "notFlag": "lantern_filled"
+        },
+        {
+          "lacks": "oil"
+        }
+      ],
+      "effects": [
+        {
+          "move": "keeper_room"
+        },
+        {
+          "unflag": "jetty_return_used"
+        },
+        {
+          "flag": "supply_return_used"
+        },
+        {
+          "remember": "Emergency supply route: recover missing supplies, then use the repaired stair."
+        }
+      ]
+    },
+    "return_keeper_after_fill": {
+      "label": "Descend: the switchboard still needs repair",
+      "text": "Pause the lantern work while the switchboard is repaired below. Return to the workshop, install the fuse, climb again.",
+      "when": [
+        {
+          "notFlag": "fuse_installed"
+        },
+        {
+          "notFlag": "tower_return_used"
+        }
+      ],
+      "effects": [
+        {
+          "move": "keeper_room"
+        },
+        {
+          "flag": "tower_return_used"
+        }
+      ]
+    },
+    "return_keeper_for_lantern": {
+      "label": "Descend to fetch the missing lantern",
+      "text": "Return to the jetty; collect the missing lantern. Take the oil too if needed before climbing again. A moored boat can still be rescued.",
+      "when": [
+        {
+          "notFlag": "lantern_filled"
+        },
+        {
+          "lacks": "lantern"
+        }
+      ],
+      "effects": [
+        {
+          "move": "keeper_room"
+        },
+        {
+          "unflag": "jetty_return_used"
+        },
+        {
+          "flag": "supply_return_used"
+        },
+        {
+          "remember": "Emergency supply route: recover missing supplies, then use the repaired stair."
+        }
+      ]
+    }
+  },
+  "endings": {
+    "beacon": {
+      "title": "Beacon Relit",
+      "text": "The beacon burns through the rain. The island has a keeper again."
+    },
+    "left": {
+      "title": "Station Abandoned",
+      "text": "The unlit tower vanishes behind rain as the boat turns for the mainland."
+    },
+    "timeout": {
+      "title": "Too Late",
+      "text": "The final storm window closes before you light the beacon. The station remains dark; leave one turn for the final light."
+    }
+  },
+  "winningPlan": [
+    "take_lantern",
+    "enter_house",
+    "take_oil",
+    "go_workshop",
+    "take_fuse",
+    "install_fuse",
+    "climb_service_ladder",
+    "fill_lantern",
+    "light_beacon"
+  ]
+}

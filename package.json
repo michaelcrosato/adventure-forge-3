@@ -1,0 +1,17 @@
+{
+  "name": "direct-game-loop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-reporter=spec test/*.test.mjs",
+    "playtest": "node src/playtest.mjs",
+    "playtest:smoke": "node src/playtest.mjs --player scripted --runs 1 --concurrency 1",
+    "aggregate": "node src/aggregate.mjs",
+    "loop": "node src/loop.mjs",
+    "measure": "node src/measure.mjs"
+  }
+}

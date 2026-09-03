@@ -1,0 +1,9 @@
+artifacts/runs/*.json
+artifacts/summary.json
+NEXT_TASK.md
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+console.log(Object.keys(m).length))

@@ -1,0 +1,9 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { loadWorld } from "../src/engine.mjs";
+
+test("the tower names the missing oil in its recovery action", async () => {
+  const world = await loadWorld();
+
+  assert.match(world.actions.return_keeper_from_tower.label, /missing oil/i);
+});
