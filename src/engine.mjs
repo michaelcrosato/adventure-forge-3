@@ -439,6 +439,12 @@ function actionEvent(world, state, actionId) {
   if (actionId === "fill_lantern" && state.flags.includes("fuse_installed")) {
     return "Hand lantern filled; small flame holds steady; beacon dark. Next: light the beacon. Each tuning step is an independent optional upgrade; optional choices: trim the wick or align the beacon lens; either works as an optional upgrade; tune both for rescue's strongest result.";
   }
+  if (actionId === "wait_for_horn" && state.flags.includes("radio_checked")) {
+    return "Spend one turn; horn bonus recorded. Confirmed channel is ready; use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
+  }
+  if (actionId === "wait_for_horn" && state.flags.includes("chronometer_wound")) {
+    return "Spend one turn; horn bonus recorded. Chronometer timing is ready; use the chronometer-timed finish after tuning; light next turn; never wait on the last turn.";
+  }
   if (
     actionId === "wait_for_horn" &&
     state.flags.includes("wick_trimmed") &&
