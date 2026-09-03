@@ -422,7 +422,11 @@ function actionEvent(world, state, actionId) {
     return "The wall log sets the required sequence: replace the fuse, fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
   }
   if (actionId === "signal_boat") {
-    if (state.inventory.includes("oil") || state.flags.includes("radio_checked")) {
+    if (
+      state.inventory.includes("oil") ||
+      state.flags.includes("lantern_filled") ||
+      state.flags.includes("radio_checked")
+    ) {
       const pendingClues = [];
       if (!state.flags.includes("read_log")) pendingClues.push("read the wall log");
       if (!state.flags.includes("tide_chart_read")) pendingClues.push("study the tide chart");
@@ -447,7 +451,9 @@ function actionEvent(world, state, actionId) {
     !state.inventory.includes("oil") &&
     !state.flags.includes("radio_checked")
   ) {
-    return "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it before taking oil (costs one turn).";
+    return state.flags.includes("lantern_filled")
+      ? "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it if time allows (costs one turn)."
+      : "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it before taking oil (costs one turn).";
   }
   if (actionId === "check_tower_radio") {
     if (state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited")) {
