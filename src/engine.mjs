@@ -595,6 +595,11 @@ function endingView(world, state) {
 export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
   const availableActions = legalActions(world, state);
+  const hasLastTurnBeaconFinisher =
+    state.turn === world.maxTurns - 1 &&
+    availableActions.some((id) =>
+      world.actions[id].effects.some((effect) => effect.end === "beacon"),
+    );
   let roomText = room.text;
   if (state.room === "tower") {
     const logTideStatus =
@@ -642,7 +647,9 @@ export function observation(world, state, event = null) {
     } else if (state.flags.includes("tide_waited")) {
       roomText = roomText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
-        "Horn timing is recorded; finish the remaining beam tuning before lighting.",
+        hasLastTurnBeaconFinisher
+          ? "Horn timing is recorded; light the available rescue beacon now; remaining tuning is optional."
+          : "Horn timing is recorded; finish the remaining beam tuning before lighting.",
       );
     }
   } else if (state.room === "keeper_room") {
