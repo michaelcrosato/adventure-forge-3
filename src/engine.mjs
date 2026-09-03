@@ -386,6 +386,17 @@ function actionEvent(world, state, actionId) {
     return "Mooring secure: the boat will hold without signaling; stronger rescue on its own. Basic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly. Stronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. Keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
   }
   if (actionId === "read_log") {
+    const fuseInstalled = state.flags.includes("fuse_installed");
+    const lanternFilled = state.flags.includes("lantern_filled");
+    if (fuseInstalled && lanternFilled) {
+      return "The wall log confirms the required sequence: the fuse is replaced and the lantern filled; light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+    }
+    if (fuseInstalled) {
+      return "The wall log confirms the required sequence: the fuse is already replaced; fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+    }
+    if (lanternFilled) {
+      return "The wall log confirms the required sequence: the lantern is already filled; replace the fuse, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+    }
     return "The wall log sets the required sequence: replace the fuse, fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
   }
   if (actionId === "signal_boat") {
