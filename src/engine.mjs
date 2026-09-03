@@ -673,15 +673,25 @@ export function observation(world, state, event = null) {
             ? "Tide chart recorded; read the wall log."
           : null;
     if (clueStatus !== null) roomText = roomText.replace("Read remaining clues.", clueStatus);
-    if (state.flags.includes("read_log") && state.flags.includes("tide_chart_read")) {
+    if (state.flags.includes("read_log") || state.flags.includes("tide_chart_read")) {
+      const hasReadLog = state.flags.includes("read_log");
+      const hasTideChart = state.flags.includes("tide_chart_read");
       const mooringStatus = state.flags.includes("mooring_secured")
         ? "Mooring is secure; the boat will hold."
         : state.flags.includes("mooring_return_used")
           ? "Mooring recovery was used without securing; continue with the basic beacon route."
           : !state.inventory.includes("lantern") && availableActions.includes("go_jetty")
-            ? "Mooring is unsecured; recover the lantern, then secure the boat before lighting."
+            ? hasReadLog
+              ? "Mooring is unsecured; recover the lantern, then secure the boat before lighting."
+              : "Mooring is unsecured; recover the lantern and read the wall log, then secure the boat before lighting."
             : availableActions.includes("return_for_mooring")
-              ? "Mooring is unsecured; return to secure it before lighting."
+              ? hasTideChart
+                ? "Mooring is unsecured; return to secure it before lighting."
+                : "Mooring is unsecured; take oil if needed, then return to secure it before studying the tide."
+              : hasTideChart && !hasReadLog
+                ? "Mooring is unsecured; read the wall log before securing the boat or lighting."
+                : availableActions.includes("take_oil")
+                  ? "Mooring is unsecured; take oil, then return to secure it before studying the tide."
               : "Mooring recovery is no longer available; continue with the basic beacon route.";
       roomText = roomText.replace(
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
