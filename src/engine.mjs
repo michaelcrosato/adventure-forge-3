@@ -470,6 +470,12 @@ function actionEvent(world, state, actionId) {
     if (!state.inventory.includes("oil") && !state.flags.includes("lantern_filled")) {
       missingSupplies.push("oil");
     }
+    if (state.flags.includes("fuse_installed")) {
+      const supplyCue = missingSupplies.length
+        ? `Take ${missingSupplies.join(" and ")} if needed, then`
+        : "Finish any keeper-room prep, then";
+      return `Current is already restored; ${supplyCue} use the repaired stair to reach the tower.`;
+    }
     const supplyCue = missingSupplies.length
       ? `Take ${missingSupplies.join(" and ")} if needed, then return`
       : "Return";
