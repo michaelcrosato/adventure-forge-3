@@ -452,6 +452,17 @@ function actionEvent(world, state, actionId) {
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
     return "Workshop beside the keeper's room; current is not restored; take and install the switchboard fuse, then use the service ladder.";
   }
+  if (actionId === "return_keeper_from_workshop") {
+    const missingSupplies = [];
+    if (!state.inventory.includes("lantern")) missingSupplies.push("the lantern");
+    if (!state.inventory.includes("oil") && !state.flags.includes("lantern_filled")) {
+      missingSupplies.push("oil");
+    }
+    const supplyCue = missingSupplies.length
+      ? `Take ${missingSupplies.join(" and ")} if needed, then return`
+      : "Return";
+    return `Tower work remains ahead—workshop stays behind. ${supplyCue} to the workshop to take and install the fuse before using the repaired stair.`;
+  }
   if (actionId === "close_storm_shutters") {
     if (state.turn === world.maxTurns - 1) {
       return "Storm shutters barred too late; no turn remains to light the beacon.";
