@@ -687,6 +687,10 @@ export function observation(world, state, event = null) {
     beaconFinishers.length === 0
   ) {
     roomText = roomText.replace(
+      "Horn timing is recorded; finish the remaining beam tuning before lighting.",
+      "Horn timing is recorded; no rescue remains; leave if possible.",
+    );
+    roomText = roomText.replace(
       "Beam tuning is complete; light now.",
       "Beam tuning is complete; no rescue remains; leave if possible.",
     );
