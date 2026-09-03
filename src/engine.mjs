@@ -471,9 +471,20 @@ function actionEvent(world, state, actionId) {
       missingSupplies.push("oil");
     }
     if (state.flags.includes("fuse_installed")) {
+      const keeperState = { ...state, room: "keeper_room" };
+      const hasKeeperPrep = [
+        "read_log",
+        "study_tide_chart",
+        "signal_boat",
+        "wind_chronometer",
+        "check_storm_radio",
+        "return_for_mooring",
+      ].some((prepAction) => legalActions(world, keeperState).includes(prepAction));
       const supplyCue = missingSupplies.length
         ? `Take ${missingSupplies.join(" and ")} if needed, then`
-        : "Finish any keeper-room prep, then";
+        : hasKeeperPrep
+          ? "Finish any keeper-room prep, then"
+          : "Then";
       return `Current is already restored; ${supplyCue} use the repaired stair to reach the tower.`;
     }
     const supplyCue = missingSupplies.length
