@@ -17,7 +17,7 @@
     },
     "keeper_room": {
       "title": "Keeper's Room",
-      "text": "Use what remains. Hand lantern will need oil before climbing unless already filled. Read remaining clues. Signal the boat first if needed; check radio if needed before taking the oil; after the lantern is filled, only with time. Use repaired stair once current is restored and supplies are ready. Read the log, take oil, then return to secure the mooring before studying tide. Wind after tide.",
+      "text": "Use what remains. Hand lantern will need oil before climbing unless already filled. Read remaining clues. Signal the boat first if needed; check radio if needed before taking the oil; after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready. If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
       "actions": [
         "read_log",
         "signal_boat",
