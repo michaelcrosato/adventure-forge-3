@@ -671,8 +671,23 @@ export function observation(world, state, event = null) {
           ? "Wall log recorded; read the tide chart."
           : state.flags.includes("tide_chart_read")
             ? "Tide chart recorded; read the wall log."
-            : null;
+          : null;
     if (clueStatus !== null) roomText = roomText.replace("Read remaining clues.", clueStatus);
+    if (state.flags.includes("read_log") && state.flags.includes("tide_chart_read")) {
+      const mooringStatus = state.flags.includes("mooring_secured")
+        ? "Mooring is secure; the boat will hold."
+        : state.flags.includes("mooring_return_used")
+          ? "Mooring recovery was used without securing; continue with the basic beacon route."
+          : !state.inventory.includes("lantern") && availableActions.includes("go_jetty")
+            ? "Mooring is unsecured; recover the lantern, then secure the boat before lighting."
+            : availableActions.includes("return_for_mooring")
+              ? "Mooring is unsecured; return to secure it before lighting."
+              : "Mooring recovery is no longer available; continue with the basic beacon route.";
+      roomText = roomText.replace(
+        "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
+        mooringStatus,
+      );
+    }
   } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {
     const missingSupplies =
       !state.inventory.includes("lantern") && !state.flags.includes("lantern_filled") ||
