@@ -916,6 +916,10 @@ export function observation(world, state, event = null) {
             !state.flags.includes("tide_chart_read") ||
             !state.flags.includes("boat_signaled"))
       ? "Climb the unpowered stair; fill the lantern, then finish keeper preparation before repairing the switchboard"
+      : id === "check_tower_radio" &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned")
+      ? "Check the tower relay; beam tuning is complete (costs one turn; before last turn only; never on last turn)"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
