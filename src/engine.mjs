@@ -717,6 +717,13 @@ export function observation(world, state, event = null) {
         "Signal the boat first if needed; check radio if needed before taking the oil;",
         "Mooring is unsecured; use the basic beacon route;",
       );
+    } else if (state.flags.includes("radio_checked") && !state.inventory.includes("oil")) {
+      roomText = roomText.replace(
+        "check radio if needed before taking the oil;",
+        state.flags.includes("lantern_filled")
+          ? "Radio channel already confirmed;"
+          : "Radio channel already confirmed; take the oil when ready;",
+      );
     } else if (state.flags.includes("lantern_filled")) {
       const radioStatus = state.flags.includes("radio_checked")
         ? "Radio channel already confirmed;"
