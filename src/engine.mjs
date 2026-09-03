@@ -452,6 +452,11 @@ function actionEvent(world, state, actionId) {
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
     return "Workshop beside the keeper's room; current is not restored; take and install the switchboard fuse, then use the service ladder.";
   }
+  if (actionId === "close_storm_shutters") {
+    return state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")
+      ? "Storm shutters barred; beam tuning is complete. The sheltered finish is ready."
+      : "Bar storm shutters. Finish remaining trim or alignment before another turn; the beam holds through rescue.";
+  }
   if (actionId === "climb_tower" && state.flags.includes("chronometer_wound")) {
     return "Unpowered stair: switchboard still needs repair below. Fill the lantern if you have oil; return to install the fuse. Chronometer already wound for the precision rescue.";
   }
