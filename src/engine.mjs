@@ -619,6 +619,23 @@ export function observation(world, state, event = null) {
     state.flags.includes("tide_chart_read")
   ) {
     roomText = roomText.replace("Read remaining clues.", "Log and tide clues are recorded.");
+  } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {
+    const missingSupplies =
+      !state.inventory.includes("lantern") && !state.flags.includes("lantern_filled") ||
+      !state.inventory.includes("oil") && !state.flags.includes("lantern_filled");
+    const canReturnForSupplies =
+      availableActions.includes("return_keeper_after_repair") ||
+      availableActions.includes("return_keeper_from_workshop");
+    const installedGuidance = missingSupplies && canReturnForSupplies
+      ? "The fuse is installed; return to the keeper's room for missing supplies before climbing; "
+      : state.inventory.includes("lantern") &&
+          (state.inventory.includes("oil") || state.flags.includes("lantern_filled"))
+        ? "The fuse is installed; supplies are ready—climb the service ladder; "
+        : "The fuse is installed; climb the service ladder; ";
+    roomText = roomText.replace(
+      "If you already carry both lantern and oil, install the fuse instead of backtracking; after installation, climb the service ladder; ",
+      installedGuidance,
+    );
   } else if (state.room === "jetty" && state.flags.includes("mooring_secured")) {
     roomText = roomText.replace(
       "secure the line before entering if you want the boat to hold while you work.",
