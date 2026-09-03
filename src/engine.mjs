@@ -592,19 +592,28 @@ function endingView(world, state) {
 export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
   const availableActions = legalActions(world, state);
-  const roomText =
-    state.room === "tower" &&
-    state.flags.includes("wick_trimmed") &&
-    state.flags.includes("lens_aligned")
-      ? room.text.replace(
-          "Finish any trim or alignment before spending a turn to wait.",
-          state.turn === world.maxTurns - 1
-            ? "Beam tuning is complete; light now."
-            : availableActions.includes("wait_for_horn")
-              ? "Beam tuning is complete; light now or wait for the horn if time allows."
-              : "Beam tuning is complete; light the beacon when ready.",
-        )
-      : room.text;
+  let roomText = room.text;
+  if (state.room === "tower") {
+    const logTideStatus =
+      state.flags.includes("read_log") && state.flags.includes("tide_chart_read")
+        ? "Log and tide chart are recorded;"
+        : state.flags.includes("read_log")
+          ? "Wall log recorded; tide chart pending;"
+          : state.flags.includes("tide_chart_read")
+            ? "Tide chart recorded; wall log pending;"
+            : "Wall log and tide chart are pending;";
+    roomText = roomText.replace("Log and tide chart are recorded;", logTideStatus);
+    if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
+      roomText = roomText.replace(
+        "Finish any trim or alignment before spending a turn to wait.",
+        state.turn === world.maxTurns - 1
+          ? "Beam tuning is complete; light now."
+          : availableActions.includes("wait_for_horn")
+            ? "Beam tuning is complete; light now or wait for the horn if time allows."
+            : "Beam tuning is complete; light the beacon when ready.",
+      );
+    }
+  }
   const beaconFinishers =
     state.turn === world.maxTurns - 1
       ? availableActions.filter((id) =>
