@@ -463,6 +463,11 @@ function actionEvent(world, state, actionId) {
       : "Return";
     return `Tower work remains ahead—workshop stays behind. ${supplyCue} to the workshop to take and install the fuse before using the repaired stair.`;
   }
+  if (actionId === "return_keeper_for_lantern") {
+    return state.inventory.includes("oil")
+      ? "You descend to the keeper's room; go to the jetty for the missing lantern, then return to the repaired stair."
+      : "You descend to the keeper's room; go to the jetty for the missing lantern and take oil before returning to the repaired stair.";
+  }
   if (actionId === "close_storm_shutters") {
     if (state.turn === world.maxTurns - 1) {
       return "Storm shutters barred too late; no turn remains to light the beacon.";
