@@ -965,6 +965,24 @@ export function modelTurnInput(world, view) {
     Array.isArray(view.turn) &&
     view.turn.length === 2 &&
     view.turn[0] === view.turn[1] - 1;
+  let modelText = view.text;
+  const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
+  if (typeof modelText === "string") {
+    if (visibleFacts.some((fact) => /boat signaled to hold/i.test(fact))) {
+      modelText = modelText.replace(
+        "Signal the boat first if needed;",
+        "Boat signal already confirmed;",
+      );
+    }
+    if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
+      modelText = modelText
+        .replace(
+          "check radio if needed before taking the oil;",
+          "Radio channel already confirmed;",
+        )
+        .replace(/check radio if needed;\s*/i, "");
+    }
+  }
   const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
   );
@@ -977,7 +995,7 @@ export function modelTurnInput(world, view) {
     goal: world.objective,
     t: view.turn,
     at: view.at,
-    text: view.text,
+    text: modelText,
     ...(isLastTurn
       ? {
           deadline: hasBeaconFinish
