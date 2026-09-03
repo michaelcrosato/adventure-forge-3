@@ -474,6 +474,12 @@ function actionEvent(world, state, actionId) {
       ? "You descend to the keeper's room; go to the jetty for the missing lantern, then return to the repaired stair."
       : "You descend to the keeper's room; go to the jetty for the missing lantern and take oil before returning to the repaired stair.";
   }
+  if (actionId === "return_keeper_after_repair") {
+    const rescueCue = state.flags.includes("mooring_secured")
+      ? "Moored boat can still be rescued."
+      : "The basic beacon route can still rescue the boat.";
+    return `Emergency release sends you to the keeper's room. Take missing oil if needed; jetty return too if lantern's gone; use repaired stair. ${rescueCue}`;
+  }
   if (actionId === "return_keeper_from_tower") {
     const rescueCue = state.flags.includes("mooring_secured")
       ? "Moored boat can still be rescued."
