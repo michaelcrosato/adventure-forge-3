@@ -920,6 +920,10 @@ export function observation(world, state, event = null) {
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned")
       ? "Check the tower relay; beam tuning is complete (costs one turn; before last turn only; never on last turn)"
+      : id === "close_storm_shutters" &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned")
+      ? "Optional: close storm shutters for a sheltered finish (costs one turn; never on last turn; beam tuning is complete)"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
