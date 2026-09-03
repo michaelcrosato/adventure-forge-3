@@ -589,6 +589,9 @@ function actionEvent(world, state, actionId) {
   ) {
     return "Current restored; you climb the service ladder to the tower and reach the lantern room.";
   }
+  if (actionId === "climb_repaired_stairs" && state.flags.includes("lantern_filled")) {
+    return "Repaired stair to lantern room; lantern already filled; continue the beacon work above.";
+  }
   return action.text ?? action.label;
 }
 
