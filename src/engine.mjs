@@ -628,6 +628,22 @@ function actionEvent(world, state, actionId) {
   ) {
     return "Current restored; you climb the service ladder to the tower and reach the lantern room.";
   }
+  if (
+    actionId === "climb_service_ladder" &&
+    state.inventory.includes("lantern") &&
+    !state.inventory.includes("oil") &&
+    !state.flags.includes("lantern_filled")
+  ) {
+    return "Current restored; you climb the service ladder to the tower with the lantern, but oil is missing; return below to fetch oil before filling.";
+  }
+  if (
+    actionId === "climb_service_ladder" &&
+    !state.inventory.includes("lantern") &&
+    state.inventory.includes("oil") &&
+    !state.flags.includes("lantern_filled")
+  ) {
+    return "Current restored; you climb the service ladder to the tower with oil, but the lantern is missing; return below to fetch the lantern before filling.";
+  }
   if (actionId === "climb_repaired_stairs" && state.flags.includes("lantern_filled")) {
     return "Repaired stair to lantern room; lantern already filled; continue the beacon work above.";
   }
