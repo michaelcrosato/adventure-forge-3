@@ -1792,7 +1792,9 @@ export function modelTurnInput(world, view) {
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
           : id === "wind_chronometer"
-            ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the keeper-room radio check before taking oil (costs one turn; optional)"
+            ? visibleActionIds.has("check_storm_radio")
+              ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the keeper-room radio check before taking oil (costs one turn; optional)"
+              : "Wind the tower chronometer for a timed rescue after the horn wait; skip the keeper-room radio, then use the later tower relay if needed (one turn; optional)"
           : id === "trim_wick" && hasComfortableTuningTime
             ? "Trim the wick for a cleaner beam"
           : id === "align_lens" && hasComfortableTuningTime
