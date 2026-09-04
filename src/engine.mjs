@@ -974,7 +974,7 @@ export function observation(world, state, event = null) {
         state.inventory.includes("oil")
           ? repairedStairActionReachable
             ? "Radio channel already confirmed; check radio if needed; oil is ready; fill the lantern before climbing;"
-            : "Radio channel already confirmed; check radio if needed; oil is ready;"
+            : "Radio channel already confirmed; oil is ready;"
           : state.flags.includes("lantern_filled")
           ? "Radio channel already confirmed;"
           : "Radio channel already confirmed; take the oil when ready;",
