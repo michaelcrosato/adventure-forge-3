@@ -1357,6 +1357,17 @@ export function modelTurnInput(world, view) {
         );
     }
     if (view.at?.[0] === "tower" && !hasBeaconFinish) {
+      const keeperReturnAvailable = [
+        "return_keeper_from_tower",
+        "return_keeper_after_fill",
+        "return_keeper_for_lantern",
+      ].some((id) => visibleActionIds.has(id));
+      if (visibleActionIds.has("fill_lantern") && !keeperReturnAvailable) {
+        modelText = modelText.replace(
+          "tower relay can confirm the radio channel after the lantern is filled if needed.",
+          "the basic beacon route remains available after filling.",
+        );
+      }
       modelText = modelText
         .replace(
           "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
