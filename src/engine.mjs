@@ -1001,6 +1001,12 @@ export function modelTurnInput(world, view) {
         )
         .replace(/check radio if needed;\s*/i, "");
     }
+    if (visibleFacts.some((fact) => /Tower current restored/i.test(fact))) {
+      modelText = modelText.replace(
+        /If the fuse remains uninstalled, install it before leaving; the service ladder opens\.\s*/i,
+        "",
+      );
+    }
     if (
       visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
       visibleActionIds.has("climb_repaired_stairs")
