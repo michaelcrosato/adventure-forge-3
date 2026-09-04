@@ -594,6 +594,17 @@ function actionEvent(world, state, actionId) {
   if (actionId === "wait_for_horn" && state.turn === world.maxTurns - 1) {
     return "Horn timing recorded too late; no turn remains to light the beacon.";
   }
+  if (
+    actionId === "wait_for_horn" &&
+    state.room === "tower" &&
+    state.turn === world.maxTurns - 2 &&
+    !(state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) &&
+    !legalActions(world, state).some((id) =>
+      world.actions[id].effects.some((effect) => effect.end === "beacon"),
+    )
+  ) {
+    return "Horn timing recorded, but one turn remains; beam tuning is incomplete, so waiting now leaves no time to tune and light.";
+  }
   if (actionId === "wait_for_horn" && state.flags.includes("radio_checked")) {
     return "Spend one turn; horn bonus recorded. Confirmed channel is ready; use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
   }
@@ -1028,6 +1039,12 @@ export function observation(world, state, event = null) {
       ? "Optional: close storm shutters for a sheltered finish (costs one turn; never on last turn; beam tuning is complete)"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
+      : id === "wait_for_horn" &&
+          state.room === "tower" &&
+          state.turn === world.maxTurns - 2 &&
+          !hasBeaconFinisher &&
+          !(state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned"))
+      ? "Finish beam tuning before waiting; one turn after the wait is too little to tune and light"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
       ? "Wait for the horn; timing bonus; costs one turn; light next turn (never on last turn)"
       : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
