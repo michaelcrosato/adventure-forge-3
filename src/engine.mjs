@@ -1360,6 +1360,17 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "tower" &&
+      !hasBeaconFinish &&
+      !visibleActionIds.has("trim_wick") &&
+      !visibleActionIds.has("align_lens")
+    ) {
+      modelText = modelText.replace(
+        /Finish any trim or alignment before lighting\.\s*/i,
+        "",
+      );
+    }
+    if (
+      view.at?.[0] === "tower" &&
       !visibleActionIds.has("close_storm_shutters") &&
       !visibleFacts.some((fact) => /Storm shutters barred/i.test(fact)) &&
       !visibleFacts.some((fact) => /Emergency supply route: recover missing supplies/i.test(fact))
