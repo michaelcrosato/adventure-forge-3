@@ -1476,6 +1476,12 @@ export function modelTurnInput(world, view) {
           "Several lighting choices; most preparation:",
           "No beacon finish is available yet; most preparation:",
         );
+      if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
+        modelText = modelText.replace(
+          /No beacon finish is available yet; most preparation: confirmed-channel rescue\/secured-boat tuned rescue at tide\/horn-timed rescue\/marked-tide rescue\/perfectly timed\/fully prepared\./i,
+          "No beacon finish is available yet; most preparation: confirmed-channel rescue.",
+        );
+      }
     }
     if (view.at?.[0] === "tower" && beaconFinishCount === 1) {
       modelText = modelText
