@@ -1884,7 +1884,9 @@ export function modelTurnInput(world, view) {
   if (
     view.at?.[0] === "tower" &&
     hasBeaconFinish &&
-    visibleFacts.some((fact) => /Radio channel clear/i.test(fact)) &&
+    typeof view.event === "string" &&
+    view.event.startsWith("Spend one turn; horn bonus recorded.") &&
+    visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact)) &&
     visibleFacts.some((fact) => /You waited through one boat horn/i.test(fact))
   ) {
     modelLastEvent = "Horn bonus recorded; light the confirmed-channel beacon now.";
