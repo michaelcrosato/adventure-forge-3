@@ -987,8 +987,8 @@ export function observation(world, state, event = null) {
       const radioStatus = state.flags.includes("radio_checked")
         ? "Radio channel already confirmed;"
         : availableActions.includes("check_storm_radio")
-          ? "Lantern filled; check the radio now if time allows;"
-          : "Lantern filled; radio check can wait until the boat and clues are ready;";
+          ? "lantern filled; check the radio now if time allows;"
+          : "lantern filled; radio check can wait until the boat and clues are ready;";
       roomText = roomText.replace(
         "check radio if needed before taking the oil;",
         radioStatus,
