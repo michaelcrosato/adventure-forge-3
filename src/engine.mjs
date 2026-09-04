@@ -791,6 +791,10 @@ export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
   const availableActions = legalActions(world, state);
   const beaconReachable = hasReachableBeacon(world, state);
+  const repairedStairActionReachable =
+    state.room === "keeper_room"
+      ? hasReachableAction(world, state, "climb_repaired_stairs")
+      : true;
   const mooringActionReachable =
     state.room === "keeper_room" &&
     !state.flags.includes("mooring_secured") &&
@@ -997,6 +1001,17 @@ export function observation(world, state, event = null) {
         .replace(
           "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
           "Mooring recovery is no longer available; continue with the basic beacon route.",
+        );
+    }
+    if (!repairedStairActionReachable) {
+      roomText = roomText
+        .replace(
+          "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
+          "The repaired-stair return is closed; after filling the lantern, restore current in the workshop, then use the service ladder.",
+        )
+        .replace(
+          "use the repaired stair after current is restored and supplies are ready.",
+          "The repaired-stair return is closed; restore current in the workshop, then use the service ladder.",
         );
     }
   } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {
