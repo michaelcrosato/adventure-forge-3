@@ -950,6 +950,9 @@ export function observation(world, state, event = null) {
       "No beacon finish remains.",
     );
   }
+  if (state.room === "tower" && state.turn === world.maxTurns - 1) {
+    roomText = roomText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
+  }
   const lastTurnExit =
     state.turn === world.maxTurns - 1 && beaconFinishers.length === 0
       ? availableActions.filter((id) => id === "leave_island")
