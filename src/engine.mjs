@@ -1063,9 +1063,10 @@ export function modelTurnInput(world, view) {
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
   const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
   const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
-  const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
+  const beaconFinishCount = (view.actions ?? []).filter(([id]) =>
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
-  );
+  ).length;
+  const hasBeaconFinish = beaconFinishCount > 0;
   if (typeof modelText === "string") {
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
@@ -1152,6 +1153,12 @@ export function modelTurnInput(world, view) {
           "Several lighting choices; most preparation:",
           "No beacon finish is available yet; most preparation:",
         );
+    }
+    if (view.at?.[0] === "tower" && beaconFinishCount === 1) {
+      modelText = modelText.replace(
+        /Several lighting choices; most preparation:[^.]+\./i,
+        "One beacon finish remains; light when ready.",
+      );
     }
     if (
       view.at?.[0] === "tower" &&
