@@ -1038,7 +1038,9 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = modelText.replace(
         "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
-        "Use the repaired stair now; fill the lantern in the tower if needed.",
+        visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))
+          ? "Use the repaired stair now; the lantern is already filled."
+          : "Use the repaired stair now; fill the lantern in the tower if needed.",
       );
     }
   }
