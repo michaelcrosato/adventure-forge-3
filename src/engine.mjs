@@ -1122,15 +1122,16 @@ export function modelTurnInput(world, view) {
           "Sheltered finish is unavailable after radio confirmation; use the confirmed-channel finish.",
         );
     }
-    if (
-      view.at?.[0] === "tower" &&
-      !hasBeaconFinish &&
-      !visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact))
-    ) {
-      modelText = modelText.replace(
-        "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
-        "No beacon finish is available yet; complete the available preparation before lighting.",
-      );
+    if (view.at?.[0] === "tower" && !hasBeaconFinish) {
+      modelText = modelText
+        .replace(
+          "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
+          "No beacon finish is available yet; complete the available preparation before lighting.",
+        )
+        .replace(
+          "Several lighting choices; most preparation:",
+          "No beacon finish is available yet; most preparation:",
+        );
     }
     if (
       view.at?.[0] === "tower" &&
