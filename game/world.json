@@ -941,6 +941,7 @@
     },
     "light_aligned_trimmed_beacon": {
       "label": "Light the aligned beacon with the clean flame",
+      "beforeLastTurn": true,
       "when": [
         {
           "has": "lantern"
@@ -958,10 +959,27 @@
           "flag": "wick_trimmed"
         },
         {
-          "notFlag": "mooring_secured"
+          "any": [
+            {
+              "all": [
+                {
+                  "notFlag": "mooring_secured"
+                },
+                {
+                  "notFlag": "boat_signaled"
+                }
+              ]
+            },
+            {
+              "flag": "chronometer_wound"
+            }
+          ]
         },
         {
-          "notFlag": "boat_signaled"
+          "notFlag": "tide_waited"
+        },
+        {
+          "notFlag": "radio_checked"
         }
       ],
       "text": "The aligned lens catches the clean flame. A true white beam cuts across the storm and holds on the channel.",
