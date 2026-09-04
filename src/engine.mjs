@@ -1309,6 +1309,10 @@ export function modelTurnInput(world, view) {
     visibleFacts.some((fact) => /Log: replace the fuse; fill the lantern; light the beacon/i.test(fact)) &&
     visibleFacts.some((fact) => /Tide chart: light the beacon before the next high tide/i.test(fact)) &&
     visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact));
+  const confirmedChannelFullyTuned =
+    confirmedChannelRecapComplete &&
+    visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+    visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact));
   if (typeof modelText === "string") {
     if (confirmedChannelRecapComplete) {
       modelText = modelText
@@ -1664,8 +1668,10 @@ export function modelTurnInput(world, view) {
       index,
       dualSupplyRecovery && id === "return_keeper_from_tower"
         ? "Descend to fetch oil first; the lantern is also missing"
-        : dualSupplyRecovery && id === "return_keeper_for_lantern"
+          : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
+          : id === "wait_for_horn" && confirmedChannelFullyTuned
+            ? "Wait for the horn to improve the rescue; light next turn"
           : id === "return_for_mooring" && /before tide study/i.test(label)
             ? label.replace(/before tide study/i, "before studying the tide chart")
           : isLastTurn &&
