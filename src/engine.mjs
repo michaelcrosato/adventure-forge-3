@@ -1345,7 +1345,7 @@ export function modelTurnInput(world, view) {
       modelText = modelText.replace(/\s*Mooring is secure; the boat will hold\.\s*$/i, "");
     }
     if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
-      modelText = `${modelText} Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room.`;
+      modelText = `${modelText} Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room. Label key: direct lighting is the basic rescue; a secured boat is the stronger safety step; signaling and radio make the strongest channel route.`;
     }
     if (
       view.at?.[0] === "workshop" &&
@@ -1870,6 +1870,14 @@ export function modelTurnInput(world, view) {
     visibleFacts.some((fact) => /Radio channel clear/i.test(fact))
   ) {
     modelLastEvent = "Workshop entered. Take the fuse; install it before climbing.";
+  }
+  if (
+    view.at?.[0] === "tower" &&
+    hasBeaconFinish &&
+    visibleFacts.some((fact) => /Radio channel clear/i.test(fact)) &&
+    visibleFacts.some((fact) => /You waited through one boat horn/i.test(fact))
+  ) {
+    modelLastEvent = "Horn bonus recorded; light the confirmed-channel beacon now.";
   }
   if (
     typeof modelLastEvent === "string" &&
