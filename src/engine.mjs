@@ -1230,8 +1230,9 @@ export function modelTurnInput(world, view) {
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
         "Hand lantern will need oil before climbing unless already filled.",
-        "Lantern is already filled;",
+        visibleActionIds.has("climb_repaired_stairs") ? "Lantern ready;" : "Lantern is already filled;",
       );
+      modelText = modelText.replace(/;\s*lantern filled;\s*/i, "; ");
     }
     if (
       visibleInventory.includes("oil") &&
