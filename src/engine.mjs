@@ -1048,6 +1048,15 @@ export function modelTurnInput(world, view) {
         "Lantern is already filled;",
       );
     }
+    if (
+      visibleInventory.includes("oil") &&
+      !visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        "Hand lantern will need oil before climbing unless already filled.",
+        "Lantern still needs filling.",
+      );
+    }
     if (visibleInventory.includes("lantern") && !visibleActionIds.has("take_lantern")) {
       modelText = modelText.replace(
         "Take the lantern if it remains;",

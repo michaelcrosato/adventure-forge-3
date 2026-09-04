@@ -15,6 +15,8 @@ test("keeper guidance stops repeating oil pickup after oil is carried", async ()
   assert.match(earlyView.text, /mooring is unsecured; read the wall log before securing the boat or lighting/i);
   assert.doesNotMatch(earlyView.text, /mooring is unsecured; take oil/i);
   assert.doesNotMatch(earlyView.text, /mooring recovery is no longer available/i);
+  assert.match(earlyInput.text, /lantern still needs filling/i);
+  assert.doesNotMatch(earlyInput.text, /hand lantern will need oil before climbing unless already filled/i);
   assert.match(earlyInput.text, /mooring is unsecured; read the wall log before securing the boat or lighting/i);
   assert.doesNotMatch(earlyInput.text, /mooring is unsecured; take oil/i);
 
