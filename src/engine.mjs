@@ -484,12 +484,12 @@ function actionEvent(world, state, actionId) {
         "check_storm_radio",
         "return_for_mooring",
       ].some((prepAction) => legalActions(world, keeperState).includes(prepAction));
-      const supplyCue = missingSupplies.length
-        ? `Take ${missingSupplies.join(" and ")} if needed, then`
-        : hasKeeperPrep
-          ? "Finish any keeper-room prep, then"
-          : "Then";
-      return `Current is already restored; ${supplyCue} use the repaired stair to reach the tower.`;
+      if (missingSupplies.length) {
+        return `Current is already restored; Take ${missingSupplies.join(" and ")} if needed, then use the repaired stair to reach the tower.`;
+      }
+      return hasKeeperPrep
+        ? "Current is already restored. Finish any keeper-room prep, then use the repaired stair to reach the tower."
+        : "Current is already restored. Then use the repaired stair to reach the tower.";
     }
     const supplyCue = missingSupplies.length
       ? `Take ${missingSupplies.join(" and ")} if needed, then return`
