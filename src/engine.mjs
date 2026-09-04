@@ -1227,6 +1227,17 @@ export function modelTurnInput(world, view) {
   ).length;
   const hasBeaconFinish = beaconFinishCount > 0;
   if (typeof modelText === "string") {
+    if (
+      view.at?.[0] === "workshop" &&
+      (visibleActionIds.has("take_fuse") || visibleActionIds.has("install_fuse"))
+    ) {
+      modelText = modelText.replace(
+        /If the fuse remains uninstalled, install it before leaving; the service ladder opens\. If you already carry both lantern and oil, install the fuse instead of backtracking; after installation, climb the service ladder;/i,
+        visibleActionIds.has("take_fuse")
+          ? "Take the fuse this turn; install it next; then climb the service ladder;"
+          : "Install the fuse this turn; then climb the service ladder;",
+      );
+    }
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
         "Hand lantern will need oil before climbing unless already filled.",
@@ -1468,6 +1479,8 @@ export function modelTurnInput(world, view) {
   }
   const lastEvent = view.event?.startsWith("Mooring secure:")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
+    : view.event?.startsWith("Workshop beside the keeper's room; current is not restored;")
+      ? "Workshop entered; current is not restored. Take the fuse this turn; install it next; then climb the service ladder."
     : view.event?.startsWith("Hand lantern filled;")
       ? "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
       : view.event;
