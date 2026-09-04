@@ -895,6 +895,35 @@ export function observation(world, state, event = null) {
           world.actions[id].effects.some((effect) => effect.end === "beacon"),
         )
       : [];
+  if (state.room === "tower" && state.turn === world.maxTurns - 1) {
+    const finalTuningCue =
+      state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")
+        ? "Beam tuning is complete; "
+        : state.flags.includes("lens_aligned")
+          ? "Lens aligned; remaining wick trim is too late; "
+          : state.flags.includes("wick_trimmed")
+            ? "Wick trimmed; remaining lens alignment is too late; "
+            : "Remaining beam tuning is too late; ";
+    roomText = roomText
+      .replace(
+        "Aligned by hand if needed; charred wick can be trimmed before lighting the beacon if needed.",
+        finalTuningCue,
+      )
+      .replace(
+        "Lens aligned; trim the wick before lighting if desired, or light the aligned beacon.",
+        finalTuningCue,
+      )
+      .replace(
+        "Wick trimmed; align the beacon lens before lighting if desired, or light the clean flame.",
+        finalTuningCue,
+      );
+    if (beaconFinishers.length === 1) {
+      roomText = roomText.replace(
+        "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
+        "One beacon finish remains; light now.",
+      );
+    }
+  }
   if (
     state.room === "tower" &&
     state.turn === world.maxTurns - 1 &&
