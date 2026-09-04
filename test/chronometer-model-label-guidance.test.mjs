@@ -21,6 +21,6 @@ test("the bounded chronometer label explains its distinct timed finish", async (
   assert.ok(bounded);
   assert.match(raw[1], /optional precision prep/i);
   assert.match(bounded[1], /timed rescue after the horn wait/i);
-  assert.match(bounded[1], /choose this instead of the radio check/i);
+  assert.match(bounded[1], /choose this instead of the keeper-room radio check before taking oil/i);
   assert.match(bounded[1], /costs one turn/i);
 });

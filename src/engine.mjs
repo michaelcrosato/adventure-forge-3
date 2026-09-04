@@ -1790,9 +1790,9 @@ export function modelTurnInput(world, view) {
           : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
-            ? "Wait for the horn to improve the rescue; light next turn"
+            ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
           : id === "wind_chronometer"
-            ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the radio check (costs one turn; optional)"
+            ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the keeper-room radio check before taking oil (costs one turn; optional)"
           : id === "trim_wick" && hasComfortableTuningTime
             ? "Trim the wick for a cleaner beam"
           : id === "align_lens" && hasComfortableTuningTime
