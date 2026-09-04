@@ -373,6 +373,34 @@ function hasReachableBeacon(world, state) {
   return reachable;
 }
 
+const actionPathCache = new WeakMap();
+
+function hasReachableAction(world, state, actionId) {
+  let worldCache = actionPathCache.get(world);
+  if (!worldCache) {
+    worldCache = new Map();
+    actionPathCache.set(world, worldCache);
+  }
+  let cache = worldCache.get(actionId);
+  if (!cache) {
+    cache = new Map();
+    worldCache.set(actionId, cache);
+  }
+  const stateKey = stableStringify(state);
+  if (cache.has(stateKey)) return cache.get(stateKey);
+  if (state.ended) {
+    cache.set(stateKey, false);
+    return false;
+  }
+  cache.set(stateKey, false);
+  const reachable = legalActions(world, state).some((candidate) =>
+    candidate === actionId ||
+    hasReachableAction(world, step(world, state, candidate).state, actionId),
+  );
+  cache.set(stateKey, reachable);
+  return reachable;
+}
+
 function sorted(values) {
   return [...values].sort();
 }
@@ -763,6 +791,12 @@ export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
   const availableActions = legalActions(world, state);
   const beaconReachable = hasReachableBeacon(world, state);
+  const mooringActionReachable =
+    state.room === "keeper_room" &&
+    !state.flags.includes("mooring_secured") &&
+    !state.flags.includes("mooring_return_used")
+      ? hasReachableAction(world, state, "secure_mooring")
+      : true;
   const hasLastTurnBeaconFinisher =
     state.turn === world.maxTurns - 1 &&
     availableActions.some((id) =>
@@ -926,7 +960,9 @@ export function observation(world, state, event = null) {
     ) {
       const hasReadLog = state.flags.includes("read_log");
       const hasTideChart = state.flags.includes("tide_chart_read");
-      const mooringStatus = state.flags.includes("mooring_secured")
+      const mooringStatus = !mooringActionReachable
+        ? "Mooring recovery is no longer available; continue with the basic beacon route."
+        : state.flags.includes("mooring_secured")
         ? "Mooring is secure; the boat will hold."
         : state.flags.includes("mooring_return_used")
           ? "Mooring recovery was used without securing; continue with the basic beacon route."
@@ -951,6 +987,17 @@ export function observation(world, state, event = null) {
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
         mooringStatus,
       );
+    }
+    if (!mooringActionReachable) {
+      roomText = roomText
+        .replace(
+          "Signal the boat first if needed; ",
+          "The secured-boat and radio routes are unavailable; ",
+        )
+        .replace(
+          "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
+          "Mooring recovery is no longer available; continue with the basic beacon route.",
+        );
     }
   } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {
     const missingSupplies =
