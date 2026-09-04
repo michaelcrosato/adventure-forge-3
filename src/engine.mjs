@@ -1056,6 +1056,12 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("Hand lantern filled;")
       ? "Lantern filled; either tuning choice is optional; both together earn the strongest rescue."
       : view.event;
+  const modelLastEvent =
+    visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
+    lastEvent ===
+      "If current is not restored, install the switchboard fuse to restore tower power; otherwise return to the keeper's room for missing supplies."
+      ? "Current is already restored; return to the keeper's room only for missing supplies or use the service ladder."
+      : lastEvent;
   const dualSupplyRecovery =
     view.at?.[0] === "tower" &&
     !view.inv &&
@@ -1075,7 +1081,7 @@ export function modelTurnInput(world, view) {
       : {}),
     ...(view.inv ? { inv: view.inv } : {}),
     ...(view.facts ? { facts: view.facts } : {}),
-    ...(lastEvent ? { last: lastEvent } : {}),
+    ...(modelLastEvent ? { last: modelLastEvent } : {}),
     a: (view.actions ?? []).map(([id, label], index) => [
       index,
       dualSupplyRecovery && id === "return_keeper_from_tower"
