@@ -1117,6 +1117,10 @@ export function modelTurnInput(world, view) {
         ? "Descend to fetch oil first; the lantern is also missing"
         : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
+          : isLastTurn &&
+            !hornBonusRecorded &&
+            id === "light_all_ready_beacon"
+          ? "Light the tuned beacon now; no time remains for the horn bonus"
           : hornBonusRecorded && id === "light_all_ready_beacon"
             ? "Light the tuned beacon with the horn bonus"
             : label,
