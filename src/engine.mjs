@@ -1068,6 +1068,15 @@ export function modelTurnInput(world, view) {
       "",
     );
   }
+  if (
+    visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+    visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact))
+  ) {
+    modelLastEvent = modelLastEvent?.replace(
+      /Finish beam tuning if needed;\s*/i,
+      "Beam tuning is complete; ",
+    );
+  }
   const dualSupplyRecovery =
     view.at?.[0] === "tower" &&
     !view.inv &&
