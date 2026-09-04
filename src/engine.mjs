@@ -1189,6 +1189,16 @@ export function modelTurnInput(world, view) {
         "Radio checks are too late.",
       );
     }
+    if (
+      isLastTurn &&
+      view.at?.[0] === "tower" &&
+      hasBeaconFinish &&
+      /(?:One beacon finish remains; light now\.|A beacon finish is ready; light now; remaining tuning is optional\.|Sheltered finish is too late; light now\.)/i.test(
+        modelText,
+      )
+    ) {
+      modelText = modelText.replace(/\s*Last turn: light now\./i, "");
+    }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
   const lastEvent = view.event?.startsWith("Mooring secure:")
