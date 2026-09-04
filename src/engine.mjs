@@ -692,7 +692,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Horn timing recorded, but one turn remains; beam tuning is incomplete, so waiting now leaves no time to tune and light.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("radio_checked")) {
-    return "Spend one turn; horn bonus recorded. Confirmed channel is ready; use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
+    return "Spend one turn; horn bonus recorded. Use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("chronometer_wound")) {
     return "Spend one turn; horn bonus recorded. This timing is required for the chronometer-timed finish. Chronometer timing is ready; use the chronometer-timed finish after tuning; light next turn; never wait on the last turn.";
