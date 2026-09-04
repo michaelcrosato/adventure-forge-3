@@ -1172,17 +1172,20 @@ export function modelTurnInput(world, view) {
           : "Use the repaired stair now; fill the lantern in the tower if needed.",
       );
     }
-    if (
-      isLastTurn &&
-      view.at?.[0] === "tower" &&
-      !hasBeaconFinish &&
-      /(?:Beam tuning is complete|Horn timing is recorded); no rescue remains; leave if possible\./i.test(
-        modelText,
-      )
-    ) {
+    if (isLastTurn && view.at?.[0] === "tower" && !hasBeaconFinish) {
+      if (
+        /(?:Beam tuning is complete|Horn timing is recorded); no rescue remains; leave if possible\./i.test(
+          modelText,
+        )
+      ) {
+        modelText = modelText.replace(
+          /\s*Last turn: no rescue remains; leave if possible\./i,
+          "",
+        );
+      }
       modelText = modelText.replace(
-        /\s*Last turn: no rescue remains; leave if possible\./i,
-        "",
+        /tower relay can confirm the radio channel(?: after the lantern is filled)? if needed\./i,
+        "Radio checks are too late.",
       );
     }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
