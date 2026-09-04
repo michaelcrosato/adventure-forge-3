@@ -1479,6 +1479,8 @@ export function modelTurnInput(world, view) {
   }
   const lastEvent = view.event?.startsWith("Mooring secure:")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
+    : view.event?.startsWith("Door opens. Mooring is secure; the boat will hold; no return is needed.")
+      ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
     : view.event?.startsWith("Workshop beside the keeper's room; current is not restored;")
       ? "Workshop entered; current is not restored. Take the fuse this turn; install it next; then climb the service ladder."
     : view.event?.startsWith("Hand lantern filled;")
