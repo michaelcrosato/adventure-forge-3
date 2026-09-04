@@ -1779,7 +1779,7 @@ export function modelTurnInput(world, view) {
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn"
           : id === "wind_chronometer"
-            ? "Wind the tower chronometer for a timed rescue after the horn wait (costs one turn; optional)"
+            ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the radio check (costs one turn; optional)"
           : id === "trim_wick" && hasComfortableTuningTime
             ? "Trim the wick for a cleaner beam"
           : id === "align_lens" && hasComfortableTuningTime
