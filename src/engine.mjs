@@ -815,6 +815,10 @@ export function observation(world, state, event = null) {
     state.room === "keeper_room"
       ? state.flags.includes("boat_signaled") || hasReachableAction(world, state, "signal_boat")
       : true;
+  const radioActionReachable =
+    state.room === "keeper_room" && !state.flags.includes("radio_checked")
+      ? hasReachableAction(world, state, "check_storm_radio")
+      : true;
   const hasLastTurnBeaconFinisher =
     state.turn === world.maxTurns - 1 &&
     availableActions.some((id) =>
@@ -1041,6 +1045,21 @@ export function observation(world, state, event = null) {
         .replace(
           "use the repaired stair after current is restored and supplies are ready.",
           "The repaired-stair return is closed; restore current in the workshop, then use the service ladder.",
+        );
+    }
+    if (!radioActionReachable) {
+      roomText = roomText
+        .replace(
+          "Signal the boat first if needed;",
+          signalActionReachable ? "Signal the boat if desired;" : "",
+        )
+        .replace(
+          "check radio if needed before taking the oil;",
+          "radio confirmation is unavailable on this route;",
+        )
+        .replace(
+          "radio check can wait until the boat and clues are ready;",
+          "radio confirmation is unavailable on this route;",
         );
     }
   } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {
