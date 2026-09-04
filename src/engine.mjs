@@ -945,7 +945,9 @@ export function observation(world, state, event = null) {
       roomText = roomText.replace(
         "check radio if needed before taking the oil;",
         state.inventory.includes("oil")
-          ? "Radio channel already confirmed; check radio if needed; oil is ready; fill the lantern before climbing;"
+          ? repairedStairActionReachable
+            ? "Radio channel already confirmed; check radio if needed; oil is ready; fill the lantern before climbing;"
+            : "Radio channel already confirmed; check radio if needed; oil is ready;"
           : state.flags.includes("lantern_filled")
           ? "Radio channel already confirmed;"
           : "Radio channel already confirmed; take the oil when ready;",
@@ -954,7 +956,9 @@ export function observation(world, state, event = null) {
       roomText = roomText.replace(
         "check radio if needed before taking the oil;",
         state.inventory.includes("lantern")
-          ? "Oil is ready; fill the lantern before climbing;"
+          ? repairedStairActionReachable
+            ? "Oil is ready; fill the lantern before climbing;"
+            : "Oil is ready;"
           : "Oil is ready; recover the lantern before filling;",
       );
     } else if (state.flags.includes("lantern_filled")) {
