@@ -1485,7 +1485,12 @@ export function modelTurnInput(world, view) {
         )
         .replace(
           /Several lighting choices; most preparation:[^.]+\./i,
-          "One beacon finish remains; light when ready.",
+          visibleActionIds.has("wait_for_horn")
+            ? visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+                visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact))
+              ? "A beacon finish is ready; light now or wait for the horn."
+              : "A beacon finish is ready; finish beam tuning or wait for the horn."
+            : "One beacon finish remains; light when ready.",
         );
     }
     if (
