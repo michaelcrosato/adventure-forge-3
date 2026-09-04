@@ -1890,6 +1890,17 @@ export function modelTurnInput(world, view) {
     modelLastEvent = "Horn bonus recorded; light the confirmed-channel beacon now.";
   }
   if (
+    view.at?.[0] === "tower" &&
+    hasBeaconFinish &&
+    typeof view.event === "string" &&
+    view.event.startsWith("Clean, steady flame") &&
+    visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))
+  ) {
+    modelLastEvent = view.event.includes("lens remains unaligned")
+      ? "Wick trimmed; beacon remains dark; align the lens first or light the beacon with the trimmed wick now."
+      : "Wick trimmed; beacon remains dark; light the tuned beacon now.";
+  }
+  if (
     typeof modelLastEvent === "string" &&
     modelLastEvent.startsWith("Safe window for a stronger rescue:") &&
     Array.isArray(view.turn) &&
