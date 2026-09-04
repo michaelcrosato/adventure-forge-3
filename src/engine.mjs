@@ -1018,10 +1018,13 @@ export function observation(world, state, event = null) {
         );
     }
     if (!repairedStairActionReachable) {
+      const repairedStairFallback = state.flags.includes("lantern_filled")
+        ? "The repaired-stair return is closed; restore current in the workshop, then use the service ladder."
+        : "The repaired-stair return is closed; after filling the lantern, restore current in the workshop, then use the service ladder.";
       roomText = roomText
         .replace(
           "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
-          "The repaired-stair return is closed; after filling the lantern, restore current in the workshop, then use the service ladder.",
+          repairedStairFallback,
         )
         .replace(
           "use the repaired stair after current is restored and supplies are ready.",
