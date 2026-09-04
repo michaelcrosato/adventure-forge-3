@@ -1007,6 +1007,12 @@ export function modelTurnInput(world, view) {
         "",
       );
     }
+    if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
+      modelText = modelText.replace(
+        "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
+        "If unsecured: read the log, then return to secure the mooring before studying tide.",
+      );
+    }
     if (
       visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
       visibleActionIds.has("climb_repaired_stairs")
