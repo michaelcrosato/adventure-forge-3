@@ -1132,6 +1132,8 @@ export function modelTurnInput(world, view) {
   }
   if (isLastTurn && !hasBeaconFinish && modelLastEvent) {
     modelLastEvent = "No beacon finish remains; leave if possible.";
+  } else if (isLastTurn && hasBeaconFinish && modelLastEvent) {
+    modelLastEvent = "A beacon finish remains; light now; remaining preparation is too late.";
   }
   const dualSupplyRecovery =
     view.at?.[0] === "tower" &&
