@@ -800,14 +800,17 @@ function endingView(world, state) {
   const tuned = state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned");
   const preparedChannel =
     state.flags.includes("mooring_secured") || state.flags.includes("boat_signaled");
-  const precisionChannel =
-    state.flags.includes("radio_checked") ||
-    (state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited"));
+  const radioConfirmed = state.flags.includes("radio_checked");
+  const chronometerTiming =
+    state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited");
+  const precisionChannel = radioConfirmed || chronometerTiming;
   const hornTiming = state.flags.includes("tide_waited");
-  const detail = precisionChannel
+  const detail = radioConfirmed
     ? hornTiming
       ? "The tuned channel and horn timing earn the strongest rescue."
       : "The tuned channel earns the strongest rescue."
+    : chronometerTiming
+      ? "The tuned beam and chronometer timing earn the strongest rescue."
     : tuned && preparedChannel
       ? "The tuned beam and prepared channel earn a stronger rescue."
       : tuned || preparedChannel
@@ -1730,7 +1733,7 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = modelText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
-        "Finish any trim or alignment before spending a turn to wait when you want the cleanest sequence; waiting now is legal, but finish tuning before lighting next turn.",
+        "Finish any trim or alignment before spending a turn to wait when you want the cleanest sequence; waiting now is legal as a bonus setup turn. Tune after the wait, then light once tuning is complete.",
       );
     }
     if (
@@ -2008,6 +2011,13 @@ export function modelTurnInput(world, view) {
           ? "Optional early climb via unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward; confirmed channel ready"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
+          : id === "wait_for_horn" &&
+              view.at?.[0] === "tower" &&
+              !confirmedChannelFullyTuned &&
+              (visibleActionIds.has("trim_wick") || visibleActionIds.has("align_lens")) &&
+              Array.isArray(view.turn) &&
+              view.turn[0] < world.maxTurns - 2
+            ? "Wait for the horn; tune after the wait, then light once tuning is complete (costs one turn; do not wait on the final turn)"
           : id === "check_storm_radio" &&
               visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
             ? "Optional alternative: check the radio to switch from chronometer timing to the confirmed-channel route (costs one turn)"
