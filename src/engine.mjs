@@ -1639,6 +1639,16 @@ export function modelTurnInput(world, view) {
       .replace(/the remaining turn matters\.\s*/i, "")
       .replace(/after tuning\b/gi, "now");
   }
+  if (
+    confirmedChannelRecapComplete &&
+    visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+    !visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact))
+  ) {
+    modelLastEvent = modelLastEvent?.replace(
+      /light the trimmed beacon now/i,
+      "light the beacon with the trimmed wick now",
+    );
+  }
   if (!isLastTurn && /No beacon finish remains before the deadline/i.test(modelText)) {
     modelLastEvent = "No beacon finish remains before the deadline; leave if possible or continue only to see the final state.";
   }
