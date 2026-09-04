@@ -84,3 +84,22 @@ test("post-signal model feedback keeps the next clue local", async () => {
   assert.match(input.last, /boat holds\. study the tide chart to unlock the storm radio/i);
   assert.doesNotMatch(input.last, /tower relay|taking oil|costs one turn/i);
 });
+
+test("fully prepared workshop model copy keeps the fuse step local", async () => {
+  const world = await loadWorld();
+  const replayed = replayActions(world, 7408, [
+    "take_lantern",
+    "secure_mooring",
+    "enter_house",
+    "read_log",
+    "study_tide_chart",
+    "signal_boat",
+    "check_storm_radio",
+    "take_oil",
+    "go_workshop",
+  ]);
+  const input = modelTurnInput(world, replayed.observation);
+
+  assert.equal(input.text, "Take the fuse; install it before climbing.");
+  assert.equal(input.last, "Workshop entered. Take the fuse; install it before climbing.");
+});

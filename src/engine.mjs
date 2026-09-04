@@ -1367,6 +1367,18 @@ export function modelTurnInput(world, view) {
           .replace(/\s*Missing supplies\?\s*Emergency release returns to the keeper's room\./i, "");
       }
     }
+    if (
+      view.at?.[0] === "workshop" &&
+      visibleActionIds.has("take_fuse") &&
+      visibleInventory.includes("lantern") &&
+      visibleInventory.includes("oil") &&
+      visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
+      visibleFacts.some((fact) => /^Tide chart:/i.test(fact)) &&
+      visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact)) &&
+      visibleFacts.some((fact) => /Radio channel clear/i.test(fact))
+    ) {
+      modelText = "Take the fuse; install it before climbing.";
+    }
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
         "Hand lantern will need oil before climbing unless already filled.",
@@ -1845,6 +1857,19 @@ export function modelTurnInput(world, view) {
     !visibleInventory.includes("oil")
   ) {
     modelLastEvent = "Boat holds. Study the tide chart to unlock the storm radio.";
+  }
+  if (
+    view.at?.[0] === "workshop" &&
+    typeof view.event === "string" &&
+    view.event.startsWith("Workshop beside the keeper's room; current is not restored;") &&
+    visibleInventory.includes("lantern") &&
+    visibleInventory.includes("oil") &&
+    visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
+    visibleFacts.some((fact) => /^Tide chart:/i.test(fact)) &&
+    visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact)) &&
+    visibleFacts.some((fact) => /Radio channel clear/i.test(fact))
+  ) {
+    modelLastEvent = "Workshop entered. Take the fuse; install it before climbing.";
   }
   if (
     typeof modelLastEvent === "string" &&
