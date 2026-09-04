@@ -1866,6 +1866,9 @@ export function modelTurnInput(world, view) {
       ? confirmedChannelRecapComplete
         ? "Lantern filled; optional beam tuning remains before lighting."
         : "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
+    : view.event?.startsWith("You take the dry fuse from the drawer;") &&
+        visibleActionIds.has("install_fuse")
+      ? "Fuse ready; install it, then climb the service ladder."
       : view.event;
   let modelLastEvent =
     visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
