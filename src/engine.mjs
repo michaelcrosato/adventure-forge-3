@@ -1012,6 +1012,10 @@ export function modelTurnInput(world, view) {
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
         "If unsecured: read the log, then return to secure the mooring before studying tide.",
       );
+      modelText = modelText.replace(
+        "Mooring is unsecured; take oil if needed, then return to secure it before studying the tide.",
+        "Mooring is unsecured; return to secure it before studying the tide.",
+      );
     }
     if (
       visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
