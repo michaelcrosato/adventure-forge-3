@@ -807,6 +807,19 @@ export function observation(world, state, event = null) {
         "tower relay can confirm the radio channel after the lantern is filled if needed.",
         "Radio channel already confirmed;",
       );
+    } else if (
+      state.flags.includes("mooring_return_used") &&
+      !state.flags.includes("mooring_secured")
+    ) {
+      roomText = roomText
+        .replace(
+          "tower relay can confirm the radio channel after the lantern is filled if needed.",
+          "The confirmed-channel route is unavailable;",
+        )
+        .replace(
+          "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
+          "Use the basic beacon route.",
+        );
     }
     const hasShelteredFinisher = availableActions.some(
       (id) =>
