@@ -1312,6 +1312,12 @@ export function modelTurnInput(world, view) {
         .replace(/Log and tide chart are recorded;\s*/i, "")
         .replace(/radio channel already confirmed;\s*/i, "");
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      visibleFacts.some((fact) => /supply boat's mooring is secure/i.test(fact))
+    ) {
+      modelText = modelText.replace(/\s*Mooring is secure; the boat will hold\.\s*$/i, "");
+    }
     if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
       modelText = `${modelText} Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room.`;
     }
