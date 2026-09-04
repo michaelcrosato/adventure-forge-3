@@ -354,6 +354,10 @@ function sorted(values) {
   return [...values].sort();
 }
 
+function capitalizeFirst(value) {
+  return value ? `${value[0].toUpperCase()}${value.slice(1)}` : value;
+}
+
 function actionEvent(world, state, actionId) {
   const action = world.actions[actionId];
   if (
@@ -400,7 +404,7 @@ function actionEvent(world, state, actionId) {
       const setup = [];
       if (!hasLog) setup.push("read the wall log");
       if (!hasOil) setup.push("take the oil");
-      return `Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. ${setup.join(" and ")}; then return to the jetty to secure it before lighting.`;
+      return `Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. ${capitalizeFirst(setup.join(" and "))}; then return to the jetty to secure it before lighting.`;
     }
     return "Door opens. Mooring unsecured; the recovery return is no longer available, so continue with the basic beacon route.";
   }
@@ -431,7 +435,7 @@ function actionEvent(world, state, actionId) {
       if (!state.flags.includes("read_log")) pendingClues.push("read the wall log");
       if (!state.flags.includes("tide_chart_read")) pendingClues.push("study the tide chart");
       if (pendingClues.length > 0) {
-        return `Ring the bell; supply boat holds position. ${pendingClues.join(" and ")} before climbing.`;
+        return `Ring the bell; supply boat holds position. ${capitalizeFirst(pendingClues.join(" and "))} before climbing.`;
       }
       return "Ring the bell; supply boat holds position.";
     }
