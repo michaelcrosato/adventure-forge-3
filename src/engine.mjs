@@ -1300,6 +1300,9 @@ export function modelTurnInput(world, view) {
         "; secure the boat before lighting.",
       );
     }
+    if (view.at?.[0] === "keeper_room" && visibleActionIds.has("climb_repaired_stairs")) {
+      modelText = modelText.replace(/; fill the lantern before climbing;\s*/i, "; ");
+    }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
         .replace(
