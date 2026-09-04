@@ -1568,6 +1568,19 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "tower" &&
+      visibleActionIds.has("wait_for_horn") &&
+      (visibleActionIds.has("trim_wick") || visibleActionIds.has("align_lens")) &&
+      Array.isArray(view.turn) &&
+      Number.isSafeInteger(view.turn[0]) &&
+      view.turn[0] < world.maxTurns - 2
+    ) {
+      modelText = modelText.replace(
+        "Finish any trim or alignment before spending a turn to wait.",
+        "Finish any trim or alignment before spending a turn to wait when you want the cleanest sequence; waiting now is legal, but finish tuning before lighting next turn.",
+      );
+    }
+    if (
+      view.at?.[0] === "tower" &&
       !hasBeaconFinish &&
       !visibleActionIds.has("trim_wick") &&
       !visibleActionIds.has("align_lens")
