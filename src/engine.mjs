@@ -1096,6 +1096,16 @@ export function modelTurnInput(world, view) {
         "Boat signal already confirmed;",
       );
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      !visibleActionIds.has("signal_boat") &&
+      !visibleFacts.some((fact) => /boat signaled to hold/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        "Signal the boat first if needed;",
+        "Secure the mooring before signaling if needed;",
+      );
+    }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
         .replace(
