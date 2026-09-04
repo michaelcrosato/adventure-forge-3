@@ -1235,6 +1235,9 @@ export function modelTurnInput(world, view) {
     if (isLastTurn && view.at?.[0] === "tower" && hasBeaconFinish) {
       modelText = modelText.replace(/\s*Last turn: light now\./i, "");
     }
+    if (isLastTurn && !hasBeaconFinish && view.at?.[0] !== "tower") {
+      modelText = "No rescue remains; leave if possible.";
+    }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
   const lastEvent = view.event?.startsWith("Mooring secure:")
