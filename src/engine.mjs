@@ -1865,6 +1865,8 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("Hand lantern filled;")
       ? confirmedChannelRecapComplete
         ? "Lantern filled; optional beam tuning remains before lighting."
+        : visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
+          ? "Lantern filled. Tuning is optional; trim and align both for the strongest chronometer-timed rescue after the horn wait. Otherwise light directly for the basic finish."
         : "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
     : view.event?.startsWith("You take the dry fuse from the drawer;") &&
         visibleActionIds.has("install_fuse")
