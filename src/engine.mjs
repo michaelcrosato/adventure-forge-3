@@ -1300,7 +1300,17 @@ export function modelTurnInput(world, view) {
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
   ).length;
   const hasBeaconFinish = beaconFinishCount > 0;
+  const fullyTunedConfirmedChannel =
+    hasBeaconFinish &&
+    visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+    visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact)) &&
+    visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact));
   if (typeof modelText === "string") {
+    if (fullyTunedConfirmedChannel) {
+      modelText = modelText
+        .replace(/Log and tide chart are recorded;\s*/i, "")
+        .replace(/radio channel already confirmed;\s*/i, "");
+    }
     if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
       modelText = `${modelText} Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room.`;
     }
