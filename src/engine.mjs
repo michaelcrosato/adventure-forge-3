@@ -979,9 +979,9 @@ export function observation(world, state, event = null) {
         "check radio if needed before taking the oil;",
         state.inventory.includes("lantern")
           ? repairedStairActionReachable
-            ? "Oil is ready; fill the lantern before climbing;"
-            : "Oil is ready;"
-          : "Oil is ready; recover the lantern before filling;",
+            ? "oil is ready; fill the lantern before climbing;"
+            : "oil is ready;"
+          : "oil is ready; recover the lantern before filling;",
       );
     } else if (state.flags.includes("lantern_filled")) {
       const radioStatus = state.flags.includes("radio_checked")
