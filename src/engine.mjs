@@ -1515,6 +1515,18 @@ export function modelTurnInput(world, view) {
         );
       }
     }
+    if (
+      view.at?.[0] === "tower" &&
+      !hasBeaconFinish &&
+      visibleActionIds.size === 1 &&
+      visibleActionIds.has("fill_lantern") &&
+      visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
+      !visibleFacts.some((fact) => /Emergency supply route: recover missing supplies/i.test(fact)) &&
+      visibleFacts.some((fact) => /radio channel clear/i.test(fact))
+    ) {
+      modelText =
+        "No beacon finish is available yet; most preparation: confirmed-channel rescue. Fill the lantern to unlock the finish.";
+    }
     if (view.at?.[0] === "tower" && beaconFinishCount === 1) {
       modelText = modelText
         .replace(
