@@ -103,3 +103,29 @@ test("fully prepared workshop model copy keeps the fuse step local", async () =>
   assert.equal(input.text, "Take the fuse; install it before climbing.");
   assert.equal(input.last, "Workshop entered. Take the fuse; install it before climbing.");
 });
+
+test("canonical early-climb label keeps its warning scannable", async () => {
+  const world = await loadWorld();
+  const replayed = replayActions(world, 7409, [
+    "take_lantern",
+    "secure_mooring",
+    "enter_house",
+    "read_log",
+    "study_tide_chart",
+    "signal_boat",
+    "check_storm_radio",
+    "take_oil",
+  ]);
+  const input = modelTurnInput(world, replayed.observation);
+  const climb = input.a.find(([, label]) => /unpowered stair/i.test(label));
+
+  assert.ok(climb);
+  assert.ok(climb[1].length < 170, `early-climb label is ${climb[1].length} characters`);
+  assert.match(climb[1], /lantern filling is the exception/i);
+  assert.match(climb[1], /costs a return/i);
+  assert.match(climb[1], /repair the switchboard afterward/i);
+  assert.match(
+    replayed.observation.actions.find(([id]) => id === "climb_tower")[1],
+    /no tower work until the fuse is installed/i,
+  );
+});

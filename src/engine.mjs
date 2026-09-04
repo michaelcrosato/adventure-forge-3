@@ -1236,7 +1236,7 @@ export function observation(world, state, event = null) {
         state.inventory.includes("oil") &&
         !state.flags.includes("lantern_filled") &&
         !state.flags.includes("fuse_installed")
-      ? "Optional early climb via the unpowered stair (no tower work until the fuse is installed—filling the lantern is the exception; costs a return): fill the lantern, then return to repair the switchboard before climbing again; confirmed channel is ready"
+      ? "Optional early climb (unpowered stair; no tower work until the fuse is installed; filling the lantern is the exception; costs a return): fill the lantern; return to repair the switchboard; confirmed channel is ready"
       : id === "climb_tower" && state.flags.includes("radio_checked")
       ? "Climb the unpowered stair; confirmed channel is ready; fill the lantern, then repair the switchboard"
       : id === "climb_tower" && state.flags.includes("chronometer_wound")
@@ -1963,6 +1963,13 @@ export function modelTurnInput(world, view) {
         ? "Descend to fetch oil first; the lantern is also missing"
           : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
+          : id === "climb_tower" &&
+            view.at?.[0] === "keeper_room" &&
+            typeof view.event === "string" &&
+            view.event.startsWith("You take the sealed oil flask;") &&
+            /^Optional early climb/i.test(label) &&
+            /unpowered stair/i.test(label)
+          ? "Optional early climb via unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward; confirmed channel ready"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
           : id === "wind_chronometer"
