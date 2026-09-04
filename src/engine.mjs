@@ -1130,6 +1130,9 @@ export function modelTurnInput(world, view) {
       .replace(/the remaining turn matters\.\s*/i, "")
       .replace(/after tuning\b/gi, "now");
   }
+  if (isLastTurn && !hasBeaconFinish && modelLastEvent) {
+    modelLastEvent = "No beacon finish remains; leave if possible.";
+  }
   const dualSupplyRecovery =
     view.at?.[0] === "tower" &&
     !view.inv &&
