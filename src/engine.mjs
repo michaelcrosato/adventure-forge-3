@@ -1027,7 +1027,9 @@ export function observation(world, state, event = null) {
     roomText = roomText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
   if (!state.ended && state.turn < world.maxTurns - 1 && !beaconReachable) {
-    roomText = "No beacon finish remains before the deadline; leave if possible or continue only to see the final state.";
+    const noRescueCue = "No beacon finish remains before the deadline; leave if possible or continue only to see the final state.";
+    roomText = noRescueCue;
+    if (event !== null) event = noRescueCue;
   }
   const noRescueExit =
     !state.ended && !beaconReachable && availableActions.includes("leave_island")
