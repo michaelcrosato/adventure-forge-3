@@ -469,16 +469,18 @@ function actionEvent(world, state, actionId, nextState = state) {
   if (actionId === "read_log") {
     const fuseInstalled = state.flags.includes("fuse_installed");
     const lanternFilled = state.flags.includes("lantern_filled");
+    const rescueHierarchy =
+      " Beam tuning is a separate beam upgrade; the confirmed channel or chronometer timing selects the strongest rescue route. Horn timing is an optional bonus on the confirmed-channel route and required only for the chronometer-timed finish.";
     if (fuseInstalled && lanternFilled) {
-      return "The wall log confirms the required sequence: the fuse is replaced and the lantern filled; light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+      return `The wall log confirms the required sequence: the fuse is replaced and the lantern filled; light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
     }
     if (fuseInstalled) {
-      return "The wall log confirms the required sequence: the fuse is already replaced; fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+      return `The wall log confirms the required sequence: the fuse is already replaced; fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
     }
     if (lanternFilled) {
-      return "The wall log confirms the required sequence: the lantern is already filled; replace the fuse, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+      return `The wall log confirms the required sequence: the lantern is already filled; replace the fuse, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
     }
-    return "The wall log sets the required sequence: replace the fuse, fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.";
+    return `The wall log sets the required sequence: replace the fuse, fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
   }
   if (actionId === "signal_boat") {
     if (
@@ -667,6 +669,12 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "You return to the jetty; secure the supply boat's mooring next.";
   }
   if (actionId === "fill_lantern" && state.flags.includes("fuse_installed")) {
+    if (state.flags.includes("radio_checked")) {
+      return "Hand lantern filled; small flame holds steady; beacon dark. Beam tuning is optional: trim the wick or align the lens, and doing both improves the beam. The confirmed-channel route is the strongest rescue; horn timing is an optional bonus.";
+    }
+    if (state.flags.includes("chronometer_wound")) {
+      return "Hand lantern filled; small flame holds steady; beacon dark. Beam tuning is optional: trim the wick or align the lens, and doing both improves the beam. The chronometer-timed route is the strongest rescue; horn timing is required for that route.";
+    }
     return "Hand lantern filled; small flame holds steady; beacon dark. Next: light the beacon. Each tuning step is an independent optional upgrade; optional choices: trim the wick or align the beacon lens; either works as an optional upgrade; tune both for rescue's strongest result.";
   }
   if (actionId === "wait_for_horn" && state.turn === world.maxTurns - 1) {
@@ -684,10 +692,10 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Horn timing recorded, but one turn remains; beam tuning is incomplete, so waiting now leaves no time to tune and light.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("radio_checked")) {
-    return "Spend one turn; horn bonus recorded. Confirmed channel is ready; use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
+    return "Spend one turn; horn bonus recorded. This bonus is optional on the confirmed-channel route. Confirmed channel is ready; use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("chronometer_wound")) {
-    return "Spend one turn; horn bonus recorded. Chronometer timing is ready; use the chronometer-timed finish after tuning; light next turn; never wait on the last turn.";
+    return "Spend one turn; horn bonus recorded. This timing is required for the chronometer-timed finish. Chronometer timing is ready; use the chronometer-timed finish after tuning; light next turn; never wait on the last turn.";
   }
   if (
     actionId === "wait_for_horn" &&
@@ -708,6 +716,12 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Clean, steady flame.";
   }
   if (actionId === "trim_wick") {
+    if (state.flags.includes("radio_checked")) {
+      return "Clean, steady flame; lens remains unaligned. The confirmed-channel route remains the strongest rescue; align the beacon lens before lighting for an optional beam upgrade, or light the trimmed beacon now.";
+    }
+    if (state.flags.includes("chronometer_wound")) {
+      return "Clean, steady flame; lens remains unaligned. Align the lens for an optional beam upgrade, then wait for the horn before the chronometer-timed finish.";
+    }
     return "Clean, steady flame; lens remains unaligned. Align the beacon lens before lighting for the strongest rescue, or light the trimmed beacon now.";
   }
   if (actionId === "align_lens" && state.flags.includes("wick_trimmed")) {
@@ -807,10 +821,10 @@ function endingView(world, state) {
   const hornTiming = state.flags.includes("tide_waited");
   const detail = radioConfirmed
     ? hornTiming
-      ? "The tuned channel and horn timing earn the strongest rescue."
+      ? "The tuned channel and horn timing earn the strongest rescue; horn timing is an optional bonus, not required for the confirmed-channel finish."
       : "The tuned channel earns the strongest rescue."
     : chronometerTiming
-      ? "The tuned beam and chronometer timing earn the strongest rescue."
+      ? "The tuned beam and chronometer timing earn the strongest rescue; horn timing is required for the chronometer-timed finish."
     : tuned && preparedChannel
       ? "The tuned beam and prepared channel earn a stronger rescue."
       : tuned || preparedChannel
@@ -1860,6 +1874,8 @@ export function modelTurnInput(world, view) {
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
     : view.event?.startsWith("Door opens. Mooring is secure; the boat will hold; no return is needed.")
       ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
+    : view.at?.[0] === "keeper_room" && view.event?.startsWith("The wall log ")
+      ? "Log key: repair and fill are required; trim and align both for the strongest beam. A confirmed channel or chronometer timing selects the strongest rescue route; horn timing is an optional bonus on a confirmed channel, but required to unlock the chronometer-timed finish."
     : view.event?.startsWith("Workshop beside the keeper's room; current is not restored;")
       ? "Workshop entered; current is not restored. One efficient option: take the fuse this turn; install it next; then climb the service ladder; this order is optional while the fuse remains here; return to the keeper's room is available before taking it."
     : view.event?.startsWith("Hand lantern filled;")
