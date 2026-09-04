@@ -1821,6 +1821,16 @@ export function modelTurnInput(world, view) {
     if (isLastTurn && !hasBeaconFinish && view.at?.[0] !== "tower") {
       modelText = "No rescue remains; leave if possible.";
     }
+    if (
+      view.at?.[0] === "tower" &&
+      confirmedChannelRecapComplete &&
+      visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact)) &&
+      visibleActionIds.has("trim_wick") &&
+      visibleActionIds.has("align_lens")
+    ) {
+      modelText =
+        "Finish any trim or alignment before spending a turn to wait; waiting now is legal, but finish tuning before lighting next turn. Sheltered finish is unavailable after radio confirmation; use the confirmed-channel finish.";
+    }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
     if (modelText.length > PLAYER_TEXT_LENGTH) {
       modelText = modelText.replace(
