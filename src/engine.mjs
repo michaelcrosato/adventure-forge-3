@@ -819,6 +819,12 @@ export function observation(world, state, event = null) {
     state.room === "keeper_room" && !state.flags.includes("radio_checked")
       ? hasReachableAction(world, state, "check_storm_radio")
       : true;
+  const towerRadioActionReachable =
+    state.room === "tower" &&
+    state.flags.includes("supply_return_used") &&
+    !state.flags.includes("radio_checked")
+      ? hasReachableAction(world, state, "check_tower_radio")
+      : true;
   const hasLastTurnBeaconFinisher =
     state.turn === world.maxTurns - 1 &&
     availableActions.some((id) =>
@@ -928,6 +934,12 @@ export function observation(world, state, event = null) {
       roomText = roomText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
         "Finish any trim or alignment before lighting.",
+      );
+    }
+    if (!towerRadioActionReachable) {
+      roomText = roomText.replace(
+        "tower relay can confirm the radio channel after the lantern is filled if needed.",
+        "The confirmed-channel route is unavailable; use the available beacon route.",
       );
     }
   } else if (state.room === "keeper_room") {
