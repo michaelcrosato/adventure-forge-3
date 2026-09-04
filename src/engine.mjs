@@ -501,7 +501,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     if (hasLog && hasTide) {
       return "Ring the bell; supply boat holds position. Check the storm radio before taking oil.";
     }
-    if (hasLog) return "Boat holds. Study the tide chart now to unlock the storm radio: make the storm radio available. If you want the keeper-room confirmation, then check it before taking oil (costs one turn). The check choice appears after the tide chart. Keeper-room radio check optional; tower relay later if you skip the check (to confirm the channel), after filling the lantern in the tower: in the lantern room, choose Check the tower relay for a clear channel.";
+    if (hasLog) return "Study the tide chart now to unlock the storm radio: make the storm radio available. If you want the keeper-room confirmation, then check it before taking oil (costs one turn). The check choice appears after the tide chart. Keeper-room radio check optional; tower relay later if you skip the check (to confirm the channel), after filling the lantern in the tower: in the lantern room, choose Check the tower relay for a clear channel.";
     if (hasTide) return "Ring the bell; supply boat holds position. Read the log before checking the storm radio.";
     return "Ring the bell; supply boat holds position. Read the log and tide chart before checking the storm radio.";
   }
@@ -1898,7 +1898,8 @@ export function modelTurnInput(world, view) {
   if (
     view.at?.[0] === "keeper_room" &&
     typeof view.event === "string" &&
-    view.event.startsWith("Boat holds.") &&
+    (view.event.startsWith("Boat holds.") ||
+      view.event.startsWith("Study the tide chart now to unlock the storm radio:")) &&
     visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
     !visibleFacts.some((fact) => /^Tide chart:/i.test(fact)) &&
     visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact)) &&
