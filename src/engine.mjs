@@ -1450,6 +1450,12 @@ export function modelTurnInput(world, view) {
         /oil is ready; fill the lantern before climbing;/i,
         "oil is ready; fill the lantern in the tower after the workshop repair;",
       );
+      modelText = modelText
+        .replace(/^Use what remains\.\s*Lantern still needs filling\.\s*Log and tide clues are recorded\.\s*/i, "")
+        .replace(
+          /after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready\./i,
+          "then use the repaired stair.",
+        );
     }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
