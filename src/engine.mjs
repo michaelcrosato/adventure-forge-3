@@ -780,6 +780,11 @@ export function observation(world, state, event = null) {
           ? "Horn timing is recorded; light the available rescue beacon now; remaining tuning is optional."
           : "Horn timing is recorded; finish the remaining beam tuning before lighting.",
       );
+    } else if (hasLastTurnBeaconFinisher) {
+      roomText = roomText.replace(
+        "Finish any trim or alignment before spending a turn to wait.",
+        "A beacon finish is ready; light now; remaining tuning is optional.",
+      );
     } else if (!availableActions.includes("wait_for_horn")) {
       roomText = roomText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
