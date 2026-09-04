@@ -953,7 +953,9 @@ export function observation(world, state, event = null) {
     } else if (state.inventory.includes("oil") && !state.flags.includes("radio_checked")) {
       roomText = roomText.replace(
         "check radio if needed before taking the oil;",
-        "Oil is ready; fill the lantern before climbing;",
+        state.inventory.includes("lantern")
+          ? "Oil is ready; fill the lantern before climbing;"
+          : "Oil is ready; recover the lantern before filling;",
       );
     } else if (state.flags.includes("lantern_filled")) {
       const radioStatus = state.flags.includes("radio_checked")
