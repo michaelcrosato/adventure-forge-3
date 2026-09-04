@@ -821,7 +821,7 @@ function endingView(world, state) {
   const hornTiming = state.flags.includes("tide_waited");
   const detail = radioConfirmed
     ? hornTiming
-      ? "The tuned channel and horn timing earn the strongest rescue; horn timing is an optional bonus, not required for the confirmed-channel finish."
+      ? "The tuned channel and horn timing earn the strongest rescue; horn timing is an optional bonus, not required."
       : "The tuned channel earns the strongest rescue."
     : chronometerTiming
       ? "The tuned beam and chronometer timing earn the strongest rescue; horn timing is required for the chronometer-timed finish."
