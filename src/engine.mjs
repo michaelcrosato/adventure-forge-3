@@ -1354,9 +1354,18 @@ export function modelTurnInput(world, view) {
       modelText = modelText.replace(
         /If the fuse remains uninstalled, install it before leaving; the service ladder opens\. If you already carry both lantern and oil, install the fuse instead of backtracking; after installation, climb the service ladder;/i,
         visibleActionIds.has("take_fuse")
-          ? "Take the fuse this turn; install it next; then climb the service ladder;"
-          : "Install the fuse this turn; then climb the service ladder;",
+          ? "One efficient option: take the fuse this turn; install it next; then climb the service ladder; this order is optional while the fuse remains here; return to the keeper's room is available before taking it;"
+          : "Install the fuse when ready; then climb the service ladder;",
       );
+      if (
+        visibleActionIds.has("install_fuse") &&
+        !visibleActionIds.has("return_keeper_after_repair") &&
+        !visibleActionIds.has("return_keeper_from_workshop")
+      ) {
+        modelText = modelText
+          .replace(/; return only for missing supplies or unfinished keeper-room prep\./i, ".")
+          .replace(/\s*Missing supplies\?\s*Emergency release returns to the keeper's room\./i, "");
+      }
     }
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
@@ -1704,7 +1713,7 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("Door opens. Mooring is secure; the boat will hold; no return is needed.")
       ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
     : view.event?.startsWith("Workshop beside the keeper's room; current is not restored;")
-      ? "Workshop entered; current is not restored. Take the fuse this turn; install it next; then climb the service ladder."
+      ? "Workshop entered; current is not restored. One efficient option: take the fuse this turn; install it next; then climb the service ladder; this order is optional while the fuse remains here; return to the keeper's room is available before taking it."
     : view.event?.startsWith("Hand lantern filled;")
       ? confirmedChannelRecapComplete
         ? "Lantern filled; optional beam tuning remains before lighting."
