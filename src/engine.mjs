@@ -811,6 +811,10 @@ export function observation(world, state, event = null) {
     !state.flags.includes("mooring_return_used")
       ? hasReachableAction(world, state, "secure_mooring")
       : true;
+  const signalActionReachable =
+    state.room === "keeper_room"
+      ? state.flags.includes("boat_signaled") || hasReachableAction(world, state, "signal_boat")
+      : true;
   const hasLastTurnBeaconFinisher =
     state.turn === world.maxTurns - 1 &&
     availableActions.some((id) =>
@@ -1139,6 +1143,12 @@ export function observation(world, state, event = null) {
       ? "Climb the unpowered stair; chronometer is already wound; fill the lantern, then repair the switchboard"
       : id === "climb_tower" && state.flags.includes("tower_return_used")
       ? "Climb the unpowered stair; early chronometer timing is closed; fill the lantern, then repair the switchboard"
+      : id === "climb_tower" &&
+          state.flags.includes("read_log") &&
+          state.flags.includes("tide_chart_read") &&
+          !state.flags.includes("boat_signaled") &&
+          !signalActionReachable
+      ? "Climb the unpowered stair; secured-boat and radio preparation is unavailable; fill the lantern, then repair the switchboard"
       : id === "climb_tower" &&
           (!state.flags.includes("read_log") ||
             !state.flags.includes("tide_chart_read") ||
