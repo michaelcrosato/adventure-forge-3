@@ -1348,10 +1348,15 @@ export function modelTurnInput(world, view) {
         );
     }
     if (view.at?.[0] === "tower" && beaconFinishCount === 1) {
-      modelText = modelText.replace(
-        /Several lighting choices; most preparation:[^.]+\./i,
-        "One beacon finish remains; light when ready.",
-      );
+      modelText = modelText
+        .replace(
+          /Before the final turn: light when ready; remaining preparation is optional\.\s*/i,
+          "",
+        )
+        .replace(
+          /Several lighting choices; most preparation:[^.]+\./i,
+          "One beacon finish remains; light when ready.",
+        );
     }
     if (
       view.at?.[0] === "tower" &&
