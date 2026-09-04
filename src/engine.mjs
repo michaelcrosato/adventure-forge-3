@@ -1342,6 +1342,10 @@ export function modelTurnInput(world, view) {
         /tower relay can confirm the radio channel(?: after the lantern is filled)? if needed\./i,
         "Radio checks are too late.",
       );
+      modelText = modelText.replace(
+        /No beacon finish is available yet; (?:complete the available preparation before lighting|most preparation:[^.]+)\./i,
+        "No beacon finish remains.",
+      );
     }
     if (isLastTurn && view.at?.[0] === "tower" && hasBeaconFinish) {
       modelText = modelText.replace(/\s*Last turn: light now\./i, "");
