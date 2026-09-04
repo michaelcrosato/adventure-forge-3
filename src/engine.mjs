@@ -1050,6 +1050,11 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("Hand lantern filled;")
       ? "Lantern filled; either tuning choice is optional; both together earn the strongest rescue."
       : view.event;
+  const dualSupplyRecovery =
+    view.at?.[0] === "tower" &&
+    !view.inv &&
+    visibleActionIds.has("return_keeper_from_tower") &&
+    visibleActionIds.has("return_keeper_for_lantern");
   return {
     goal: world.objective,
     t: view.turn,
@@ -1065,7 +1070,14 @@ export function modelTurnInput(world, view) {
     ...(view.inv ? { inv: view.inv } : {}),
     ...(view.facts ? { facts: view.facts } : {}),
     ...(lastEvent ? { last: lastEvent } : {}),
-    a: (view.actions ?? []).map(([, label], index) => [index, label]),
+    a: (view.actions ?? []).map(([id, label], index) => [
+      index,
+      dualSupplyRecovery && id === "return_keeper_from_tower"
+        ? "Descend to fetch oil first; the lantern is also missing"
+        : dualSupplyRecovery && id === "return_keeper_for_lantern"
+          ? "Descend to fetch the lantern first; oil is also missing"
+          : label,
+    ]),
   };
 }
 
