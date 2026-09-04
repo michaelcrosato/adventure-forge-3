@@ -1300,13 +1300,14 @@ export function modelTurnInput(world, view) {
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
   ).length;
   const hasBeaconFinish = beaconFinishCount > 0;
-  const fullyTunedConfirmedChannel =
+  const confirmedChannelRecapComplete =
     hasBeaconFinish &&
-    visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
-    visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact)) &&
+    view.turn?.[0] !== world.maxTurns - 1 &&
+    visibleFacts.some((fact) => /Log: replace the fuse; fill the lantern; light the beacon/i.test(fact)) &&
+    visibleFacts.some((fact) => /Tide chart: light the beacon before the next high tide/i.test(fact)) &&
     visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact));
   if (typeof modelText === "string") {
-    if (fullyTunedConfirmedChannel) {
+    if (confirmedChannelRecapComplete) {
       modelText = modelText
         .replace(/Log and tide chart are recorded;\s*/i, "")
         .replace(/radio channel already confirmed;\s*/i, "");
