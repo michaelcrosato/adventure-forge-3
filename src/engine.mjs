@@ -1529,6 +1529,18 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "tower" &&
+      beaconFinishCount === 1 &&
+      visibleActionIds.has("wait_for_horn") &&
+      visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+      visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        /Beam tuning is complete; light now or wait for the horn if time allows\.\s*A beacon finish is ready; light now or wait for the horn\./i,
+        "Beam tuning is complete; light now or wait for the horn.",
+      );
+    }
+    if (
+      view.at?.[0] === "tower" &&
       visibleActionIds.has("fill_lantern") &&
       !visibleActionIds.has("trim_wick") &&
       !visibleActionIds.has("align_lens")
