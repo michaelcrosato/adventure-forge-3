@@ -1085,6 +1085,16 @@ export function modelTurnInput(world, view) {
         "",
       );
     }
+    if (
+      visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact)) &&
+      !visibleFacts.some((fact) => /Emergency supply route: recover missing supplies/i.test(fact)) &&
+      !visibleActionIds.has("close_storm_shutters")
+    ) {
+      modelText = modelText.replace(
+        "Bar shutters: sheltered finish",
+        "Sheltered finish is unavailable after radio confirmation; use the confirmed-channel finish.",
+      );
+    }
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
