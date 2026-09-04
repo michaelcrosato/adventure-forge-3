@@ -803,8 +803,11 @@ function endingView(world, state) {
   const precisionChannel =
     state.flags.includes("radio_checked") ||
     (state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited"));
+  const hornTiming = state.flags.includes("tide_waited");
   const detail = precisionChannel
-    ? "The tuned channel earns the strongest rescue."
+    ? hornTiming
+      ? "The tuned channel and horn timing earn the strongest rescue."
+      : "The tuned channel earns the strongest rescue."
     : tuned && preparedChannel
       ? "The tuned beam and prepared channel earn a stronger rescue."
       : tuned || preparedChannel
