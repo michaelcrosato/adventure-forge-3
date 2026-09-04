@@ -1291,6 +1291,15 @@ export function modelTurnInput(world, view) {
         .replace(/radio check can wait until the boat and clues are ready;\s*/i, "")
         .replace(/check the radio now if time allows;\s*/i, "");
     }
+    if (modelText.includes("Tide chart recorded; read the wall log.")) {
+      modelText = modelText.replace(
+        / and read the wall log, then secure the boat before lighting\./i,
+        ", then secure the boat before lighting.",
+      ).replace(
+        /; read the wall log before securing the boat or lighting\./i,
+        "; secure the boat before lighting.",
+      );
+    }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
         .replace(
