@@ -545,6 +545,9 @@ function actionEvent(world, state, actionId) {
     const supplyCue = missingSupplies.length
       ? `Take ${missingSupplies.join(" and ")} if needed, then return`
       : "Return";
+    if (missingSupplies.length === 0) {
+      return "Tower work remains ahead—workshop stays behind. Return to the workshop to take and install the fuse, then use the service ladder.";
+    }
     return `Tower work remains ahead—workshop stays behind. ${supplyCue} to the workshop to take and install the fuse before using the repaired stair.`;
   }
   if (actionId === "return_keeper_for_lantern") {
