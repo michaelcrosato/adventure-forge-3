@@ -1469,7 +1469,7 @@ export function modelTurnInput(world, view) {
   const lastEvent = view.event?.startsWith("Mooring secure:")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
     : view.event?.startsWith("Hand lantern filled;")
-      ? "Lantern filled; either tuning choice is optional; both together earn the strongest rescue."
+      ? "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
       : view.event;
   let modelLastEvent =
     visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
