@@ -350,6 +350,29 @@ export function legalActions(world, state) {
   return available;
 }
 
+const beaconPathCache = new WeakMap();
+
+function hasReachableBeacon(world, state) {
+  let cache = beaconPathCache.get(world);
+  if (!cache) {
+    cache = new Map();
+    beaconPathCache.set(world, cache);
+  }
+  const stateKey = stableStringify(state);
+  if (cache.has(stateKey)) return cache.get(stateKey);
+  if (state.ended) {
+    const reachable = state.ending === "beacon";
+    cache.set(stateKey, reachable);
+    return reachable;
+  }
+  cache.set(stateKey, false);
+  const reachable = legalActions(world, state).some((actionId) =>
+    hasReachableBeacon(world, step(world, state, actionId).state),
+  );
+  cache.set(stateKey, reachable);
+  return reachable;
+}
+
 function sorted(values) {
   return [...values].sort();
 }
@@ -739,6 +762,7 @@ function endingView(world, state) {
 export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
   const availableActions = legalActions(world, state);
+  const beaconReachable = hasReachableBeacon(world, state);
   const hasLastTurnBeaconFinisher =
     state.turn === world.maxTurns - 1 &&
     availableActions.some((id) =>
@@ -1002,15 +1026,23 @@ export function observation(world, state, event = null) {
   if (state.room === "tower" && state.turn === world.maxTurns - 1) {
     roomText = roomText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
+  if (!state.ended && state.turn < world.maxTurns - 1 && !beaconReachable) {
+    roomText = "No beacon finish remains before the deadline; leave if possible or continue only to see the final state.";
+  }
+  const noRescueExit =
+    !state.ended && !beaconReachable && availableActions.includes("leave_island")
+      ? ["leave_island"]
+      : [];
   const lastTurnExit =
     state.turn === world.maxTurns - 1 && beaconFinishers.length === 0
       ? availableActions.filter((id) => id === "leave_island")
       : [];
+  const exitActions = lastTurnExit.length > 0 ? lastTurnExit : noRescueExit;
   const visibleActions =
     beaconFinishers.length > 0
       ? beaconFinishers
-      : lastTurnExit.length > 0
-        ? lastTurnExit
+      : exitActions.length > 0
+        ? exitActions
         : availableActions;
   const actions = visibleActions.map((id) => [
     id,
@@ -1293,6 +1325,9 @@ export function modelTurnInput(world, view) {
       .replace(/Finish any trim or alignment before lighting if needed;\s*/i, "")
       .replace(/the remaining turn matters\.\s*/i, "")
       .replace(/after tuning\b/gi, "now");
+  }
+  if (!isLastTurn && /No beacon finish remains before the deadline/i.test(modelText)) {
+    modelLastEvent = "No beacon finish remains before the deadline; leave if possible or continue only to see the final state.";
   }
   if (isLastTurn && !hasBeaconFinish && modelLastEvent) {
     modelLastEvent = "No beacon finish remains; leave if possible.";
