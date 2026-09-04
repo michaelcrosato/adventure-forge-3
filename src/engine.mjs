@@ -1396,6 +1396,104 @@ export function modelTurnInput(world, view) {
         "Take the oil before climbing; fill the lantern in the tower.",
       );
     }
+    const hasSecureMooringFact = visibleFacts.some((fact) => /supply boat's mooring is secure/i.test(fact));
+    const hasLogClue = visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact));
+    const hasTideClue = visibleFacts.some((fact) => /^Tide chart:/i.test(fact));
+    const hasBoatSignal = visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact));
+    const hasRadioConfirmation = visibleFacts.some((fact) => /Radio channel clear/i.test(fact));
+    const hasMooringRecovery = visibleFacts.some((fact) => /Mooring recovery used/i.test(fact));
+    const hasFilledLantern = visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact));
+    if (
+      view.at?.[0] === "keeper_room" &&
+      hasSecureMooringFact &&
+      !hasMooringRecovery &&
+      visibleInventory.includes("lantern") &&
+      !visibleInventory.includes("oil") &&
+      !hasFilledLantern
+    ) {
+      if (
+        visibleActionIds.has("read_log") &&
+        visibleActionIds.has("study_tide_chart") &&
+        visibleActionIds.has("signal_boat") &&
+        visibleActionIds.has("take_oil") &&
+        !hasLogClue &&
+        !hasTideClue
+      ) {
+        modelText =
+          "Read the wall log and study the tide chart; signal the boat if you want the confirmed channel; take the oil before climbing; fill the lantern in the tower.";
+      } else if (
+        visibleActionIds.has("read_log") &&
+        visibleActionIds.has("study_tide_chart") &&
+        visibleActionIds.has("take_oil") &&
+        !hasLogClue &&
+        !hasTideClue &&
+        hasBoatSignal
+      ) {
+        modelText =
+          "Read the wall log and study the tide chart; boat signal already confirmed; take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("study_tide_chart") &&
+        visibleActionIds.has("signal_boat") &&
+        visibleActionIds.has("take_oil") &&
+        hasLogClue &&
+        !hasTideClue
+      ) {
+        modelText =
+          "Study the tide chart; signal the boat if you want the confirmed channel; take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("study_tide_chart") &&
+        visibleActionIds.has("take_oil") &&
+        hasLogClue &&
+        !hasTideClue &&
+        hasBoatSignal
+      ) {
+        modelText = "Study the tide chart; take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("read_log") &&
+        visibleActionIds.has("signal_boat") &&
+        visibleActionIds.has("take_oil") &&
+        !hasLogClue &&
+        hasTideClue
+      ) {
+        modelText =
+          "Read the wall log; signal the boat if you want the confirmed channel; take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("read_log") &&
+        visibleActionIds.has("take_oil") &&
+        !hasLogClue &&
+        hasTideClue &&
+        hasBoatSignal
+      ) {
+        modelText = "Read the wall log; take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("signal_boat") &&
+        visibleActionIds.has("take_oil") &&
+        hasLogClue &&
+        hasTideClue &&
+        !hasBoatSignal
+      ) {
+        modelText = "Signal the boat if you want the confirmed channel; take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("check_storm_radio") &&
+        visibleActionIds.has("take_oil") &&
+        hasLogClue &&
+        hasTideClue &&
+        hasBoatSignal &&
+        !hasRadioConfirmation
+      ) {
+        modelText = "Check the radio for the confirmed channel; then take the oil before climbing.";
+      } else if (
+        visibleActionIds.has("take_oil") &&
+        visibleActionIds.has("go_workshop") &&
+        hasLogClue &&
+        hasTideClue &&
+        hasBoatSignal &&
+        hasRadioConfirmation &&
+        !/repaired-stair return is closed/i.test(modelText)
+      ) {
+        modelText = "Take the oil; then use the workshop before climbing.";
+      }
+    }
     if (visibleInventory.includes("lantern") && !visibleActionIds.has("take_lantern")) {
       modelText = modelText.replace(
         "Take the lantern if it remains;",
@@ -1480,6 +1578,17 @@ export function modelTurnInput(world, view) {
           /after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready\./i,
           "then use the repaired stair.",
         );
+      if (
+        hasLogClue &&
+        hasTideClue &&
+        hasBoatSignal &&
+        hasRadioConfirmation &&
+        view.event?.startsWith("You take the sealed oil flask;") &&
+        !/repaired-stair return is closed/i.test(modelText)
+      ) {
+        modelText =
+          "Oil is ready; fill the lantern in the tower after the workshop repair—climb the service ladder first.";
+      }
     }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
@@ -1725,6 +1834,18 @@ export function modelTurnInput(world, view) {
       "If current is not restored, install the switchboard fuse to restore tower power; otherwise return to the keeper's room for missing supplies."
       ? "Current is already restored; return to the keeper's room only for missing supplies or use the service ladder."
       : lastEvent;
+  if (
+    view.at?.[0] === "keeper_room" &&
+    typeof view.event === "string" &&
+    view.event.startsWith("Boat holds.") &&
+    visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
+    !visibleFacts.some((fact) => /^Tide chart:/i.test(fact)) &&
+    visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact)) &&
+    visibleInventory.includes("lantern") &&
+    !visibleInventory.includes("oil")
+  ) {
+    modelLastEvent = "Boat holds. Study the tide chart to unlock the storm radio.";
+  }
   if (
     typeof modelLastEvent === "string" &&
     modelLastEvent.startsWith("Safe window for a stronger rescue:") &&
