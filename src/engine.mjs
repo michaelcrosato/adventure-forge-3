@@ -1437,6 +1437,20 @@ export function modelTurnInput(world, view) {
     if (view.at?.[0] === "keeper_room" && visibleActionIds.has("climb_repaired_stairs")) {
       modelText = modelText.replace(/; fill the lantern before climbing;\s*/i, "; ");
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      visibleActionIds.has("go_workshop") &&
+      visibleActionIds.has("climb_tower") &&
+      !visibleActionIds.has("climb_repaired_stairs") &&
+      visibleInventory.includes("lantern") &&
+      visibleInventory.includes("oil") &&
+      !visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        /oil is ready; fill the lantern before climbing;/i,
+        "oil is ready; fill the lantern in the tower after the workshop repair;",
+      );
+    }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
         .replace(
