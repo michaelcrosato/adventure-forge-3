@@ -1222,7 +1222,15 @@ export function observation(world, state, event = null) {
         : availableActions;
   const actions = visibleActions.map((id) => [
     id,
-    id === "climb_tower" &&
+    id === "go_workshop" &&
+        state.room === "keeper_room" &&
+        state.flags.includes("radio_checked") &&
+        state.inventory.includes("lantern") &&
+        state.inventory.includes("oil") &&
+        !state.flags.includes("lantern_filled") &&
+        !state.flags.includes("fuse_installed")
+      ? "Enter the workshop first; install the fuse before climbing to avoid an unpowered return"
+      : id === "climb_tower" &&
         state.flags.includes("radio_checked") &&
         state.inventory.includes("lantern") &&
         state.inventory.includes("oil") &&
