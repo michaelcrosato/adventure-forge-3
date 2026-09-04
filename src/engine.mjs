@@ -1228,7 +1228,7 @@ export function observation(world, state, event = null) {
         state.inventory.includes("oil") &&
         !state.flags.includes("lantern_filled") &&
         !state.flags.includes("fuse_installed")
-      ? "Optional early climb via the unpowered stair: fill the lantern, then return to repair the switchboard before climbing again; confirmed channel is ready"
+      ? "Optional early climb via the unpowered stair (no tower work until the fuse is installed; costs a return): fill the lantern, then return to repair the switchboard before climbing again; confirmed channel is ready"
       : id === "climb_tower" && state.flags.includes("radio_checked")
       ? "Climb the unpowered stair; confirmed channel is ready; fill the lantern, then repair the switchboard"
       : id === "climb_tower" && state.flags.includes("chronometer_wound")
