@@ -800,9 +800,13 @@ export function observation(world, state, event = null) {
         "Finish any trim or alignment before spending a turn to wait.",
         state.turn === world.maxTurns - 1
           ? "Beam tuning is complete; light now."
-          : availableActions.includes("wait_for_horn")
+          : hasBeaconFinisher && availableActions.includes("wait_for_horn")
             ? "Beam tuning is complete; light now or wait for the horn if time allows."
-            : "Beam tuning is complete; light the beacon when ready.",
+            : hasBeaconFinisher
+              ? "Beam tuning is complete; light the beacon when ready."
+              : availableActions.includes("wait_for_horn")
+                ? "Beam tuning is complete; wait for the horn before lighting."
+                : "Beam tuning is complete; finish the remaining preparation before lighting.",
       );
     } else if (state.flags.includes("tide_waited")) {
       roomText = roomText.replace(
