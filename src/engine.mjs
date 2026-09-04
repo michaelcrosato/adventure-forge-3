@@ -1403,6 +1403,12 @@ export function modelTurnInput(world, view) {
       modelText = "No rescue remains; leave if possible.";
     }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
+    if (modelText.length > PLAYER_TEXT_LENGTH) {
+      modelText = modelText.replace(
+        "Before the final turn: finish the remaining preparation.",
+        "Before the final turn: finish preparation.",
+      );
+    }
   }
   const lastEvent = view.event?.startsWith("Mooring secure:")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue. Basic rescue: skip signaling and light directly. Stronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
