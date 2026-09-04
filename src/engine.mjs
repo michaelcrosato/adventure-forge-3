@@ -927,6 +927,12 @@ export function observation(world, state, event = null) {
       );
     }
   } else if (state.room === "keeper_room") {
+    if (state.flags.includes("boat_signaled") && !state.flags.includes("radio_checked")) {
+      roomText = roomText.replace(
+        "Signal the boat first if needed;",
+        "Boat signal already confirmed;",
+      );
+    }
     const clueStatus =
       state.flags.includes("read_log") && state.flags.includes("tide_chart_read")
         ? "Log and tide clues are recorded."
