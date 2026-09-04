@@ -1556,6 +1556,8 @@ export function modelTurnInput(world, view) {
         ? "Descend to fetch oil first; the lantern is also missing"
         : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
+          : id === "return_for_mooring" && /before tide study/i.test(label)
+            ? label.replace(/before tide study/i, "before studying the tide chart")
           : isLastTurn &&
             !hornBonusRecorded &&
             id === "light_all_ready_beacon"
