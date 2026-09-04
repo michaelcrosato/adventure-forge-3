@@ -1016,6 +1016,12 @@ export function modelTurnInput(world, view) {
         "Mooring is unsecured; take oil if needed, then return to secure it before studying the tide.",
         "Mooring is unsecured; return to secure it before studying the tide.",
       );
+      if (!visibleFacts.some((fact) => /Tower current restored/i.test(fact))) {
+        modelText = modelText.replace(
+          "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
+          "Use the repaired stair after current is restored and supplies are ready.",
+        );
+      }
     }
     if (
       visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
