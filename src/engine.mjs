@@ -464,7 +464,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Door opens. Mooring unsecured; the recovery return is no longer available, so continue with the basic beacon route.";
   }
   if (actionId === "secure_mooring") {
-    return "Mooring secure: the boat will hold without signaling; stronger rescue on its own.\nBasic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly.\nStronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. Keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
+    return "The boat will hold without signaling; stronger rescue on its own.\nBasic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly.\nStronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. Keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
   }
   if (actionId === "read_log") {
     const fuseInstalled = state.flags.includes("fuse_installed");
@@ -1380,7 +1380,7 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = modelText.replace(/\s*Mooring is secure; the boat will hold\.\s*$/i, "");
     }
-    if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
+    if (view.at?.[0] === "jetty" && view.event?.startsWith("The boat will hold without signaling;")) {
       modelText =
         "Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room. Label key: direct lighting is the basic rescue; a secured boat is the stronger safety step; signaling and radio make the strongest channel route. Secured direct lighting is the stronger direct route.";
     }
@@ -1878,7 +1878,7 @@ export function modelTurnInput(world, view) {
       );
     }
   }
-  const lastEvent = view.event?.startsWith("Mooring secure:")
+  const lastEvent = view.event?.startsWith("The boat will hold without signaling;")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
     : view.event?.startsWith("Mooring is secure; the boat will hold; no return is needed.")
       ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
