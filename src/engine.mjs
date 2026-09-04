@@ -1245,7 +1245,8 @@ export function observation(world, state, event = null) {
         state.inventory.includes("lantern") &&
         state.inventory.includes("oil") &&
         !state.flags.includes("lantern_filled") &&
-        !state.flags.includes("fuse_installed")
+        !state.flags.includes("fuse_installed") &&
+        event === null
       ? "Enter the workshop first; install the fuse before climbing to avoid an unpowered return"
       : id === "climb_tower" &&
         state.flags.includes("radio_checked") &&
