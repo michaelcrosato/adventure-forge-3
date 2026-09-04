@@ -1066,12 +1066,12 @@ export function observation(world, state, event = null) {
           signalActionReachable ? "Signal the boat if desired;" : "",
         )
         .replace(
-          "check radio if needed before taking the oil;",
-          mooringActionReachable ? "radio confirmation is unavailable on this route;" : "",
+          /check radio if needed before taking the oil;\s*/i,
+          mooringActionReachable ? "radio confirmation is unavailable on this route; " : "",
         )
         .replace(
-          "radio check can wait until the boat and clues are ready;",
-          mooringActionReachable ? "radio confirmation is unavailable on this route;" : "",
+          /radio check can wait until the boat and clues are ready;\s*/i,
+          mooringActionReachable ? "radio confirmation is unavailable on this route; " : "",
         );
     }
   } else if (state.room === "workshop" && state.flags.includes("fuse_installed")) {

@@ -20,5 +20,6 @@ test("keeper copy does not repeat radio unavailability after closing both routes
 
   assert.match(view.text, /secured-boat and radio routes are unavailable/i);
   assert.doesNotMatch(view.text, /radio confirmation is unavailable on this route/i);
+  assert.doesNotMatch(view.text, / {2,}/);
   assert.doesNotMatch(input.text, /radio confirmation is unavailable on this route/i);
 });
