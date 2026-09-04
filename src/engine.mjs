@@ -1083,6 +1083,9 @@ export function modelTurnInput(world, view) {
     !view.inv &&
     visibleActionIds.has("return_keeper_from_tower") &&
     visibleActionIds.has("return_keeper_for_lantern");
+  const hornBonusRecorded = visibleFacts.some((fact) =>
+    /You waited through one boat horn/i.test(fact),
+  );
   return {
     goal: world.objective,
     t: view.turn,
@@ -1104,7 +1107,9 @@ export function modelTurnInput(world, view) {
         ? "Descend to fetch oil first; the lantern is also missing"
         : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
-          : label,
+          : hornBonusRecorded && id === "light_all_ready_beacon"
+            ? "Light the tuned beacon with the horn bonus"
+            : label,
     ]),
   };
 }
