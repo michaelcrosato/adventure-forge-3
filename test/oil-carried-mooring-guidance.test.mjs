@@ -4,7 +4,21 @@ import { loadWorld, modelTurnInput, observation, replayActions } from "../src/en
 
 test("keeper guidance stops repeating oil pickup after oil is carried", async () => {
   const world = await loadWorld();
-  const keeper = replayActions(world, 8301, [
+  const earlyKeeper = replayActions(world, 8301, [
+    "take_lantern",
+    "enter_house",
+    "take_oil",
+  ]).state;
+  const earlyView = observation(world, earlyKeeper);
+  const earlyInput = modelTurnInput(world, earlyView);
+
+  assert.match(earlyView.text, /mooring is unsecured; read the wall log before securing the boat or lighting/i);
+  assert.doesNotMatch(earlyView.text, /mooring is unsecured; take oil/i);
+  assert.doesNotMatch(earlyView.text, /mooring recovery is no longer available/i);
+  assert.match(earlyInput.text, /mooring is unsecured; read the wall log before securing the boat or lighting/i);
+  assert.doesNotMatch(earlyInput.text, /mooring is unsecured; take oil/i);
+
+  const keeper = replayActions(world, 8302, [
     "take_lantern",
     "enter_house",
     "read_log",

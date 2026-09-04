@@ -866,6 +866,8 @@ export function observation(world, state, event = null) {
                 : state.inventory.includes("oil")
                   ? "Mooring is unsecured; return to secure it before studying the tide."
                 : "Mooring is unsecured; take oil if needed, then return to secure it before studying the tide."
+              : !hasReadLog && availableActions.includes("read_log")
+                ? "Mooring is unsecured; read the wall log before securing the boat or lighting."
               : hasTideChart && !hasReadLog
                 ? "Mooring is unsecured; read the wall log before securing the boat or lighting."
                 : availableActions.includes("take_oil")
