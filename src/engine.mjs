@@ -1562,6 +1562,18 @@ export function modelTurnInput(world, view) {
       );
     }
     if (
+      view.at?.[0] === "tower" &&
+      visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact)) &&
+      (visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) ||
+        visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact))) &&
+      !visibleActionIds.has("close_storm_shutters")
+    ) {
+      modelText = modelText.replace(
+        /\s*Sheltered finish is unavailable after radio confirmation; use the confirmed-channel finish\./i,
+        "",
+      );
+    }
+    if (
       visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
       visibleActionIds.has("climb_repaired_stairs")
     ) {
