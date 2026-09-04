@@ -1360,6 +1360,17 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "tower" &&
+      visibleActionIds.has("fill_lantern") &&
+      !visibleActionIds.has("trim_wick") &&
+      !visibleActionIds.has("align_lens")
+    ) {
+      modelText = modelText.replace(
+        /Aligned by hand if needed; charred wick can be trimmed before lighting the beacon if needed\.\s*/i,
+        "",
+      );
+    }
+    if (
+      view.at?.[0] === "tower" &&
       !hasBeaconFinish &&
       !visibleActionIds.has("trim_wick") &&
       !visibleActionIds.has("align_lens")
