@@ -1405,7 +1405,7 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = modelText.replace(
         "check radio if needed before taking the oil;",
-        "check the radio after the clues and boat are ready, before taking the oil if needed;",
+        "check the radio after the clues and boat are ready; it becomes available after the tide chart; take the oil after if needed;",
       );
     }
     if (
