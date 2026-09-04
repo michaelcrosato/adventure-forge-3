@@ -773,10 +773,17 @@ export function observation(world, state, event = null) {
         "Radio channel already confirmed;",
       );
     }
+    const hasShelteredFinisher = availableActions.some(
+      (id) =>
+        id.startsWith("light_sheltered") &&
+        world.actions[id].effects.some((effect) => effect.end === "beacon"),
+    );
     if (state.flags.includes("shutters_closed")) {
       roomText = roomText.replace(
         "Bar shutters: sheltered finish",
-        "Shutters barred: sheltered finish ready",
+        hasShelteredFinisher
+          ? "Shutters barred: sheltered finish ready"
+          : "Shutters barred; finish remaining trim or alignment before lighting",
       );
     } else if (hasLastTurnBeaconFinisher) {
       roomText = roomText.replace(
