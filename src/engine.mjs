@@ -1232,6 +1232,20 @@ export function modelTurnInput(world, view) {
         "check the radio after the clues and boat are ready, before taking the oil if needed;",
       );
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      modelText.includes("The secured-boat and radio routes are unavailable;")
+    ) {
+      modelText = modelText
+        .replace(
+          /check the radio after the clues and boat are ready, before taking the oil if needed;\s*/i,
+          "",
+        )
+        .replace(/check radio if needed before taking the oil;\s*/i, "")
+        .replace(/check radio if needed;\s*/i, "")
+        .replace(/radio check can wait until the boat and clues are ready;\s*/i, "")
+        .replace(/check the radio now if time allows;\s*/i, "");
+    }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
         .replace(
