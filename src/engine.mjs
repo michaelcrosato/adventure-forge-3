@@ -845,7 +845,11 @@ export function observation(world, state, event = null) {
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
         "Mooring is secure; the boat will hold.",
       );
-    } else if (state.flags.includes("read_log") || state.flags.includes("tide_chart_read")) {
+    } else if (
+      state.flags.includes("read_log") ||
+      state.flags.includes("tide_chart_read") ||
+      state.inventory.includes("oil")
+    ) {
       const hasReadLog = state.flags.includes("read_log");
       const hasTideChart = state.flags.includes("tide_chart_read");
       const mooringStatus = state.flags.includes("mooring_secured")
@@ -859,6 +863,8 @@ export function observation(world, state, event = null) {
             : availableActions.includes("return_for_mooring")
               ? hasTideChart
                 ? "Mooring is unsecured; return to secure it before lighting."
+                : state.inventory.includes("oil")
+                  ? "Mooring is unsecured; return to secure it before studying the tide."
                 : "Mooring is unsecured; take oil if needed, then return to secure it before studying the tide."
               : hasTideChart && !hasReadLog
                 ? "Mooring is unsecured; read the wall log before securing the boat or lighting."
