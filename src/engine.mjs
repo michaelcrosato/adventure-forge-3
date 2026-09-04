@@ -2059,6 +2059,8 @@ export function modelTurnInput(world, view) {
           : id === "check_storm_radio" &&
               visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
             ? "Optional alternative: check the radio to switch from chronometer timing to the confirmed-channel route (costs one turn)"
+          : id === "check_storm_radio" && /before taking oil/i.test(label)
+            ? "Optional: check the storm radio before taking oil (costs one turn)"
           : id === "wind_chronometer"
             ? visibleActionIds.has("check_storm_radio")
               ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the keeper-room radio check before taking oil (costs one turn; optional)"
