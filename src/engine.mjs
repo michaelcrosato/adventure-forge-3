@@ -1310,6 +1310,10 @@ export function modelTurnInput(world, view) {
     Array.isArray(view.turn) &&
     view.turn.length === 2 &&
     view.turn[0] === view.turn[1] - 1;
+  const hasComfortableTuningTime =
+    Array.isArray(view.turn) &&
+    view.turn.length === 2 &&
+    view.turn[1] - view.turn[0] > 4;
   let modelText = view.text;
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
   const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
@@ -1752,6 +1756,10 @@ export function modelTurnInput(world, view) {
           ? "Descend to fetch the lantern first; oil is also missing"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn"
+          : id === "trim_wick" && hasComfortableTuningTime
+            ? "Trim the wick for a cleaner beam"
+          : id === "align_lens" && hasComfortableTuningTime
+            ? "Align the lens for a truer beam"
           : id === "return_for_mooring" && /before tide study/i.test(label)
             ? label.replace(/before tide study/i, "before studying the tide chart")
           : isLastTurn &&
