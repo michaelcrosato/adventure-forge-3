@@ -1300,6 +1300,13 @@ export function modelTurnInput(world, view) {
         "; secure the boat before lighting.",
       );
     }
+    if (
+      visibleInventory.includes("oil") &&
+      !visibleInventory.includes("lantern") &&
+      modelText.includes("Lantern is still missing; recover it before filling.")
+    ) {
+      modelText = modelText.replace(/; recover the lantern before filling;\s*/i, "; ");
+    }
     if (view.at?.[0] === "keeper_room" && visibleActionIds.has("climb_repaired_stairs")) {
       modelText = modelText.replace(/; fill the lantern before climbing;\s*/i, "; ");
     }
