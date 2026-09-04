@@ -1504,7 +1504,9 @@ export function modelTurnInput(world, view) {
         hasBoatSignal &&
         !hasRadioConfirmation
       ) {
-        modelText = "Check the radio for the confirmed channel; then take the oil before climbing.";
+        modelText = visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
+          ? "Chronometer timing is prepared; take the oil to keep that timed route, or check the radio instead to switch to the confirmed-channel route; then use the workshop before climbing."
+          : "Check the radio for the confirmed channel; then take the oil before climbing.";
       } else if (
         visibleActionIds.has("take_oil") &&
         visibleActionIds.has("go_workshop") &&
@@ -2006,6 +2008,9 @@ export function modelTurnInput(world, view) {
           ? "Optional early climb via unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward; confirmed channel ready"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
+          : id === "check_storm_radio" &&
+              visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
+            ? "Optional alternative: check the radio to switch from chronometer timing to the confirmed-channel route (costs one turn)"
           : id === "wind_chronometer"
             ? visibleActionIds.has("check_storm_radio")
               ? "Wind the tower chronometer for a timed rescue after the horn wait; choose this instead of the keeper-room radio check before taking oil (costs one turn; optional)"
