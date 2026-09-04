@@ -1562,6 +1562,8 @@ export function modelTurnInput(world, view) {
             !hornBonusRecorded &&
             id === "light_all_ready_beacon"
           ? "Light the tuned beacon now; no time remains for the horn bonus"
+          : id === "light_all_ready_beacon" && !hornBonusRecorded
+            ? "Light the tuned beacon now; the horn bonus is optional; the tuned channel still earns a stronger rescue"
           : hornBonusRecorded && id === "light_all_ready_beacon"
             ? "Light the tuned beacon with the horn bonus"
             : label,
