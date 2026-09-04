@@ -1165,6 +1165,10 @@ export function observation(world, state, event = null) {
   if (state.room === "tower" && state.turn === world.maxTurns - 1) {
     roomText = roomText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
+  roomText = roomText.replace(
+    /; Finish any trim or alignment before lighting\./g,
+    "; finish any trim or alignment before lighting.",
+  );
   if (!state.ended && state.turn < world.maxTurns - 1 && !beaconReachable) {
     const noRescueCue = "No beacon finish remains before the deadline; leave if possible or continue only to see the final state.";
     roomText = noRescueCue;
