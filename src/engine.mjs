@@ -733,8 +733,19 @@ export function observation(world, state, event = null) {
     availableActions.some((id) =>
       world.actions[id].effects.some((effect) => effect.end === "beacon"),
     );
+  const hasBeaconFinisher = availableActions.some((id) =>
+    world.actions[id].effects.some((effect) => effect.end === "beacon"),
+  );
   let roomText = room.text;
   if (state.room === "tower") {
+    if (state.turn < world.maxTurns - 1) {
+      roomText = roomText.replace(
+        "Last turn: light now.",
+        hasBeaconFinisher
+          ? "Before the final turn: light when ready; remaining preparation is optional."
+          : "Before the final turn: finish the remaining preparation.",
+      );
+    }
     const logTideStatus =
       state.flags.includes("read_log") && state.flags.includes("tide_chart_read")
         ? "Log and tide chart are recorded;"
@@ -1154,6 +1165,16 @@ export function modelTurnInput(world, view) {
       ? "Current is already restored; return to the keeper's room only for missing supplies or use the service ladder."
       : lastEvent;
   if (visibleFacts.some((fact) => /Storm shutters barred for a steady beam/i.test(fact))) {
+    modelLastEvent = modelLastEvent?.replace(
+      /\s*Bar storm shutters before this check if needed: close for a sheltered finish\./i,
+      "",
+    );
+  }
+  if (
+    visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact)) &&
+    !visibleFacts.some((fact) => /Emergency supply route: recover missing supplies/i.test(fact)) &&
+    !visibleActionIds.has("close_storm_shutters")
+  ) {
     modelLastEvent = modelLastEvent?.replace(
       /\s*Bar storm shutters before this check if needed: close for a sheltered finish\./i,
       "",
