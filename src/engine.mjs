@@ -1222,7 +1222,14 @@ export function observation(world, state, event = null) {
         : availableActions;
   const actions = visibleActions.map((id) => [
     id,
-    id === "climb_tower" && state.flags.includes("radio_checked")
+    id === "climb_tower" &&
+        state.flags.includes("radio_checked") &&
+        state.inventory.includes("lantern") &&
+        state.inventory.includes("oil") &&
+        !state.flags.includes("lantern_filled") &&
+        !state.flags.includes("fuse_installed")
+      ? "Optional early climb via the unpowered stair: fill the lantern, then return to repair the switchboard before climbing again; confirmed channel is ready"
+      : id === "climb_tower" && state.flags.includes("radio_checked")
       ? "Climb the unpowered stair; confirmed channel is ready; fill the lantern, then repair the switchboard"
       : id === "climb_tower" && state.flags.includes("chronometer_wound")
       ? "Climb the unpowered stair; chronometer is already wound; fill the lantern, then repair the switchboard"
