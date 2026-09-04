@@ -998,6 +998,12 @@ export function modelTurnInput(world, view) {
   const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
   const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
   if (typeof modelText === "string") {
+    if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
+      modelText = modelText.replace(
+        "Hand lantern will need oil before climbing unless already filled.",
+        "Lantern is already filled;",
+      );
+    }
     if (visibleInventory.includes("lantern") && !visibleActionIds.has("take_lantern")) {
       modelText = modelText.replace(
         "Take the lantern if it remains;",
