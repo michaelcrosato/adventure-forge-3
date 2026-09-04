@@ -1139,6 +1139,7 @@ export function modelTurnInput(world, view) {
   } else if (isLastTurn && hasBeaconFinish && modelLastEvent) {
     modelLastEvent = "A beacon finish remains; light now; remaining preparation is too late.";
   }
+  modelLastEvent = modelLastEvent?.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   const dualSupplyRecovery =
     view.at?.[0] === "tower" &&
     !view.inv &&
