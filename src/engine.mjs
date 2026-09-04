@@ -763,6 +763,11 @@ export function observation(world, state, event = null) {
         "Bar shutters: sheltered finish",
         "Shutters barred: sheltered finish ready",
       );
+    } else if (hasLastTurnBeaconFinisher) {
+      roomText = roomText.replace(
+        "Bar shutters: sheltered finish",
+        "Sheltered finish is too late; light now.",
+      );
     }
     if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
       roomText = roomText.replace(
