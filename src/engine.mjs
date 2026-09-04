@@ -626,7 +626,20 @@ function actionEvent(world, state, actionId, nextState = state) {
       missingPreparation.push("wind the chronometer");
     }
     if (missingPreparation.length > 0) {
-      return `Unpowered stair: fill the lantern if you have oil; after filling, return to ${missingPreparation.join(", ")}, then repair the switchboard before climbing again.`;
+      const chronometerPending =
+        missingPreparation.includes("wind the chronometer") &&
+        state.flags.includes("jetty_return_used") &&
+        state.flags.includes("workshop_return_used");
+      if (!chronometerPending) {
+        return `Unpowered stair: fill the lantern if you have oil; after filling, return to ${missingPreparation.join(", ")}, then repair the switchboard before climbing again.`;
+      }
+      const remainingPreparation = missingPreparation.filter(
+        (preparation) => preparation !== "wind the chronometer",
+      );
+      const preparationCue = remainingPreparation.length
+        ? `After filling, return to ${remainingPreparation.join(", ")}, then repair the switchboard before climbing again.`
+        : "After filling, return to repair the switchboard before climbing again.";
+      return `Unpowered stair: fill the lantern if you have oil. Early chronometer timing closes after this fill. ${preparationCue}`;
     }
     return "Unpowered stair: fill the lantern if you have oil; after filling, return below to repair the switchboard before climbing again.";
   }
