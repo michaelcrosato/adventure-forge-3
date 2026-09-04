@@ -1360,7 +1360,7 @@ export function modelTurnInput(world, view) {
     }
     if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
       modelText =
-        "Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room. Label key: direct lighting is the basic rescue; a secured boat is the stronger safety step; signaling and radio make the strongest channel route.";
+        "Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room. Label key: direct lighting is the basic rescue; a secured boat is the stronger safety step; signaling and radio make the strongest channel route. Secured direct lighting is the stronger direct route.";
     }
     if (
       view.at?.[0] === "workshop" &&
