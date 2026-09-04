@@ -1052,6 +1052,9 @@ export function modelTurnInput(world, view) {
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
   const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
   const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
+  const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
+    world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
+  );
   if (typeof modelText === "string") {
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
@@ -1108,6 +1111,16 @@ export function modelTurnInput(world, view) {
           "Sheltered finish is unavailable after radio confirmation; use the confirmed-channel finish.",
         );
     }
+    if (
+      view.at?.[0] === "tower" &&
+      !hasBeaconFinish &&
+      !visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
+        "No beacon finish is available yet; complete the available preparation before lighting.",
+      );
+    }
     if (visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))) {
       modelText = modelText.replace(
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
@@ -1150,9 +1163,6 @@ export function modelTurnInput(world, view) {
     }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
-  const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
-    world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
-  );
   const lastEvent = view.event?.startsWith("Mooring secure:")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue. Basic rescue: skip signaling and light directly. Stronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
     : view.event?.startsWith("Hand lantern filled;")
