@@ -409,7 +409,7 @@ function capitalizeFirst(value) {
   return value ? `${value[0].toUpperCase()}${value.slice(1)}` : value;
 }
 
-function actionEvent(world, state, actionId) {
+function actionEvent(world, state, actionId, nextState = state) {
   const action = world.actions[actionId];
   if (
     actionId === "enter_house" &&
@@ -608,16 +608,23 @@ function actionEvent(world, state, actionId) {
     !state.flags.includes("tower_return_used")
   ) {
     const missingPreparation = [];
-    if (!state.flags.includes("read_log")) missingPreparation.push("read the wall log");
-    if (!state.flags.includes("tide_chart_read")) missingPreparation.push("study the tide chart");
-    if (!state.flags.includes("boat_signaled")) {
+    if (!nextState.flags.includes("read_log")) missingPreparation.push("read the wall log");
+    if (!nextState.flags.includes("tide_chart_read")) missingPreparation.push("study the tide chart");
+    const boatSignalReachable =
+      nextState.flags.includes("boat_signaled") ||
+      hasReachableAction(world, nextState, "signal_boat");
+    if (!nextState.flags.includes("boat_signaled") && boatSignalReachable) {
       missingPreparation.push(
-        state.flags.includes("mooring_secured") ? "signal the boat" : "secure and signal the boat",
+        nextState.flags.includes("mooring_secured") ? "signal the boat" : "secure and signal the boat",
       );
     }
-    if (missingPreparation.length > 0) {
-      return `Unpowered stair: fill the lantern if you have oil; after filling, return to ${missingPreparation.join(", ")}, wind the chronometer, then repair the switchboard before climbing again.`;
+    if (boatSignalReachable) {
+      missingPreparation.push("wind the chronometer");
     }
+    if (missingPreparation.length > 0) {
+      return `Unpowered stair: fill the lantern if you have oil; after filling, return to ${missingPreparation.join(", ")}, then repair the switchboard before climbing again.`;
+    }
+    return "Unpowered stair: fill the lantern if you have oil; after filling, return below to repair the switchboard before climbing again.";
   }
   if (
     actionId === "return_keeper_after_fill" &&
@@ -766,7 +773,7 @@ export function step(world, state, actionId) {
     ended: ending !== null,
     ending,
   });
-  return { ok: true, state: next, error: null, event: actionEvent(world, state, actionId) };
+  return { ok: true, state: next, error: null, event: actionEvent(world, state, actionId, next) };
 }
 
 function endingView(world, state) {
