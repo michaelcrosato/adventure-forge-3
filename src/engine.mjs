@@ -1106,6 +1106,16 @@ export function modelTurnInput(world, view) {
         "Secure the mooring before signaling if needed;",
       );
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      !visibleActionIds.has("check_storm_radio") &&
+      !visibleFacts.some((fact) => /radio channel clear/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        "check radio if needed before taking the oil;",
+        "check the radio after the clues and boat are ready, before taking the oil if needed;",
+      );
+    }
     if (visibleFacts.some((fact) => /radio channel clear/i.test(fact))) {
       modelText = modelText
         .replace(
