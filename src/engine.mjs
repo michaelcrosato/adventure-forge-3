@@ -1024,6 +1024,15 @@ export function modelTurnInput(world, view) {
       }
     }
     if (
+      visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
+      visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        "Aligned by hand if needed; charred wick can be trimmed before lighting the beacon if needed. ",
+        "",
+      );
+    }
+    if (
       visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
       visibleActionIds.has("climb_repaired_stairs")
     ) {
