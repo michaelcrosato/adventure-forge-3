@@ -1376,6 +1376,17 @@ export function modelTurnInput(world, view) {
           : "Lantern is still missing; recover it before filling.",
       );
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      visibleActionIds.has("take_oil") &&
+      visibleInventory.includes("lantern") &&
+      !visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))
+    ) {
+      modelText = modelText.replace(
+        "Hand lantern will need oil before climbing unless already filled.",
+        "Take the oil before climbing; fill the lantern in the tower.",
+      );
+    }
     if (visibleInventory.includes("lantern") && !visibleActionIds.has("take_lantern")) {
       modelText = modelText.replace(
         "Take the lantern if it remains;",
