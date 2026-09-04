@@ -1292,6 +1292,13 @@ export function observation(world, state, event = null) {
           !hasBeaconFinisher &&
           !(state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned"))
       ? "Finish beam tuning before waiting; one turn after the wait is too little to tune and light"
+      : id === "wait_for_horn" &&
+          state.room === "tower" &&
+          state.turn < world.maxTurns - 1 &&
+          state.flags.includes("radio_checked") &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned")
+        ? "Wait for the horn; timing bonus; costs one turn; light next turn"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
        ? "Wait for the horn; the horn's timing bonus strengthens the rescue; costs one turn; light next turn; do not wait on the final turn"
       : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
