@@ -8,6 +8,10 @@ const PLAYER_FACT_LIMIT = 14;
 const PLAYER_FACT_LENGTH = 280;
 const PLAYER_LABEL_LENGTH = 160;
 const PLAYER_TEXT_LENGTH = 560;
+const TOWER_FINISH_SUMMARY =
+  "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.";
+const COMPACT_TOWER_FINISH_SUMMARY =
+  "Several lighting choices; most preparation: confirmed-channel rescue/marked-tide rescue/perfectly timed/fully prepared.";
 const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
 const isRecord = (value) => value && typeof value === "object" && !Array.isArray(value);
 
@@ -1164,6 +1168,9 @@ export function observation(world, state, event = null) {
   }
   if (state.room === "tower" && state.turn === world.maxTurns - 1) {
     roomText = roomText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
+  }
+  if (state.room === "tower" && roomText.length > PLAYER_TEXT_LENGTH) {
+    roomText = roomText.replace(TOWER_FINISH_SUMMARY, COMPACT_TOWER_FINISH_SUMMARY);
   }
   roomText = roomText.replace(
     /; Finish any trim or alignment before lighting\./g,
