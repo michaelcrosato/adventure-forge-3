@@ -1159,6 +1159,9 @@ export function observation(world, state, event = null) {
       "No beacon finish remains.",
     );
   }
+  if (state.ended) {
+    roomText = endingView(world, state)[2];
+  }
   if (state.room === "tower" && state.turn === world.maxTurns - 1) {
     roomText = roomText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
@@ -1253,6 +1256,7 @@ export function observation(world, state, event = null) {
  */
 export function modelTurnInput(world, view) {
   const isLastTurn =
+    !view.end &&
     Array.isArray(view.turn) &&
     view.turn.length === 2 &&
     view.turn[0] === view.turn[1] - 1;
