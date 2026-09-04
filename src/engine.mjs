@@ -1227,6 +1227,9 @@ export function modelTurnInput(world, view) {
   ).length;
   const hasBeaconFinish = beaconFinishCount > 0;
   if (typeof modelText === "string") {
+    if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
+      modelText = `${modelText} The signal choice appears after entering the keeper's room.`;
+    }
     if (
       view.at?.[0] === "workshop" &&
       (visibleActionIds.has("take_fuse") || visibleActionIds.has("install_fuse"))
