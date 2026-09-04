@@ -1102,6 +1102,7 @@ export function modelTurnInput(world, view) {
           : "Use the repaired stair now; fill the lantern in the tower if needed.",
       );
     }
+    modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
   }
   const hasBeaconFinish = (view.actions ?? []).some(([id]) =>
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
