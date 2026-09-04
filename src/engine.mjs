@@ -995,8 +995,15 @@ export function modelTurnInput(world, view) {
     view.turn[0] === view.turn[1] - 1;
   let modelText = view.text;
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
+  const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
   const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
   if (typeof modelText === "string") {
+    if (visibleInventory.includes("lantern") && !visibleActionIds.has("take_lantern")) {
+      modelText = modelText.replace(
+        "Take the lantern if it remains;",
+        "Lantern is already carried;",
+      );
+    }
     if (visibleFacts.some((fact) => /boat signaled to hold/i.test(fact))) {
       modelText = modelText.replace(
         "Signal the boat first if needed;",
