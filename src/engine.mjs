@@ -1054,7 +1054,9 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = modelText.replace(
         "Hand lantern will need oil before climbing unless already filled.",
-        "Lantern still needs filling.",
+        visibleInventory.includes("lantern")
+          ? "Lantern still needs filling."
+          : "Lantern is still missing; recover it before filling.",
       );
     }
     if (visibleInventory.includes("lantern") && !visibleActionIds.has("take_lantern")) {
