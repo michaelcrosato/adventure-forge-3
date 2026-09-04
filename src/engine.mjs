@@ -470,7 +470,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     const fuseInstalled = state.flags.includes("fuse_installed");
     const lanternFilled = state.flags.includes("lantern_filled");
     const rescueHierarchy =
-      " Beam tuning is a separate beam upgrade; the confirmed channel or chronometer timing selects the strongest rescue route. Horn timing is an optional bonus on the confirmed-channel route and required only for the chronometer-timed finish.";
+      " Tuning affects the beam; channel confirmation or chronometer timing determines the rescue route.";
     if (fuseInstalled && lanternFilled) {
       return `The wall log confirms the required sequence: the fuse is replaced and the lantern filled; light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
     }
