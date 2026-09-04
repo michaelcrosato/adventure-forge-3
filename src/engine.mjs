@@ -2008,13 +2008,20 @@ export function modelTurnInput(world, view) {
         ? "Descend to fetch oil first; the lantern is also missing"
           : dualSupplyRecovery && id === "return_keeper_for_lantern"
           ? "Descend to fetch the lantern first; oil is also missing"
+          : id === "go_workshop" &&
+              view.at?.[0] === "keeper_room" &&
+              typeof view.event === "string" &&
+              view.event.startsWith("You take the sealed oil flask;") &&
+              visibleActionIds.has("go_workshop") &&
+              visibleFacts.some((fact) => /Radio channel clear/i.test(fact))
+            ? "Enter the workshop; install the fuse before climbing"
           : id === "climb_tower" &&
             view.at?.[0] === "keeper_room" &&
             typeof view.event === "string" &&
             view.event.startsWith("You take the sealed oil flask;") &&
             /^Optional early climb/i.test(label) &&
             /unpowered stair/i.test(label)
-          ? "Optional early climb via unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward; confirmed channel ready"
+          ? "Optional early climb: unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
           : id === "wait_for_horn" &&
