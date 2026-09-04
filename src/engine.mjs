@@ -1583,7 +1583,9 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("Workshop beside the keeper's room; current is not restored;")
       ? "Workshop entered; current is not restored. Take the fuse this turn; install it next; then climb the service ladder."
     : view.event?.startsWith("Hand lantern filled;")
-      ? "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
+      ? confirmedChannelRecapComplete
+        ? "Lantern filled; optional beam tuning remains before lighting."
+        : "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
       : view.event;
   let modelLastEvent =
     visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
