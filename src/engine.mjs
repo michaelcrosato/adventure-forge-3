@@ -1054,18 +1054,18 @@ export function observation(world, state, event = null) {
       const repairedStairFallback = state.flags.includes("lantern_filled")
         ? "the repaired-stair return is closed; restore current in the workshop, then use the service ladder."
         : "the repaired-stair return is closed; after filling the lantern, restore current in the workshop, then use the service ladder.";
-    roomText = roomText
-      .replace(
-        "Signal the boat first if needed;",
-        state.flags.includes("boat_signaled")
-          ? "Boat signal already confirmed;"
-          : signalActionReachable
-            ? "Signal the boat if desired;"
-            : "",
-      )
-      .replace(
-        "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
-        repairedStairFallback,
+      roomText = roomText
+        .replace(
+          "Signal the boat first if needed;",
+          state.flags.includes("boat_signaled")
+            ? "Boat signal already confirmed;"
+            : signalActionReachable
+              ? "Signal the boat if desired;"
+              : "",
+        )
+        .replace(
+          "after the lantern is filled, only with time, use the repaired stair once current is restored and supplies are ready.",
+          repairedStairFallback,
         )
         .replace(
           "use the repaired stair after current is restored and supplies are ready.",
