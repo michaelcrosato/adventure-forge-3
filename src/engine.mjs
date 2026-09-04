@@ -783,7 +783,11 @@ export function observation(world, state, event = null) {
         "Bar shutters: sheltered finish",
         hasShelteredFinisher
           ? "Shutters barred: sheltered finish ready"
-          : "Shutters barred; finish remaining trim or alignment before lighting",
+          : hasLastTurnBeaconFinisher
+            ? "Shutters barred; sheltered finish is too late; light now."
+            : state.turn === world.maxTurns - 1
+              ? "Shutters barred; no rescue remains; leave if possible."
+              : "Shutters barred; finish remaining trim or alignment before lighting",
       );
     } else if (hasLastTurnBeaconFinisher) {
       roomText = roomText.replace(
