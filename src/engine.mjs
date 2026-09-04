@@ -717,7 +717,7 @@ function actionEvent(world, state, actionId, nextState = state) {
   }
   if (actionId === "trim_wick") {
     if (state.flags.includes("radio_checked")) {
-      return "Clean, steady flame; lens remains unaligned. The confirmed-channel route remains the strongest rescue; align the beacon lens before lighting for an optional beam upgrade, or light the trimmed beacon now.";
+      return "Clean, steady flame; lens remains unaligned. Align the beacon lens before lighting for an optional beam upgrade, or light the trimmed beacon now.";
     }
     if (state.flags.includes("chronometer_wound")) {
       return "Clean, steady flame; lens remains unaligned. Align the lens for an optional beam upgrade, then wait for the horn before the chronometer-timed finish.";
