@@ -1182,6 +1182,7 @@ export function modelTurnInput(world, view) {
           /\s*Last turn: no rescue remains; leave if possible\./i,
           "",
         );
+        modelText = modelText.replace(/^Beam tuning is complete\.\s*/i, "");
       }
       modelText = modelText.replace(
         /tower relay can confirm the radio channel(?: after the lantern is filled)? if needed\./i,
