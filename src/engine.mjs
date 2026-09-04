@@ -1692,6 +1692,16 @@ export function modelTurnInput(world, view) {
       "If current is not restored, install the switchboard fuse to restore tower power; otherwise return to the keeper's room for missing supplies."
       ? "Current is already restored; return to the keeper's room only for missing supplies or use the service ladder."
       : lastEvent;
+  if (
+    typeof modelLastEvent === "string" &&
+    modelLastEvent.startsWith("Safe window for a stronger rescue:") &&
+    Array.isArray(view.turn) &&
+    Number.isSafeInteger(view.turn[0]) &&
+    Number.isSafeInteger(view.turn[1])
+  ) {
+    const turnsRemaining = view.turn[1] - view.turn[0];
+    modelLastEvent = `${modelLastEvent} Use turn ${view.turn[1]} as the high-tide cutoff; ${turnsRemaining} turns remain to reach and light the beacon.`;
+  }
   if (visibleFacts.some((fact) => /Storm shutters barred for a steady beam/i.test(fact))) {
     modelLastEvent = modelLastEvent?.replace(
       /\s*Bar storm shutters before this check if needed: close for a sheltered finish\./i,
