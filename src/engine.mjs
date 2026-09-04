@@ -1333,6 +1333,17 @@ export function modelTurnInput(world, view) {
     visibleFacts.some((fact) => /Wick trimmed for a clean beam/i.test(fact)) &&
     visibleFacts.some((fact) => /beacon lens is aligned with the channel/i.test(fact));
   if (typeof modelText === "string") {
+    if (
+      view.at?.[0] === "jetty" &&
+      view.turn?.[0] === 0 &&
+      visibleActionIds.has("take_lantern") &&
+      !visibleActionIds.has("secure_mooring")
+    ) {
+      modelText = modelText.replace(
+        "Take the lantern if it remains; secure the line before entering if you want the boat to hold while you work.",
+        "Take the lantern first; securing the line becomes available next, before entering if you want the boat to hold while you work.",
+      );
+    }
     if (confirmedChannelRecapComplete) {
       modelText = modelText
         .replace(/Log and tide chart are recorded;\s*/i, "")
