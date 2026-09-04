@@ -1228,7 +1228,7 @@ export function modelTurnInput(world, view) {
   const hasBeaconFinish = beaconFinishCount > 0;
   if (typeof modelText === "string") {
     if (view.at?.[0] === "jetty" && view.event?.startsWith("Mooring secure:")) {
-      modelText = `${modelText} The signal choice appears after entering the keeper's room.`;
+      modelText = `${modelText} Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room.`;
     }
     if (
       view.at?.[0] === "workshop" &&
