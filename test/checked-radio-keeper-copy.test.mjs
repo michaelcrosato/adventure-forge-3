@@ -20,4 +20,6 @@ test("keeper observation does not repeat a checked radio", async () => {
 
   assert.match(text, /radio channel already confirmed; oil is ready; the repaired-stair return is closed/i);
   assert.doesNotMatch(text, /radio channel already confirmed; check radio if needed/i);
+  assert.match(text, /boat signal already confirmed/i);
+  assert.doesNotMatch(text, /signal the boat first if needed/i);
 });
