@@ -876,7 +876,7 @@ export function observation(world, state, event = null) {
       roomText = roomText
         .replace(
           "tower relay can confirm the radio channel after the lantern is filled if needed.",
-          "The confirmed-channel route is unavailable;",
+          "the confirmed-channel route is unavailable;",
         )
         .replace(
           "Several lighting choices; most preparation: sheltered confirmed-channel rescue/secured-boat tuned rescue at tide/horn-timed rescue/marked-tide rescue/perfectly timed/fully prepared.",
@@ -939,7 +939,7 @@ export function observation(world, state, event = null) {
     if (!towerRadioActionReachable && (state.turn < world.maxTurns - 1 || hasLastTurnBeaconFinisher)) {
       roomText = roomText.replace(
         "tower relay can confirm the radio channel after the lantern is filled if needed.",
-        "The confirmed-channel route is unavailable; use the available beacon route.",
+        "the confirmed-channel route is unavailable; use the available beacon route.",
       );
     }
   } else if (state.room === "keeper_room") {
