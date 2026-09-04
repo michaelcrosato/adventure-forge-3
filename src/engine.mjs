@@ -436,8 +436,8 @@ function actionEvent(world, state, actionId, nextState = state) {
   if (actionId === "enter_house" && state.inventory.includes("lantern")) {
     if (state.flags.includes("mooring_secured")) {
       return state.flags.includes("boat_signaled")
-        ? "Door opens. Mooring is secure; the boat will hold. Signal already confirmed its hold; radio checks confirm the channel if desired."
-        : "Door opens. Mooring is secure; the boat will hold; no return is needed. Next step (optional): signal the boat from the keeper's room for a confirmed channel. For reference, general status rule: if mooring unsecured, boat may not hold; once secure, boat holds.";
+      ? "Door opens. Mooring is secure; the boat will hold. Signal already confirmed its hold; radio checks confirm the channel if desired."
+      : "Mooring is secure; the boat will hold; no return is needed. Next step (optional): signal the boat from the keeper's room for a confirmed channel. For reference, general status rule: if mooring unsecured, boat may not hold; once secure, boat holds.";
     }
     const enteredState = { ...state, room: "keeper_room" };
     const canReturnNow = legalActions(world, enteredState).includes("return_for_mooring");
@@ -1880,7 +1880,7 @@ export function modelTurnInput(world, view) {
   }
   const lastEvent = view.event?.startsWith("Mooring secure:")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
-    : view.event?.startsWith("Door opens. Mooring is secure; the boat will hold; no return is needed.")
+    : view.event?.startsWith("Mooring is secure; the boat will hold; no return is needed.")
       ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
     : view.at?.[0] === "keeper_room" && view.event?.startsWith("The wall log ")
       ? "Log key: repair and fill are required; trim and align both for the strongest beam. A confirmed channel or chronometer timing selects the strongest rescue route; horn timing is an optional bonus on a confirmed channel, but required to unlock the chronometer-timed finish."
