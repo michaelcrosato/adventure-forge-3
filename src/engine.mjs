@@ -898,12 +898,12 @@ export function observation(world, state, event = null) {
   if (state.room === "tower" && state.turn === world.maxTurns - 1) {
     const finalTuningCue =
       state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")
-        ? "Beam tuning is complete;"
+        ? "Beam tuning is complete."
         : state.flags.includes("lens_aligned")
-          ? "Lens aligned; remaining wick trim is too late;"
+          ? "Lens aligned; remaining wick trim is too late."
           : state.flags.includes("wick_trimmed")
-            ? "Wick trimmed; remaining lens alignment is too late;"
-            : "Remaining beam tuning is too late;";
+            ? "Wick trimmed; remaining lens alignment is too late."
+            : "Remaining beam tuning is too late.";
     roomText = roomText
       .replace(
         "Aligned by hand if needed; charred wick can be trimmed before lighting the beacon if needed.",
