@@ -834,6 +834,7 @@ export function observation(world, state, event = null) {
     world.actions[id].effects.some((effect) => effect.end === "beacon"),
   );
   let roomText = room.text;
+  const hornTimingPrefix = state.flags.includes("radio_checked") ? "horn" : "Horn";
   if (state.room === "tower") {
     if (state.turn < world.maxTurns - 1) {
       roomText = roomText.replace(
@@ -922,8 +923,8 @@ export function observation(world, state, event = null) {
       roomText = roomText.replace(
         "Finish any trim or alignment before spending a turn to wait.",
         hasLastTurnBeaconFinisher
-          ? "Horn timing is recorded; light the available rescue beacon now; remaining tuning is optional."
-          : "Horn timing is recorded; finish the remaining beam tuning before lighting.",
+          ? `${hornTimingPrefix} timing is recorded; light the available rescue beacon now; remaining tuning is optional.`
+          : `${hornTimingPrefix} timing is recorded; finish the remaining beam tuning before lighting.`,
       );
     } else if (hasLastTurnBeaconFinisher) {
       roomText = roomText.replace(
@@ -1138,8 +1139,8 @@ export function observation(world, state, event = null) {
     beaconFinishers.length === 0
   ) {
     roomText = roomText.replace(
-      "Horn timing is recorded; finish the remaining beam tuning before lighting.",
-      "Horn timing is recorded; no rescue remains; leave if possible.",
+      `${hornTimingPrefix} timing is recorded; finish the remaining beam tuning before lighting.`,
+      `${hornTimingPrefix} timing is recorded; no rescue remains; leave if possible.`,
     );
     roomText = roomText.replace(
       "Beam tuning is complete; light now.",
