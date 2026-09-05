@@ -1299,6 +1299,14 @@ export function observation(world, state, event = null) {
       ? "Optional: close storm shutters for a sheltered finish (costs one turn; never on last turn; beam tuning is complete)"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
+      : id === "trim_wick" &&
+          state.flags.includes("radio_checked") &&
+          state.turn < world.maxTurns - 2
+      ? "Trim the wick for a cleaner beam"
+      : id === "align_lens" &&
+          state.flags.includes("radio_checked") &&
+          state.turn < world.maxTurns - 2
+      ? "Align the lens for a truer beam"
       : id === "wait_for_horn" &&
           state.room === "tower" &&
           state.turn === world.maxTurns - 2 &&
