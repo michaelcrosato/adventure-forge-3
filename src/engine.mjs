@@ -2412,6 +2412,12 @@ export function modelTurnInput(world, view) {
               view.turn[0] < world.maxTurns - 2
             ? "Wait for the horn; tune after the wait, then light once tuning is complete (costs one turn; do not wait on the final turn)"
           : id === "check_storm_radio" &&
+              hasMooringRecovery &&
+              view.at?.[0] === "keeper_room" &&
+              typeof view.event === "string" &&
+              view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.")
+            ? "Optional: check the storm radio (costs one turn)"
+          : id === "check_storm_radio" &&
               visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
             ? "Optional alternative: check the radio to switch from chronometer timing to the confirmed-channel route (costs one turn)"
           : id === "check_storm_radio" && /before taking oil/i.test(label)
