@@ -464,7 +464,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Door opens. Mooring unsecured; the recovery return is no longer available, so continue with the basic beacon route.";
   }
   if (actionId === "secure_mooring") {
-    return "The boat will hold without signaling; stronger rescue on its own.\nBasic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly.\nStronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. Keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
+    return "The boat will hold without signaling; stronger rescue on its own.\nBasic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly.\nStronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. For later reference, keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
   }
   if (actionId === "read_log") {
     const fuseInstalled = state.flags.includes("fuse_installed");
