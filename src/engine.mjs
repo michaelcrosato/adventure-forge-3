@@ -531,6 +531,16 @@ function actionEvent(world, state, actionId, nextState = state) {
   }
   if (actionId === "check_tower_radio") {
     if (
+      state.turn >= world.maxTurns - 7 &&
+      state.flags.includes("chronometer_wound") &&
+      state.flags.includes("wick_trimmed") &&
+      state.flags.includes("lens_aligned") &&
+      !state.flags.includes("shutters_closed") &&
+      !state.flags.includes("tide_waited")
+    ) {
+      return "Channel is clear; the confirmed-channel finish is ready.";
+    }
+    if (
       state.turn >= world.maxTurns - 5 &&
       state.flags.includes("chronometer_wound") &&
       state.flags.includes("tide_waited") &&
