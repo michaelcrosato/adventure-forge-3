@@ -761,7 +761,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     ) {
       return "You return to the jetty; the mooring line is at hand.";
     }
-    return "You return to the jetty; secure the supply boat's mooring next.";
+    return "You return to the jetty; if you want the stronger boat route, secure the supply boat's mooring next.";
   }
   if (actionId === "fill_lantern" && state.flags.includes("fuse_installed")) {
     if (state.flags.includes("radio_checked")) {
@@ -2136,7 +2136,8 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "jetty" &&
-      view.event?.startsWith("You return to the jetty; secure the supply boat's mooring next.")
+      view.event?.startsWith("You return to the jetty;") &&
+      /secure the supply boat's mooring next\./i.test(view.event)
     ) {
       modelText = "The mooring is at hand before re-entering the keeper's house.";
     }
