@@ -945,6 +945,7 @@ export function step(world, state, actionId) {
 
   const turn = state.turn + 1;
   if (ending === null && turn >= world.maxTurns) ending = "timeout";
+  if (ending !== null) journal.delete("Hand lantern filled; beacon remains dark.");
 
   const next = Object.freeze({
     seed: state.seed,
