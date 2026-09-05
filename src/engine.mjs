@@ -1562,6 +1562,7 @@ export function modelTurnInput(world, view) {
   let modelGoal = world.objective;
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
   const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
+  const hasMooringRecovery = visibleFacts.some((fact) => /Mooring recovery used/i.test(fact));
   const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
   const beaconFinishCount = (view.actions ?? []).filter(([id]) =>
     world.actions[id]?.effects.some((effect) => effect.end === "beacon"),
@@ -1675,7 +1676,6 @@ export function modelTurnInput(world, view) {
     const hasTideClue = visibleFacts.some((fact) => /^Tide chart:/i.test(fact));
     const hasBoatSignal = visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact));
     const hasRadioConfirmation = visibleFacts.some((fact) => /Radio channel clear/i.test(fact));
-    const hasMooringRecovery = visibleFacts.some((fact) => /Mooring recovery used/i.test(fact));
     const hasFilledLantern = visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact));
     if (
       view.at?.[0] === "keeper_room" &&
@@ -2010,6 +2010,15 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "tower" &&
+      hasMooringRecovery &&
+      visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact)) &&
+      hasBeaconFinish &&
+      (visibleActionIds.has("trim_wick") || visibleActionIds.has("align_lens"))
+    ) {
+      modelText = "The beacon is ready; tune the beam if you wish, light now, or wait for the horn.";
+    }
+    if (
+      view.at?.[0] === "tower" &&
       !hasBeaconFinish &&
       !visibleActionIds.has("trim_wick") &&
       !visibleActionIds.has("align_lens")
@@ -2112,6 +2121,7 @@ export function modelTurnInput(world, view) {
     if (
       view.at?.[0] === "tower" &&
       confirmedChannelRecapComplete &&
+      !hasMooringRecovery &&
       visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact)) &&
       visibleActionIds.has("trim_wick") &&
       visibleActionIds.has("align_lens")
@@ -2230,6 +2240,17 @@ export function modelTurnInput(world, view) {
     visibleFacts.some((fact) => /You waited through one boat horn/i.test(fact))
   ) {
     modelLastEvent = "Horn bonus recorded; light the confirmed-channel beacon now.";
+  }
+  if (
+    view.at?.[0] === "tower" &&
+    hasMooringRecovery &&
+    visibleActionIds.size === 1 &&
+    hasBeaconFinish &&
+    typeof view.event === "string" &&
+    (view.event.startsWith("Spend one turn; horn bonus recorded.") ||
+      view.event.startsWith("Horn timing recorded; beam tuning is complete."))
+  ) {
+    modelLastEvent = "The beacon is ready; light now.";
   }
   if (
     view.at?.[0] === "tower" &&
