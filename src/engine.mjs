@@ -431,7 +431,7 @@ function actionEvent(world, state, actionId, nextState = state) {
   ) {
     return state.flags.includes("boat_signaled")
       ? "Mooring is secure; the boat will hold."
-      : "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired.";
+      : "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired. The signal only holds position, and the later radio check confirms the channel.";
   }
   if (
     actionId === "enter_house" &&
