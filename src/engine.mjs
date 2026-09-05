@@ -750,7 +750,7 @@ function actionEvent(world, state, actionId, nextState = state) {
       return "Clean, steady flame; lens remains unaligned. Align the beacon lens before lighting for an optional beam upgrade, or light the trimmed beacon now.";
     }
     if (state.flags.includes("chronometer_wound")) {
-      return "Clean, steady flame; lens remains unaligned. Align the lens for an optional beam upgrade, then wait for the horn before the chronometer-timed finish.";
+      return "Clean, steady flame; lens remains unaligned. The remaining beam adjustment is optional before lighting.";
     }
     return "Clean, steady flame; lens remains unaligned. Align the beacon lens before lighting for the strongest rescue, or light the trimmed beacon now.";
   }
@@ -1331,7 +1331,7 @@ export function observation(world, state, event = null) {
       : id === "close_storm_shutters" &&
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned")
-      ? "Optional: close storm shutters for a sheltered finish (costs one turn; never on last turn; beam tuning is complete)"
+        ? "Optional: close storm shutters for a sheltered finish (costs one turn; beam tuning is complete)"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
       : id === "study_tide_chart" &&
@@ -1348,7 +1348,15 @@ export function observation(world, state, event = null) {
       : id === "align_lens" &&
           state.flags.includes("radio_checked") &&
           state.turn < world.maxTurns - 2
-      ? "Align the lens for a truer beam"
+        ? "Align the lens for a truer beam"
+      : id === "trim_wick" &&
+          state.flags.includes("chronometer_wound") &&
+          state.turn < world.maxTurns - 2
+        ? "Trim the wick for a cleaner beam"
+      : id === "align_lens" &&
+          state.flags.includes("chronometer_wound") &&
+          state.turn < world.maxTurns - 2
+        ? "Align the lens for a truer beam"
       : id === "wait_for_horn" &&
           state.room === "tower" &&
           state.turn === world.maxTurns - 2 &&
