@@ -2036,6 +2036,18 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "tower" &&
+      hasMooringRecovery &&
+      !hasBeaconFinish &&
+      visibleActionIds.has("check_tower_radio") &&
+      visibleActionIds.has("trim_wick") &&
+      visibleActionIds.has("align_lens") &&
+      visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact)) &&
+      !visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
+    ) {
+      modelText = "Lantern filled. Tune the beam, check the tower relay, or wait for the horn before lighting.";
+    }
+    if (
+      view.at?.[0] === "tower" &&
       !hasBeaconFinish &&
       !visibleActionIds.has("trim_wick") &&
       !visibleActionIds.has("align_lens")
