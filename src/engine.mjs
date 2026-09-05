@@ -850,7 +850,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Spend one turn; horn bonus recorded. Without the wall log, use the horn-timed finish after tuning if the tide mark is recorded; light next turn; never wait on the last turn.";
   }
   if (actionId === "trim_wick" && state.flags.includes("lens_aligned")) {
-    return "Clean, steady flame.";
+    return "Clean, steady flame; beacon remains dark.";
   }
   if (actionId === "trim_wick") {
     if (state.flags.includes("radio_checked")) {
