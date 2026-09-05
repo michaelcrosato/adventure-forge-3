@@ -1510,7 +1510,7 @@ export function observation(world, state, event = null) {
           !state.flags.includes("tide_chart_read")
         ? "Return to the jetty"
       : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
-        ? "Return—secure the mooring before lighting; recovery remains open afterward"
+        ? "Return to secure the mooring before lighting"
       : id === "light_all_ready_beacon" &&
           state.flags.includes("tide_waited") &&
           (event !== null || state.turn < world.maxTurns - 1)
