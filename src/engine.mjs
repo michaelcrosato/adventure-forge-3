@@ -2248,6 +2248,17 @@ export function modelTurnInput(world, view) {
   }
   if (
     view.at?.[0] === "keeper_room" &&
+    !hasMooringRecovery &&
+    visibleInventory.includes("lantern") &&
+    !visibleInventory.includes("oil") &&
+    !visibleFacts.some((fact) => /Tide chart:/i.test(fact)) &&
+    typeof view.event === "string" &&
+    view.event.startsWith("Study the tide chart now to unlock the storm radio:")
+  ) {
+    modelText = "The boat holds. The tide chart and oil are waiting; choose what to investigate next.";
+  }
+  if (
+    view.at?.[0] === "keeper_room" &&
     typeof view.event === "string" &&
     (view.event.startsWith("Boat holds.") ||
       view.event.startsWith("Study the tide chart now to unlock the storm radio:")) &&
