@@ -665,6 +665,9 @@ function actionEvent(world, state, actionId, nextState = state) {
   if (actionId === "take_oil") {
     return "You take the sealed oil flask; fill the hand lantern before lighting, whether you climb now or later.";
   }
+  if (actionId === "install_fuse") {
+    return "Fuse installed; tower current restored.";
+  }
   if (actionId === "return_for_mooring") {
     return "You return to the jetty; secure the supply boat's mooring next.";
   }
