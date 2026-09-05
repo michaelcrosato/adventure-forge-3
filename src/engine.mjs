@@ -1319,6 +1319,12 @@ export function observation(world, state, event = null) {
       : id === "return_keeper_from_tower" && state.inventory.includes("lantern")
       ? "Descend to fetch the missing oil; lantern is already carried"
       : id === "check_tower_radio" &&
+          hasBeaconFinisher &&
+          state.flags.includes("shutters_closed") &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned")
+      ? "Optional relay check (costs one turn); a sheltered beacon finish is ready"
+      : id === "check_tower_radio" &&
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned") &&
           !state.flags.includes("shutters_closed") &&
