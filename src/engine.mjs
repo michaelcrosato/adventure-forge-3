@@ -2243,6 +2243,7 @@ export function modelTurnInput(world, view) {
     typeof view.event === "string" &&
     view.event.startsWith("The wall log marks repair and filling as required.")
   ) {
+    modelText = "The wall log points to repairs and lantern work; the tide chart and mooring are still here to investigate. Take the oil when ready.";
     modelLastEvent = "The wall log names the repair and lantern work; the rest is left to the keeper.";
   }
   if (
