@@ -738,6 +738,13 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Fuse installed; tower current restored.";
   }
   if (actionId === "return_for_mooring") {
+    if (
+      state.flags.includes("read_log") &&
+      state.inventory.includes("oil") &&
+      !state.flags.includes("tide_chart_read")
+    ) {
+      return "You return to the jetty; the mooring line is at hand.";
+    }
     return "You return to the jetty; secure the supply boat's mooring next.";
   }
   if (actionId === "fill_lantern" && state.flags.includes("fuse_installed")) {
@@ -1454,6 +1461,11 @@ export function observation(world, state, event = null) {
           : "Wait for the horn; timing bonus; costs one turn; light next turn"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
        ? "Wait for the horn; the horn's timing bonus strengthens the rescue; costs one turn; light next turn; do not wait on the final turn"
+      : id === "return_for_mooring" &&
+          state.flags.includes("read_log") &&
+          state.inventory.includes("oil") &&
+          !state.flags.includes("tide_chart_read")
+        ? "Return to the jetty"
       : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
         ? "Return—secure the mooring before lighting; recovery remains open afterward"
       : id === "light_all_ready_beacon" &&
