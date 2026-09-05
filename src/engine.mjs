@@ -530,6 +530,14 @@ function actionEvent(world, state, actionId, nextState = state) {
       : "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it before taking oil (costs one turn).";
   }
   if (actionId === "check_tower_radio") {
+    if (
+      state.flags.includes("wick_trimmed") &&
+      state.flags.includes("lens_aligned") &&
+      !state.flags.includes("shutters_closed") &&
+      !state.flags.includes("tide_waited")
+    ) {
+      return "Channel is clear; this enables the strongest rescue outcome. Beam tuning is complete; use the confirmed-channel rescue beacon.";
+    }
     if (state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited")) {
       return "Channel is clear; confirmed channel earns the strongest rescue. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn. Bar storm shutters before this check if needed: close for a sheltered finish.";
     }
@@ -1307,6 +1315,12 @@ export function observation(world, state, event = null) {
       ? "Descend to fetch the missing lantern; oil is already carried"
       : id === "return_keeper_from_tower" && state.inventory.includes("lantern")
       ? "Descend to fetch the missing oil; lantern is already carried"
+      : id === "check_tower_radio" &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned") &&
+          !state.flags.includes("shutters_closed") &&
+          !state.flags.includes("tide_waited")
+      ? "Check the tower relay; beam tuning is complete (costs one turn)"
       : id === "check_tower_radio" &&
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned")
