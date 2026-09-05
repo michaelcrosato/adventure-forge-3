@@ -2238,6 +2238,15 @@ export function modelTurnInput(world, view) {
       : lastEvent;
   if (
     view.at?.[0] === "keeper_room" &&
+    visibleInventory.includes("lantern") &&
+    !visibleFacts.some((fact) => /supply boat's mooring is secure/i.test(fact)) &&
+    typeof view.event === "string" &&
+    view.event.startsWith("The wall log marks repair and filling as required.")
+  ) {
+    modelLastEvent = "The wall log names the repair and lantern work; the rest is left to the keeper.";
+  }
+  if (
+    view.at?.[0] === "keeper_room" &&
     typeof view.event === "string" &&
     (view.event.startsWith("Boat holds.") ||
       view.event.startsWith("Study the tide chart now to unlock the storm radio:")) &&
