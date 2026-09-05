@@ -544,7 +544,28 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Channel is clear; this enables the strongest rescue outcome. Finish beam tuning if needed; use confirmed-channel rescue beacon. Check before the last turn; costs a turn.";
   }
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
+    if (
+      state.flags.includes("chronometer_wound") &&
+      state.flags.includes("read_log") &&
+      state.flags.includes("tide_chart_read") &&
+      state.flags.includes("boat_signaled") &&
+      state.inventory.includes("lantern") &&
+      state.inventory.includes("oil")
+    ) {
+      return "Workshop entered; fuse remains to be installed.";
+    }
     return "Workshop beside the keeper's room; current is not restored; take and install the switchboard fuse, then use the service ladder.";
+  }
+  if (
+    actionId === "take_fuse" &&
+    state.flags.includes("chronometer_wound") &&
+    state.flags.includes("read_log") &&
+    state.flags.includes("tide_chart_read") &&
+    state.flags.includes("boat_signaled") &&
+    state.inventory.includes("lantern") &&
+    state.inventory.includes("oil")
+  ) {
+    return "You take the dry fuse from the drawer.";
   }
   if (actionId === "return_keeper_from_workshop") {
     const missingSupplies = [];
@@ -2000,6 +2021,9 @@ export function modelTurnInput(world, view) {
         : visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
           ? "Lantern filled. Strongest chronometer-timed rescue after the horn wait requires both adjustments; confirmed-channel route is an equally strong alternative after a radio check, without the required horn. Light directly for the basic finish."
         : "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
+    : view.event?.startsWith("You take the dry fuse from the drawer.") &&
+        visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
+      ? "Fuse ready; install when ready."
     : view.event?.startsWith("You take the dry fuse from the drawer;") &&
         visibleActionIds.has("install_fuse")
       ? "Fuse ready; install it, then climb the service ladder."
