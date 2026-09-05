@@ -594,6 +594,17 @@ function actionEvent(world, state, actionId, nextState = state) {
   }
   if (actionId === "go_workshop" && !state.flags.includes("fuse_installed")) {
     if (
+      state.flags.includes("mooring_return_used") &&
+      state.flags.includes("radio_checked") &&
+      state.flags.includes("read_log") &&
+      state.flags.includes("tide_chart_read") &&
+      state.flags.includes("boat_signaled") &&
+      state.inventory.includes("lantern") &&
+      state.inventory.includes("oil")
+    ) {
+      return "Workshop entered; fuse remains to be installed.";
+    }
+    if (
       state.flags.includes("chronometer_wound") &&
       state.flags.includes("read_log") &&
       state.flags.includes("tide_chart_read") &&
