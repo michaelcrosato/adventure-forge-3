@@ -1258,7 +1258,12 @@ export function observation(world, state, event = null) {
         : availableActions;
   const actions = visibleActions.map((id) => [
     id,
-    id === "go_workshop" &&
+    id === "secure_mooring" &&
+        state.room === "jetty" &&
+        typeof event === "string" &&
+        event.startsWith("You take the lantern from a hook;")
+      ? "Secure the supply boat's mooring (optional)"
+      : id === "go_workshop" &&
         state.room === "keeper_room" &&
         state.flags.includes("radio_checked") &&
         state.inventory.includes("lantern") &&

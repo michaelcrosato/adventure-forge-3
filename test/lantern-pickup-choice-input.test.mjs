@@ -14,7 +14,7 @@ test("the eventful lantern pickup leaves the opening choice open", async () => {
   );
   assert.equal(input.last, "Lantern carried; the house and optional mooring are ahead.");
   assert.deepEqual(input.a.map(([, label]) => label), [
-    "Secure the supply boat's mooring",
+    "Secure the supply boat's mooring (optional)",
     "Enter the keeper's house",
     "Abandon the station",
   ]);
