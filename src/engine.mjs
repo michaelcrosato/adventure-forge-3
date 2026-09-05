@@ -1305,6 +1305,13 @@ export function observation(world, state, event = null) {
       ? "Optional: close storm shutters for a sheltered finish (costs one turn; never on last turn; beam tuning is complete)"
       : id === "check_storm_radio" && state.flags.includes("lantern_filled")
       ? "Check the storm radio after filling (costs one turn)"
+      : id === "study_tide_chart" &&
+          state.room === "keeper_room" &&
+          state.flags.includes("mooring_secured") &&
+          state.flags.includes("read_log") &&
+          !state.flags.includes("tide_chart_read") &&
+          !state.flags.includes("boat_signaled")
+        ? "Study the tide chart before the optional radio check"
       : id === "trim_wick" &&
           state.flags.includes("radio_checked") &&
           state.turn < world.maxTurns - 2
