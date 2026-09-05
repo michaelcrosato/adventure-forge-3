@@ -415,6 +415,11 @@ function capitalizeFirst(value) {
 
 function actionEvent(world, state, actionId, nextState = state) {
   const action = world.actions[actionId];
+  const tideDeadline = () =>
+    `Use turn ${world.maxTurns} as the high-tide cutoff; ${Math.max(
+      0,
+      world.maxTurns - nextState.turn,
+    )} turns remain to reach and light the beacon.`;
   if (
     actionId === "enter_house" &&
     state.inventory.includes("lantern") &&
@@ -541,8 +546,11 @@ function actionEvent(world, state, actionId, nextState = state) {
     !state.flags.includes("radio_checked")
   ) {
     return state.flags.includes("lantern_filled")
-      ? "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it if time allows (costs one turn)."
-      : "Safe window for a stronger rescue: light the beacon before the next high tide. Storm radio is now available; check it before taking oil (costs one turn).";
+      ? `Safe window for a stronger rescue: light the beacon before the next high tide. ${tideDeadline()} Storm radio is now available; check it if time allows (costs one turn).`
+      : `Safe window for a stronger rescue: light the beacon before the next high tide. ${tideDeadline()} Storm radio is now available; check it before taking oil (costs one turn).`;
+  }
+  if (actionId === "study_tide_chart") {
+    return `${action.text ?? action.label} ${tideDeadline()}`;
   }
   if (actionId === "check_tower_radio") {
     if (
@@ -2225,6 +2233,7 @@ export function modelTurnInput(world, view) {
   if (
     typeof modelLastEvent === "string" &&
     modelLastEvent.startsWith("Safe window for a stronger rescue:") &&
+    !/high-tide cutoff/i.test(modelLastEvent) &&
     Array.isArray(view.turn) &&
     Number.isSafeInteger(view.turn[0]) &&
     Number.isSafeInteger(view.turn[1])
