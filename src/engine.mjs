@@ -925,9 +925,12 @@ function endingView(world, state) {
     state.flags.includes("chronometer_wound") && state.flags.includes("tide_waited");
   const precisionChannel = radioConfirmed || chronometerTiming;
   const hornTiming = state.flags.includes("tide_waited");
+  const mixedRadioTiming = radioConfirmed && hornTiming && state.flags.includes("chronometer_wound");
   const detail = radioConfirmed
     ? hornTiming
-      ? "The channel selects the route; the horn adds only its bonus. The tuned channel and horn timing earn the strongest rescue; horn timing is an optional bonus, not required."
+      ? mixedRadioTiming
+        ? "The clear channel carries the horn's call; the boat answers through the rain."
+        : "The channel selects the route; the horn adds only its bonus. The tuned channel and horn timing earn the strongest rescue; horn timing is an optional bonus, not required."
       : "The tuned channel earns the strongest rescue."
     : chronometerTiming
       ? "The tuned beam and chronometer timing earn the strongest rescue; horn timing is required for the chronometer-timed finish."
