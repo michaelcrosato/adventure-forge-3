@@ -548,6 +548,9 @@ function actionEvent(world, state, actionId, nextState = state) {
     !state.inventory.includes("oil") &&
     !state.flags.includes("radio_checked")
   ) {
+    if (state.flags.includes("mooring_return_used")) {
+      return `The tide chart marks the next high tide. ${tideDeadline()} The storm radio is now available.`;
+    }
     return state.flags.includes("lantern_filled")
       ? `Safe window for a stronger rescue: light the beacon before the next high tide. ${tideDeadline()} Storm radio is now available; check it if time allows (costs one turn).`
       : `Safe window for a stronger rescue: light the beacon before the next high tide. ${tideDeadline()} Storm radio is now available; check it before taking oil (costs one turn).`;
