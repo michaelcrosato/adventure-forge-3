@@ -722,6 +722,9 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Spend one turn; horn bonus recorded. Use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("chronometer_wound")) {
+    if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
+      return "Horn timing recorded; beam tuning is complete.";
+    }
     return "Spend one turn; horn bonus recorded. This timing is required for the chronometer-timed finish. Chronometer timing is ready; use the chronometer-timed finish after tuning; light next turn; never wait on the last turn.";
   }
   if (
