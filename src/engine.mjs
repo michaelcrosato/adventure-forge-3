@@ -531,6 +531,9 @@ function actionEvent(world, state, actionId, nextState = state) {
     }
     const hasLog = state.flags.includes("read_log");
     const hasTide = state.flags.includes("tide_chart_read");
+    if (state.flags.includes("mooring_return_used") && hasLog && hasTide) {
+      return "Ring the bell; supply boat holds position. The radio and oil are waiting.";
+    }
     if (hasLog && hasTide) {
       return "Ring the bell; supply boat holds position. Check the storm radio before taking oil.";
     }
@@ -1487,6 +1490,11 @@ export function observation(world, state, event = null) {
           !state.flags.includes("tide_chart_read") &&
           !state.flags.includes("boat_signaled")
         ? "Study the tide chart before the optional radio check"
+      : id === "check_storm_radio" &&
+          state.room === "keeper_room" &&
+          state.flags.includes("mooring_return_used") &&
+          !state.flags.includes("lantern_filled")
+        ? "Check the storm radio (optional; costs one turn)"
       : id === "trim_wick" &&
           state.flags.includes("radio_checked") &&
           state.turn < world.maxTurns - 2
@@ -2220,7 +2228,8 @@ export function modelTurnInput(world, view) {
       view.at?.[0] === "keeper_room" &&
       hasMooringRecovery &&
       typeof view.event === "string" &&
-      view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.")
+      (view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.") ||
+        view.event.startsWith("Ring the bell; supply boat holds position. The radio and oil are waiting."))
     ) {
       modelText = "The boat holds position. The radio, oil, and workshop are ready when you are.";
     }
@@ -2352,7 +2361,8 @@ export function modelTurnInput(world, view) {
     view.at?.[0] === "keeper_room" &&
     hasMooringRecovery &&
     typeof view.event === "string" &&
-    view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.")
+    (view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.") ||
+      view.event.startsWith("Ring the bell; supply boat holds position. The radio and oil are waiting."))
   ) {
     modelLastEvent = "The boat holds position.";
   }
@@ -2536,8 +2546,7 @@ export function modelTurnInput(world, view) {
           : id === "check_storm_radio" &&
               hasMooringRecovery &&
               view.at?.[0] === "keeper_room" &&
-              typeof view.event === "string" &&
-              view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.")
+              !visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact))
             ? "Optional: check the storm radio (costs one turn)"
           : id === "check_storm_radio" &&
               visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
