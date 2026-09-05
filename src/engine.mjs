@@ -774,6 +774,9 @@ function actionEvent(world, state, actionId, nextState = state) {
       return "Clean, steady flame; lens remains unaligned. Align the beacon lens before lighting for an optional beam upgrade, or light the trimmed beacon now.";
     }
     if (state.flags.includes("chronometer_wound")) {
+      if (state.turn >= world.maxTurns - 9) {
+        return "Wick trimmed; beacon remains dark; lens remains unaligned. The remaining beam adjustment is optional before lighting.";
+      }
       return "Clean, steady flame; lens remains unaligned. The remaining beam adjustment is optional before lighting.";
     }
     return "Clean, steady flame; lens remains unaligned. Align the beacon lens before lighting for the strongest rescue, or light the trimmed beacon now.";
@@ -1994,6 +1997,13 @@ export function modelTurnInput(world, view) {
       view.turn[0] >= world.maxTurns - 9
     ) {
       modelText = "Lantern filled; beacon remains dark. Finish available beam work before lighting.";
+    }
+    if (
+      view.at?.[0] === "tower" &&
+      view.event?.startsWith("Wick trimmed; beacon remains dark;") &&
+      visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
+    ) {
+      modelText = "Wick trimmed; beacon remains dark. Align the lens before lighting if desired, or light when ready.";
     }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
     if (modelText.length > PLAYER_TEXT_LENGTH) {
