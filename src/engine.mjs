@@ -697,7 +697,7 @@ function actionEvent(world, state, actionId, nextState = state) {
       return "Hand lantern filled; small flame holds steady; beacon dark. Beam tuning is optional; the confirmed-channel route is the strongest rescue; horn timing is an optional bonus.";
     }
     if (state.flags.includes("chronometer_wound")) {
-      return "Hand lantern filled; flame steady; beacon dark. The chronometer-timed route is the strongest rescue on this timing path; the confirmed-channel route is an equally strong alternative after a radio check; horn timing is required only for the chronometer route.";
+      return "Hand lantern filled; beacon dark. Chronometer-timed route is the strongest rescue on this timing path; confirmed-channel route is an equally strong alternative after a radio check; horn timing is required only for the chronometer route.";
     }
     return "Hand lantern filled; small flame holds steady; beacon dark. Next: light the beacon. Each tuning step is an independent optional upgrade; optional choices: trim the wick or align the beacon lens; either works as an optional upgrade; tune both for rescue's strongest result.";
   }
@@ -1976,7 +1976,7 @@ export function modelTurnInput(world, view) {
       ? confirmedChannelRecapComplete
         ? "Lantern filled; optional beam tuning remains before lighting."
         : visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
-          ? "Lantern filled. Optional tuning: strongest chronometer-timed rescue after the horn wait requires both adjustments. The confirmed-channel route is an equally strong alternative after a radio check, without the required horn. Light directly for the basic finish."
+          ? "Lantern filled. Strongest chronometer-timed rescue after the horn wait requires both adjustments; confirmed-channel route is an equally strong alternative after a radio check, without the required horn. Light directly for the basic finish."
         : "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
     : view.event?.startsWith("You take the dry fuse from the drawer;") &&
         visibleActionIds.has("install_fuse")
