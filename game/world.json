@@ -1464,7 +1464,7 @@
       ]
     },
     "light_sheltered_chronometer_beacon": {
-      "label": "Light the sheltered chronometer rescue beacon",
+      "label": "Light the beacon",
       "when": [
         {
           "has": "lantern"
