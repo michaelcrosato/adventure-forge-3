@@ -2272,6 +2272,20 @@ export function modelTurnInput(world, view) {
   }
   if (
     view.at?.[0] === "keeper_room" &&
+    hasMooringRecovery &&
+    visibleInventory.includes("lantern") &&
+    !visibleInventory.includes("oil") &&
+    !visibleFacts.some((fact) => /Tide chart:/i.test(fact)) &&
+    visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
+    typeof view.event === "string" &&
+    view.event.startsWith(
+      "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired.",
+    )
+  ) {
+    modelText = "The recovered boat holds. The tide chart, signal, oil, and workshop remain; choose what to investigate next.";
+  }
+  if (
+    view.at?.[0] === "keeper_room" &&
     typeof view.event === "string" &&
     (view.event.startsWith("Boat holds.") ||
       view.event.startsWith("Study the tide chart now to unlock the storm radio:")) &&
