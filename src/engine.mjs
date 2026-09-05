@@ -2460,6 +2460,12 @@ export function modelTurnInput(world, view) {
             /^Optional early climb/i.test(label) &&
             /unpowered stair/i.test(label)
           ? "Optional early climb: unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward"
+          : id === "wait_for_horn" &&
+              hasMooringRecovery &&
+              confirmedChannelFullyTuned &&
+              typeof view.event === "string" &&
+              view.event.startsWith("Beam will hold true.")
+            ? "Wait for the horn; listen for the boat"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? typeof view.event === "string"
               ? view.event.startsWith("Channel is clear;")
@@ -2472,7 +2478,10 @@ export function modelTurnInput(world, view) {
               (visibleActionIds.has("trim_wick") || visibleActionIds.has("align_lens")) &&
               Array.isArray(view.turn) &&
               view.turn[0] < world.maxTurns - 2
-            ? "Wait for the horn; tune after the wait, then light once tuning is complete (costs one turn; do not wait on the final turn)"
+            ? hasMooringRecovery &&
+              visibleFacts.some((fact) => /Radio channel clear/i.test(fact))
+              ? "Wait for the horn; tune or light afterward"
+              : "Wait for the horn; tune after the wait, then light once tuning is complete (costs one turn; do not wait on the final turn)"
           : id === "check_storm_radio" &&
               hasMooringRecovery &&
               view.at?.[0] === "keeper_room" &&
