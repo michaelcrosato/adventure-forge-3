@@ -1332,7 +1332,9 @@ export function observation(world, state, event = null) {
           state.flags.includes("radio_checked") &&
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned")
-        ? "Wait for the horn; timing bonus; costs one turn; light next turn"
+        ? event !== null
+          ? "Wait for the horn for an optional timing bonus"
+          : "Wait for the horn; timing bonus; costs one turn; light next turn"
       : id === "wait_for_horn" && state.turn < world.maxTurns - 1
        ? "Wait for the horn; the horn's timing bonus strengthens the rescue; costs one turn; light next turn; do not wait on the final turn"
       : id === "return_for_mooring" && state.flags.includes("tide_chart_read")
@@ -2083,7 +2085,9 @@ export function modelTurnInput(world, view) {
             /unpowered stair/i.test(label)
           ? "Optional early climb: unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
-            ? "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
+            ? typeof view.event === "string"
+              ? "Wait for the horn for an optional timing bonus"
+              : "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
           : id === "wait_for_horn" &&
               view.at?.[0] === "tower" &&
               !confirmedChannelFullyTuned &&
