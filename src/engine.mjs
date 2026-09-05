@@ -2116,6 +2116,22 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = "Wick trimmed; beacon remains dark. Align the lens before lighting if desired, or light when ready.";
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      typeof view.event === "string" &&
+      view.event.startsWith("Door opens. If mooring unsecured")
+    ) {
+      modelText = modelText.replace(
+        /\s*return to secure the mooring before climbing\.\s*$/i,
+        "",
+      );
+    }
+    if (
+      view.at?.[0] === "jetty" &&
+      view.event?.startsWith("You return to the jetty; secure the supply boat's mooring next.")
+    ) {
+      modelText = "The mooring is at hand before re-entering the keeper's house.";
+    }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
     if (modelText.length > PLAYER_TEXT_LENGTH) {
       modelText = modelText.replace(
