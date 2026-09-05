@@ -1420,6 +1420,10 @@ export function modelTurnInput(world, view) {
       modelText =
         "Mooring alone supports a stronger direct rescue; the strongest channel rescue needs the keeper-room signal and radio check. The signal choice appears after entering the keeper's room. Label key: direct lighting is the basic rescue; a secured boat is the stronger safety step; signaling and radio make the strongest channel route. Secured direct lighting is the stronger direct route.";
     }
+    if (view.at?.[0] === "jetty" && view.event?.startsWith("You take the lantern from a hook;")) {
+      modelText =
+        "The keeper's house waits in the rain. Secure the mooring for an optional boat hold, or enter to investigate.";
+    }
     if (
       view.at?.[0] === "workshop" &&
       (visibleActionIds.has("take_fuse") || visibleActionIds.has("install_fuse"))
@@ -1931,6 +1935,9 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("You take the dry fuse from the drawer;") &&
         visibleActionIds.has("install_fuse")
       ? "Fuse ready; install it, then climb the service ladder."
+    : view.at?.[0] === "jetty" &&
+        view.event?.startsWith("You take the lantern from a hook;")
+      ? "Lantern carried; the house and optional mooring are ahead."
       : view.event;
   let modelLastEvent =
     visibleFacts.some((fact) => /Tower current restored/i.test(fact)) &&
