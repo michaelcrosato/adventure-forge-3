@@ -698,6 +698,9 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Horn timing recorded, but one turn remains; beam tuning is incomplete, so waiting now leaves no time to tune and light.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("radio_checked")) {
+    if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
+      return "Horn timing recorded; beam tuning is complete.";
+    }
     return "Spend one turn; horn bonus recorded. Use the confirmed-channel finish after tuning; light next turn; never wait on the last turn.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("chronometer_wound")) {
@@ -1953,7 +1956,8 @@ export function modelTurnInput(world, view) {
     view.at?.[0] === "tower" &&
     hasBeaconFinish &&
     typeof view.event === "string" &&
-    view.event.startsWith("Spend one turn; horn bonus recorded.") &&
+    (view.event.startsWith("Spend one turn; horn bonus recorded.") ||
+      view.event.startsWith("Horn timing recorded; beam tuning is complete.")) &&
     visibleFacts.some((fact) => /channel (?:is )?clear/i.test(fact)) &&
     visibleFacts.some((fact) => /You waited through one boat horn/i.test(fact))
   ) {
