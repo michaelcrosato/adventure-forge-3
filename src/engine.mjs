@@ -447,7 +447,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     const enteredState = { ...state, room: "keeper_room" };
     const canReturnNow = legalActions(world, enteredState).includes("return_for_mooring");
     if (canReturnNow) {
-      return "Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. Return to the jetty to secure it before lighting.";
+      return "Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. Return to the jetty to secure it before lighting if you want the stronger boat route; the basic rescue remains available.";
     }
 
     const hasLog = state.flags.includes("read_log");
@@ -464,7 +464,7 @@ function actionEvent(world, state, actionId, nextState = state) {
       const setup = [];
       if (!hasLog) setup.push("read the wall log");
       if (!hasOil) setup.push("take the oil");
-      return `Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. ${capitalizeFirst(setup.join(" and "))}; then return to the jetty to secure it before lighting.`;
+      return `Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. ${capitalizeFirst(setup.join(" and "))}; then return to the jetty to secure it before lighting if you want the stronger boat route; the basic rescue remains available.`;
     }
     return "Door opens. Mooring unsecured; the recovery return is no longer available, so continue with the basic beacon route.";
   }
@@ -1586,7 +1586,7 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = modelText.replace(
         "Take the lantern if it remains; secure the line before entering if you want the boat to hold while you work.",
-        "Take the lantern first; securing the line becomes available next, before entering if you want the boat to hold while you work.",
+        "Take the lantern first; securing the line becomes available next if you want the stronger boat route; enter the house to investigate first if you prefer.",
       );
     }
     if (confirmedChannelRecapComplete) {
@@ -1677,6 +1677,17 @@ export function modelTurnInput(world, view) {
     const hasRadioConfirmation = visibleFacts.some((fact) => /Radio channel clear/i.test(fact));
     const hasMooringRecovery = visibleFacts.some((fact) => /Mooring recovery used/i.test(fact));
     const hasFilledLantern = visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact));
+    if (
+      view.at?.[0] === "keeper_room" &&
+      visibleActionIds.has("return_for_mooring") &&
+      hasTideClue &&
+      !hasSecureMooringFact
+    ) {
+      modelText = modelText.replace(
+        /Mooring is unsecured; return to secure it before lighting\./i,
+        "Mooring is unsecured; return only if you want the stronger boat route; the basic beacon route remains available.",
+      );
+    }
     if (
       view.at?.[0] === "keeper_room" &&
       view.turn?.[0] === 2 &&
@@ -2358,6 +2369,8 @@ export function modelTurnInput(world, view) {
             ? "Align the lens for a truer beam"
           : id === "return_for_mooring" && /before tide study/i.test(label)
             ? label.replace(/before tide study/i, "before studying the tide chart")
+          : id === "return_for_mooring" && /return to secure the mooring before lighting/i.test(label)
+            ? "Optional stronger route: return to secure the mooring before lighting"
           : isLastTurn &&
             !hornBonusRecorded &&
             id === "light_all_ready_beacon"
