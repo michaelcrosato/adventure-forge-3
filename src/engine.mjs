@@ -470,6 +470,14 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "The boat will hold without signaling; stronger rescue on its own.\nBasic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly.\nStronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. For later reference, keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
   }
   if (actionId === "read_log") {
+    if (
+      state.flags.includes("tide_chart_read") &&
+      state.inventory.includes("lantern") &&
+      !state.flags.includes("fuse_installed") &&
+      !state.flags.includes("lantern_filled")
+    ) {
+      return "The keeper's note is brief: mend the switchboard, fill the hand lantern, and wake the beacon before the tide turns.";
+    }
     if (state.flags.includes("mooring_secured")) {
       return "The wall log confirms the remaining work: replace the fuse, fill the hand lantern, then light the beacon. Trim the wick and align the lens for a stronger beam; the confirmed channel chooses the strongest rescue route.";
     }
@@ -1342,7 +1350,19 @@ export function observation(world, state, event = null) {
       : exitActions.length > 0
         ? exitActions
         : availableActions;
-  const actions = visibleActions.map((id) => [
+  const clueFirstActions =
+    state.room === "keeper_room" &&
+    state.inventory.includes("lantern") &&
+    !state.flags.includes("read_log") &&
+    !state.flags.includes("tide_chart_read") &&
+    visibleActions.includes("read_log") &&
+    visibleActions.includes("study_tide_chart")
+      ? [
+          "study_tide_chart",
+          ...visibleActions.filter((id) => id !== "study_tide_chart"),
+        ]
+      : visibleActions;
+  const actions = clueFirstActions.map((id) => [
     id,
     id === "secure_mooring" &&
         state.room === "jetty" &&
@@ -1638,6 +1658,19 @@ export function modelTurnInput(world, view) {
     const hasRadioConfirmation = visibleFacts.some((fact) => /Radio channel clear/i.test(fact));
     const hasMooringRecovery = visibleFacts.some((fact) => /Mooring recovery used/i.test(fact));
     const hasFilledLantern = visibleFacts.some((fact) => /Hand lantern filled; beacon remains dark/i.test(fact));
+    if (
+      view.at?.[0] === "keeper_room" &&
+      view.turn?.[0] === 2 &&
+      visibleInventory.includes("lantern") &&
+      visibleActionIds.has("read_log") &&
+      visibleActionIds.has("study_tide_chart") &&
+      !hasLogClue &&
+      !hasTideClue &&
+      !hasSecureMooringFact
+    ) {
+      modelText =
+        "Study the tide chart first; then read the wall log; take the oil before climbing; fill the lantern in the tower; return to secure the mooring before climbing.";
+    }
     if (
       view.at?.[0] === "keeper_room" &&
       hasSecureMooringFact &&
