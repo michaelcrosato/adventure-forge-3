@@ -470,7 +470,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     const fuseInstalled = state.flags.includes("fuse_installed");
     const lanternFilled = state.flags.includes("lantern_filled");
     const rescueHierarchy =
-      " Tuning affects the beam; channel confirmation or chronometer timing determines the rescue route.";
+      " tuning affects the beam; channel confirmation or chronometer timing determines the rescue route.";
     if (fuseInstalled && lanternFilled) {
       return `The wall log confirms the required sequence: the fuse is replaced and the lantern filled; light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
     }
@@ -480,7 +480,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     if (lanternFilled) {
       return `The wall log confirms the required sequence: the lantern is already filled; replace the fuse, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
     }
-    return `The wall log sets the required sequence: replace the fuse, fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. A confirmed channel earns the strongest rescue outcome.${rescueHierarchy}`;
+    return `The wall log: required sequence: replace the fuse, fill the hand lantern, then light the beacon. Optional tuning: trim the wick or align the lens before lighting; tune both for the strongest rescue beam. Confirmed channel earns the strongest rescue outcome. Route choice:${rescueHierarchy}`;
   }
   if (actionId === "signal_boat") {
     if (
@@ -1882,7 +1882,7 @@ export function modelTurnInput(world, view) {
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
     : view.event?.startsWith("Mooring is secure; the boat will hold; no return is needed.")
       ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
-    : view.at?.[0] === "keeper_room" && view.event?.startsWith("The wall log ")
+    : view.at?.[0] === "keeper_room" && view.event?.startsWith("The wall log")
       ? "Log key: repair and fill are required; trim and align both for the strongest beam. A confirmed channel or chronometer timing selects the strongest rescue route; horn timing is an optional bonus on a confirmed channel, but required to unlock the chronometer-timed finish."
     : view.event?.startsWith("Workshop beside the keeper's room; current is not restored;")
       ? "Workshop entered; current is not restored. One efficient option: take the fuse this turn; install it next; then climb the service ladder; this order is optional while the fuse remains here; return to the keeper's room is available before taking it."
