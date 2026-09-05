@@ -1413,6 +1413,14 @@ export function observation(world, state, event = null) {
           state.flags.includes("lens_aligned")
       ? "Optional relay check (costs one turn); a sheltered beacon finish is ready"
       : id === "check_tower_radio" &&
+          state.turn >= world.maxTurns - 7 &&
+          state.flags.includes("chronometer_wound") &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned") &&
+          !state.flags.includes("shutters_closed") &&
+          !state.flags.includes("tide_waited")
+      ? "Optional relay check to confirm the channel (costs one turn)"
+      : id === "check_tower_radio" &&
           state.flags.includes("wick_trimmed") &&
           state.flags.includes("lens_aligned") &&
           !state.flags.includes("shutters_closed") &&
