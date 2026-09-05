@@ -836,6 +836,10 @@ function endingView(world, state) {
 
 export function observation(world, state, event = null) {
   const room = world.rooms[state.room];
+  const secureMooringEntryEvent =
+    state.room === "keeper_room" &&
+    typeof event === "string" &&
+    event.startsWith("Mooring is secure; the boat will hold; no return is needed.");
   const availableActions = legalActions(world, state);
   const beaconReachable = hasReachableBeacon(world, state);
   const repairedStairActionReachable =
@@ -981,6 +985,9 @@ export function observation(world, state, event = null) {
       );
     }
   } else if (state.room === "keeper_room") {
+    if (secureMooringEntryEvent) {
+      roomText = roomText.replace("Signal the boat first if needed; ", "");
+    }
     if (state.flags.includes("boat_signaled") && !state.flags.includes("radio_checked")) {
       roomText = roomText.replace(
         "Signal the boat first if needed;",
@@ -1035,7 +1042,7 @@ export function observation(world, state, event = null) {
     if (state.flags.includes("mooring_secured")) {
       roomText = roomText.replace(
         "If unsecured: read the log, take oil, then return to secure the mooring before studying tide.",
-        "Mooring is secure; the boat will hold.",
+        secureMooringEntryEvent ? "" : "Mooring is secure; the boat will hold.",
       );
     } else if (
       state.flags.includes("read_log") ||
