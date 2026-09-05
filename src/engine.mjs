@@ -1703,6 +1703,20 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "keeper_room" &&
+      view.turn?.[0] === 2 &&
+      typeof view.event === "string" &&
+      view.event.startsWith("Door opens. If mooring unsecured") &&
+      visibleInventory.includes("lantern") &&
+      visibleActionIds.has("read_log") &&
+      visibleActionIds.has("study_tide_chart") &&
+      !visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
+      !visibleFacts.some((fact) => /^Tide chart:/i.test(fact))
+    ) {
+      modelText =
+        "The wall log and tide chart are here; oil and the workshop await. When ready, fill the lantern in the tower.";
+    }
+    if (
+      view.at?.[0] === "keeper_room" &&
       hasSecureMooringFact &&
       !hasMooringRecovery &&
       visibleInventory.includes("lantern") &&
