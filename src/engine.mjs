@@ -505,6 +505,13 @@ function actionEvent(world, state, actionId, nextState = state) {
       if (!state.flags.includes("read_log")) pendingClues.push("read the wall log");
       if (!state.flags.includes("tide_chart_read")) pendingClues.push("study the tide chart");
       if (pendingClues.length > 0) {
+        if (
+          state.flags.includes("read_log") &&
+          state.inventory.includes("oil") &&
+          !state.flags.includes("tide_chart_read")
+        ) {
+          return "Ring the bell; supply boat holds position. The tide chart is still unread.";
+        }
         return `Ring the bell; supply boat holds position. ${capitalizeFirst(pendingClues.join(" and "))} before climbing.`;
       }
       return "Ring the bell; supply boat holds position.";
