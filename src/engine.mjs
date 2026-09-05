@@ -771,6 +771,9 @@ function actionEvent(world, state, actionId, nextState = state) {
   }
   if (actionId === "fill_lantern" && state.flags.includes("fuse_installed")) {
     if (state.flags.includes("radio_checked")) {
+      if (state.flags.includes("mooring_return_used")) {
+        return "Hand lantern filled; small flame holds steady; beacon dark. Beam tuning remains optional before lighting.";
+      }
       return "Hand lantern filled; small flame holds steady; beacon dark. Beam tuning is optional; the confirmed-channel route is the strongest rescue; horn timing is an optional bonus.";
     }
     if (state.flags.includes("chronometer_wound")) {
