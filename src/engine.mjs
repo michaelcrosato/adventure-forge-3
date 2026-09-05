@@ -774,6 +774,9 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Fuse installed; tower current restored.";
   }
   if (actionId === "return_for_mooring") {
+    if (state.flags.includes("tide_chart_read") && !state.inventory.includes("oil")) {
+      return "You return to the jetty; the mooring line is at hand.";
+    }
     if (
       state.flags.includes("read_log") &&
       state.inventory.includes("oil") &&
@@ -965,11 +968,13 @@ function endingView(world, state) {
       : "The tuned channel earns the strongest rescue."
     : chronometerTiming
       ? "The tuned beam and chronometer timing earn the strongest rescue; horn timing is required for the chronometer-timed finish."
-    : tuned && preparedChannel
-      ? "The tuned beam and prepared channel earn a stronger rescue."
-      : tuned || preparedChannel
-        ? "Optional preparation earns a stronger rescue."
-        : "The beacon is relit without optional preparation.";
+      : tuned && preparedChannel
+        ? "The tuned beam and prepared channel earn a stronger rescue."
+        : tuned
+          ? "The tuned direct rescue succeeds; the mooring was not secured, so the boat is not guaranteed to hold."
+        : tuned || preparedChannel
+          ? "Optional preparation earns a stronger rescue."
+          : "The beacon is relit without optional preparation.";
 
   return [state.ending, ending.title, `${ending.text} ${detail}`];
 }
@@ -2219,8 +2224,9 @@ export function modelTurnInput(world, view) {
     }
     if (
       view.at?.[0] === "jetty" &&
-      view.event?.startsWith("You return to the jetty;") &&
-      /secure the supply boat's mooring next\./i.test(view.event)
+      typeof view.event === "string" &&
+      (view.event.startsWith("You return to the jetty; the mooring line is at hand.") ||
+        /secure the supply boat's mooring next\./i.test(view.event))
     ) {
       modelText = "The mooring is at hand before re-entering the keeper's house.";
     }
