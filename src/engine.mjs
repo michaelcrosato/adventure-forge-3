@@ -1400,6 +1400,14 @@ export function observation(world, state, event = null) {
         typeof event === "string" &&
         event.startsWith("You take the lantern from a hook;")
       ? "Secure the supply boat's mooring (optional)"
+      : id === "read_log" &&
+          state.room === "keeper_room" &&
+          state.turn === 2 &&
+          state.inventory.includes("lantern") &&
+          visibleActions.includes("study_tide_chart") &&
+          !state.flags.includes("read_log") &&
+          !state.flags.includes("tide_chart_read")
+        ? "Read the wall log after studying the tide chart"
       : id === "go_workshop" &&
         state.room === "keeper_room" &&
         state.flags.includes("radio_checked") &&
