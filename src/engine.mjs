@@ -1422,7 +1422,7 @@ export function modelTurnInput(world, view) {
     }
     if (view.at?.[0] === "jetty" && view.event?.startsWith("You take the lantern from a hook;")) {
       modelText =
-        "The keeper's house waits in the rain. Secure the mooring for an optional boat hold, or enter to investigate.";
+        "The keeper's house waits in the rain. Enter to investigate; the mooring can be secured later if needed.";
     }
     if (
       view.at?.[0] === "workshop" &&
