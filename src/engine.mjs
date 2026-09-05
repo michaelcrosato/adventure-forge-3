@@ -2162,6 +2162,14 @@ export function modelTurnInput(world, view) {
     ) {
       modelText = "The mooring is at hand before re-entering the keeper's house.";
     }
+    if (
+      view.at?.[0] === "keeper_room" &&
+      hasMooringRecovery &&
+      typeof view.event === "string" &&
+      view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.")
+    ) {
+      modelText = "The boat holds position. The radio, oil, and workshop are ready when you are.";
+    }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
     if (modelText.length > PLAYER_TEXT_LENGTH) {
       modelText = modelText.replace(
@@ -2216,6 +2224,14 @@ export function modelTurnInput(world, view) {
     !visibleInventory.includes("oil")
   ) {
     modelLastEvent = "Boat holds. Study the tide chart to unlock the storm radio.";
+  }
+  if (
+    view.at?.[0] === "keeper_room" &&
+    hasMooringRecovery &&
+    typeof view.event === "string" &&
+    view.event.startsWith("Ring the bell; supply boat holds position. Check the storm radio before taking oil.")
+  ) {
+    modelLastEvent = "The boat holds position.";
   }
   if (
     view.at?.[0] === "workshop" &&
