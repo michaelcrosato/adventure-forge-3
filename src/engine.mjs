@@ -697,6 +697,9 @@ function actionEvent(world, state, actionId, nextState = state) {
       return "Hand lantern filled; small flame holds steady; beacon dark. Beam tuning is optional; the confirmed-channel route is the strongest rescue; horn timing is an optional bonus.";
     }
     if (state.flags.includes("chronometer_wound")) {
+      if (state.turn >= world.maxTurns - 10) {
+        return "Hand lantern filled; beacon remains dark. Finish available beam work before lighting.";
+      }
       return "Hand lantern filled; beacon dark. Chronometer-timed route is the strongest rescue on this timing path; confirmed-channel route is an equally strong alternative after a radio check; horn timing is required only for the chronometer route.";
     }
     return "Hand lantern filled; small flame holds steady; beacon dark. Next: light the beacon. Each tuning step is an independent optional upgrade; optional choices: trim the wick or align the beacon lens; either works as an optional upgrade; tune both for rescue's strongest result.";
@@ -1962,6 +1965,15 @@ export function modelTurnInput(world, view) {
       modelText =
         "Finish any trim or alignment before spending a turn to wait; waiting now is legal, but finish tuning before lighting next turn. Sheltered finish is unavailable after radio confirmation; use the confirmed-channel finish.";
     }
+    if (
+      view.at?.[0] === "tower" &&
+      view.event?.startsWith("Hand lantern filled;") &&
+      visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact)) &&
+      Array.isArray(view.turn) &&
+      view.turn[0] >= world.maxTurns - 9
+    ) {
+      modelText = "Lantern filled; beacon remains dark. Finish available beam work before lighting.";
+    }
     modelText = modelText.replace(/; ([A-Z])/g, (_, letter) => `; ${letter.toLowerCase()}`);
     if (modelText.length > PLAYER_TEXT_LENGTH) {
       modelText = modelText.replace(
@@ -1981,6 +1993,10 @@ export function modelTurnInput(world, view) {
     : view.event?.startsWith("Hand lantern filled;")
       ? confirmedChannelRecapComplete
         ? "Lantern filled; optional beam tuning remains before lighting."
+        : visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact)) &&
+            Array.isArray(view.turn) &&
+            view.turn[0] >= world.maxTurns - 9
+          ? "Lantern filled; beacon remains dark; finish available beam work before lighting."
         : visibleFacts.some((fact) => /Tower chronometer wound for precision/i.test(fact))
           ? "Lantern filled. Strongest chronometer-timed rescue after the horn wait requires both adjustments; confirmed-channel route is an equally strong alternative after a radio check, without the required horn. Light directly for the basic finish."
         : "Lantern filled. Tuning is optional: trim the wick or align the lens for a stronger rescue; do both for the strongest."
