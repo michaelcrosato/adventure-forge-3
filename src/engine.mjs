@@ -470,6 +470,9 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "The boat will hold without signaling; stronger rescue on its own.\nBasic rescue: signaling is optional for a basic rescue—skip signaling and light for the boat directly.\nStronger channel route: later, signal the boat from the keeper's room (enter the keeper's room first); radio checks confirm the channel. For later reference, keeper-room menu offers the choice: use \"Signal the secured boat to hold position\" to confirm its hold.";
   }
   if (actionId === "read_log") {
+    if (state.flags.includes("mooring_secured")) {
+      return "The wall log confirms the remaining work: replace the fuse, fill the hand lantern, then light the beacon. Trim the wick and align the lens for a stronger beam; the confirmed channel chooses the strongest rescue route.";
+    }
     const fuseInstalled = state.flags.includes("fuse_installed");
     const lanternFilled = state.flags.includes("lantern_filled");
     const rescueHierarchy =
