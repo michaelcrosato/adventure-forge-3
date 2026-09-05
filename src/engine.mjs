@@ -420,6 +420,9 @@ function actionEvent(world, state, actionId, nextState = state) {
       0,
       world.maxTurns - nextState.turn,
     )} turns remain to reach and light the beacon.`;
+  if (actionId === "take_lantern") {
+    return "You take the lantern from a hook; the keeper's house is ready.";
+  }
   if (
     actionId === "enter_house" &&
     state.inventory.includes("lantern") &&
@@ -447,7 +450,7 @@ function actionEvent(world, state, actionId, nextState = state) {
     const enteredState = { ...state, room: "keeper_room" };
     const canReturnNow = legalActions(world, enteredState).includes("return_for_mooring");
     if (canReturnNow) {
-      return "Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. Return to the jetty to secure it before lighting if you want the stronger boat route; the basic rescue remains available.";
+      return "Mooring unsecured; boat may not hold. Once secured, boat holds. Read the wall log and take the oil; return to the jetty to secure it before lighting if you want the stronger boat route; the basic rescue remains available.";
     }
 
     const hasLog = state.flags.includes("read_log");
@@ -461,10 +464,7 @@ function actionEvent(world, state, actionId, nextState = state) {
       inventory: setupInventory,
     }).includes("return_for_mooring");
     if (canReturnAfterSetup) {
-      const setup = [];
-      if (!hasLog) setup.push("read the wall log");
-      if (!hasOil) setup.push("take the oil");
-      return `Door opens. If mooring unsecured, boat may not hold; once secure, boat holds. ${capitalizeFirst(setup.join(" and "))}; then return to the jetty to secure it before lighting if you want the stronger boat route; the basic rescue remains available.`;
+      return "Mooring unsecured; boat may not hold. Once secured, boat holds. Read the wall log and take the oil; return to the jetty to secure it before lighting if you want the stronger boat route; the basic rescue remains available.";
     }
     return "Door opens. Mooring unsecured; the recovery return is no longer available, so continue with the basic beacon route.";
   }
@@ -1759,7 +1759,9 @@ export function modelTurnInput(world, view) {
       view.at?.[0] === "keeper_room" &&
       view.turn?.[0] === 2 &&
       typeof view.event === "string" &&
-      view.event.startsWith("Door opens. If mooring unsecured") &&
+      (view.event.startsWith("Door opens. If mooring unsecured") ||
+        view.event.startsWith("Door opens. Mooring unsecured") ||
+        view.event.startsWith("Mooring unsecured; boat may not hold")) &&
       visibleInventory.includes("lantern") &&
       visibleActionIds.has("read_log") &&
       visibleActionIds.has("study_tide_chart") &&
@@ -2228,7 +2230,9 @@ export function modelTurnInput(world, view) {
     if (
       view.at?.[0] === "keeper_room" &&
       typeof view.event === "string" &&
-      view.event.startsWith("Door opens. If mooring unsecured")
+      (view.event.startsWith("Door opens. If mooring unsecured") ||
+        view.event.startsWith("Door opens. Mooring unsecured") ||
+        view.event.startsWith("Mooring unsecured; boat may not hold"))
     ) {
       modelText = modelText.replace(
         /\s*return to secure the mooring before climbing\.\s*$/i,
