@@ -1408,6 +1408,14 @@ export function observation(world, state, event = null) {
       ? "Finish beam tuning before waiting; one turn after the wait is too little to tune and light"
       : id === "wait_for_horn" &&
           state.room === "tower" &&
+          state.turn >= world.maxTurns - 7 &&
+          state.turn < world.maxTurns - 2 &&
+          state.flags.includes("chronometer_wound") &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned")
+        ? "Wait for the horn"
+      : id === "wait_for_horn" &&
+          state.room === "tower" &&
           state.turn < world.maxTurns - 2 &&
           state.flags.includes("chronometer_wound") &&
           state.flags.includes("wick_trimmed") &&
