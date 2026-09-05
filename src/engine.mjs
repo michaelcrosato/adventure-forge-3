@@ -918,13 +918,26 @@ export function step(world, state, actionId) {
   let score = state.score;
   let ending = null;
 
+  if (actionId === "secure_mooring") {
+    const recoveredMooring = journal.delete("Mooring recovery used; mooring remains unsecured.");
+    if (recoveredMooring) journal.add("Mooring recovery used; mooring is now secure.");
+  }
+
   for (const effect of action.effects) {
     if (effect.move !== undefined) room = effect.move;
     else if (effect.take !== undefined) inventory.add(effect.take);
     else if (effect.remove !== undefined) inventory.delete(effect.remove);
     else if (effect.flag !== undefined) flags.add(effect.flag);
     else if (effect.unflag !== undefined) flags.delete(effect.unflag);
-    else if (effect.remember !== undefined) journal.add(effect.remember);
+    else if (effect.remember !== undefined) {
+      const remembered =
+        actionId === "return_for_mooring" &&
+        state.flags.includes("tide_chart_read") &&
+        effect.remember === "Mooring recovery used; boat safety restored."
+          ? "Mooring recovery used; mooring remains unsecured."
+          : effect.remember;
+      journal.add(remembered);
+    }
     else if (effect.score !== undefined) score += effect.score;
     else if (effect.end !== undefined) ending = effect.end;
     else throw new Error(`Unknown effect in ${actionId}: ${JSON.stringify(effect)}`);
