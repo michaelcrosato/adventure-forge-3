@@ -2306,7 +2306,9 @@ export function modelTurnInput(world, view) {
           ? "Optional early climb: unpowered stair; lantern filling is the exception; costs a return; repair the switchboard afterward"
           : id === "wait_for_horn" && confirmedChannelFullyTuned
             ? typeof view.event === "string"
-              ? "Wait for the horn for an optional timing bonus"
+              ? view.event.startsWith("Channel is clear;")
+                ? "Wait for the horn; listen for the boat's answer"
+                : "Wait for the horn for an optional timing bonus"
               : "Wait for the horn to improve the rescue; light next turn; the confirmed-channel finish stays the same, with a timing bonus added"
           : id === "wait_for_horn" &&
               view.at?.[0] === "tower" &&
