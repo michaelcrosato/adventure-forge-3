@@ -1381,6 +1381,7 @@ export function modelTurnInput(world, view) {
     view.turn.length === 2 &&
     view.turn[1] - view.turn[0] > 4;
   let modelText = view.text;
+  let modelGoal = world.objective;
   const visibleFacts = Array.isArray(view.facts) ? view.facts : [];
   const visibleInventory = Array.isArray(view.inv) ? view.inv : [];
   const visibleActionIds = new Set((view.actions ?? []).map(([id]) => id));
@@ -1428,6 +1429,7 @@ export function modelTurnInput(world, view) {
     if (view.at?.[0] === "jetty" && view.event?.startsWith("You take the lantern from a hook;")) {
       modelText =
         "The keeper's house waits in the rain. Enter to investigate; the mooring can be secured later if needed.";
+      modelGoal = "Investigate the keeper's house first; the mooring is optional.";
     }
     if (
       view.at?.[0] === "workshop" &&
@@ -2062,7 +2064,7 @@ export function modelTurnInput(world, view) {
     /You waited through one boat horn/i.test(fact),
   );
   return {
-    goal: world.objective,
+    goal: modelGoal,
     t: view.turn,
     at: view.at,
     text: modelText,
