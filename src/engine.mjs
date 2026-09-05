@@ -774,6 +774,13 @@ function actionEvent(world, state, actionId, nextState = state) {
     return "Horn timing recorded, but one turn remains; beam tuning is incomplete, so waiting now leaves no time to tune and light.";
   }
   if (actionId === "wait_for_horn" && state.flags.includes("radio_checked")) {
+    if (
+      state.flags.includes("wick_trimmed") &&
+      state.flags.includes("lens_aligned") &&
+      state.turn >= world.maxTurns - 7
+    ) {
+      return "Horn timing recorded; beam tuning is complete. The confirmed-channel finish gains an optional timing bonus.";
+    }
     if (state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned")) {
       return "Horn timing recorded; beam tuning is complete.";
     }
@@ -1435,6 +1442,14 @@ export function observation(world, state, event = null) {
           !hasBeaconFinisher &&
           !(state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned"))
       ? "Finish beam tuning before waiting; one turn after the wait is too little to tune and light"
+      : id === "wait_for_horn" &&
+          state.room === "tower" &&
+          state.turn >= world.maxTurns - 7 &&
+          state.turn < world.maxTurns - 2 &&
+          state.flags.includes("radio_checked") &&
+          state.flags.includes("wick_trimmed") &&
+          state.flags.includes("lens_aligned")
+        ? "Wait for the horn; confirmed-channel finish gains an optional timing bonus"
       : id === "wait_for_horn" &&
           state.room === "tower" &&
           state.turn >= world.maxTurns - 7 &&
