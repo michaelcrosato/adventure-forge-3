@@ -473,6 +473,13 @@ function actionEvent(world, state, actionId, nextState = state) {
     if (state.flags.includes("mooring_secured")) {
       return "The wall log confirms the remaining work: replace the fuse, fill the hand lantern, then light the beacon. Trim the wick and align the lens for a stronger beam; the confirmed channel chooses the strongest rescue route.";
     }
+    if (
+      state.inventory.includes("lantern") &&
+      !state.flags.includes("fuse_installed") &&
+      !state.flags.includes("lantern_filled")
+    ) {
+      return "The wall log marks repair and filling as required. Tune both beams for a stronger rescue. Confirmed channel or chronometer timing selects the strongest rescue route; horn timing is required only for the chronometer route.";
+    }
     const fuseInstalled = state.flags.includes("fuse_installed");
     const lanternFilled = state.flags.includes("lantern_filled");
     const rescueHierarchy =
