@@ -2277,6 +2277,10 @@ export function modelTurnInput(world, view) {
   }
   const lastEvent = view.event?.startsWith("The boat will hold without signaling;")
     ? "Mooring secure: the boat will hold without signaling; this is already a stronger rescue.\nBasic rescue: skip signaling and light directly.\nStronger channel route: enter the keeper's room, signal the secured boat, then check the radio."
+    : view.event?.startsWith(
+        "Mooring is secure; the boat will hold. The keeper's penciled instruction says:",
+      )
+      ? "Mooring is secure; the boat will hold. Signal it to hold position; a later radio check confirms the channel. Route label: signal the boat for a confirmed channel."
     : view.event?.startsWith("Mooring is secure; the boat will hold; no return is needed.")
       ? "Mooring is secure; the boat will hold. Optional next step: signal the boat from the keeper's room for a confirmed channel."
     : view.at?.[0] === "keeper_room" && view.event?.startsWith("The wall log")
