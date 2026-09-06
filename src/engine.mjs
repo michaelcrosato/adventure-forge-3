@@ -966,7 +966,7 @@ function endingView(world, state) {
   if (state.ending !== "beacon") return [state.ending, ending.title, ending.text];
 
   const tuned = state.flags.includes("wick_trimmed") && state.flags.includes("lens_aligned");
-  const preparedChannel =
+  const securedBoat =
     state.flags.includes("mooring_secured") || state.flags.includes("boat_signaled");
   const radioConfirmed = state.flags.includes("radio_checked");
   const chronometerTiming =
@@ -982,11 +982,11 @@ function endingView(world, state) {
       : "The tuned channel earns the strongest rescue."
     : chronometerTiming
       ? "The tuned beam and chronometer timing earn the strongest rescue; horn timing is required for the chronometer-timed finish."
-      : tuned && preparedChannel
-        ? "The tuned beam and prepared channel earn a stronger rescue."
+      : tuned && securedBoat
+        ? "The tuned beam and secured boat earn a stronger rescue."
         : tuned
           ? "The tuned direct rescue succeeds; the mooring was not secured, so the boat is not guaranteed to hold."
-        : tuned || preparedChannel
+        : tuned || securedBoat
           ? "Optional preparation earns a stronger rescue."
           : "The beacon is relit without optional preparation.";
 
