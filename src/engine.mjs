@@ -431,7 +431,7 @@ function actionEvent(world, state, actionId, nextState = state) {
   ) {
     return state.flags.includes("boat_signaled")
       ? "Mooring is secure; the boat will hold."
-      : "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired. The signal only holds position, and the later radio check confirms the channel.";
+      : "Mooring is secure; the boat will hold. The keeper's penciled instruction says: signal the boat to hold position. The signal only holds position; a later radio check confirms the channel. It marks the old shorthand \"signal the boat for a confirmed channel\" as incomplete.";
   }
   if (
     actionId === "enter_house" &&
@@ -2347,10 +2347,10 @@ export function modelTurnInput(world, view) {
     !visibleInventory.includes("oil") &&
     !visibleFacts.some((fact) => /Tide chart:/i.test(fact)) &&
     visibleFacts.some((fact) => /^Log: replace the fuse/i.test(fact)) &&
-    typeof view.event === "string" &&
-    view.event.startsWith(
-      "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired.",
-    )
+      typeof view.event === "string" &&
+      view.event.startsWith(
+        "Mooring is secure; the boat will hold. The keeper's penciled instruction says:",
+      )
   ) {
     modelText = "The recovered boat holds. The tide chart, signal, oil, and workshop remain; choose what to investigate next.";
   }
@@ -2363,7 +2363,7 @@ export function modelTurnInput(world, view) {
     !visibleFacts.some((fact) => /Boat signaled to hold/i.test(fact)) &&
     typeof view.event === "string" &&
     view.event.startsWith(
-      "Mooring is secure; the boat will hold. From the keeper's room, signal the boat for a confirmed channel if desired.",
+      "Mooring is secure; the boat will hold. The keeper's penciled instruction says:",
     )
   ) {
     modelText = "The recovered boat holds. The tide window is recorded; signal the boat, take the oil, or enter the workshop when ready.";
