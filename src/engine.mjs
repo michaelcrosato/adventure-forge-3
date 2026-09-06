@@ -431,7 +431,7 @@ function actionEvent(world, state, actionId, nextState = state) {
   ) {
     return state.flags.includes("boat_signaled")
       ? "Mooring is secure; the boat will hold."
-      : "Mooring is secure; the boat will hold. The keeper's penciled instruction says: signal the boat to hold position; the signal only holds position, and a later radio check confirms the channel (the margin labels old shorthand \"signal the boat for a confirmed channel\" as incomplete). Only that old line is crossed out.";
+      : "Mooring is secure; the boat will hold. The keeper's penciled instruction says: signal the boat to hold position; the signal only holds position; a later radio check confirms the channel (the margin labels old shorthand \"signal the boat for a confirmed channel\" as incomplete).";
   }
   if (
     actionId === "enter_house" &&
