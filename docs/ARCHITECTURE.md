@@ -83,6 +83,8 @@ sequenceDiagram
 
 The player never controls the state machine. It does not report the action trace or outcome. This is stronger and smaller than asking an MCP client to play and then trusting its final report.
 
+Generated task and playtest records are local workflow outputs: `NEXT_TASK.md`, `artifacts/summary.json`, and `artifacts/runs/*.json` are ignored so Git contains the engine, game data, tests, and documentation rather than disposable run state.
+
 ## Coding cycle
 
 ```mermaid

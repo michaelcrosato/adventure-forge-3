@@ -6,6 +6,8 @@ A small reference implementation of this path:
 
 There is no MCP server, HTTP game service, tool catalog, JSON-RPC transport, or model-visible session handle. The playtest supervisor imports the deterministic engine and owns game state in-process.
 
+Source repository: [github.com/michaelcrosato/adventure-forge-3](https://github.com/michaelcrosato/adventure-forge-3)
+
 ## Why this version does not use MCP
 
 The automated lane is closed:
@@ -72,9 +74,9 @@ The included winning route produces these JSON byte measurements:
 | Engine actions | 9 |
 | Action-choice calls | 9 |
 | Review calls | 1 |
-| Mean compact turn input | 785 bytes |
+| Mean compact turn input | 605 bytes |
 | Mean action output | 7 bytes |
-| Review input | 2,096 bytes |
+| Review input | 2,119 bytes |
 
 These values measure JSON bytes, not tokenizer-specific tokens. Deterministic playtests do not require credentials or network access.
 
@@ -151,15 +153,16 @@ One cycle does this:
 
 The loop does not commit, reset, push, merge, or delete Git state.
 
+Generated `NEXT_TASK.md`, `artifacts/summary.json`, and `artifacts/runs/*.json` files are local loop outputs and are intentionally ignored. Keep product changes, tests, and documentation in Git.
+
 ## Validation
 
-The included repository was checked with:
+The current repository baseline was checked with:
 
-- 15 Node tests: all pass.
-- One deterministic scripted winning route: `beacon`.
-- One six-run mechanical wave through the direct supervisor.
-- One disposable full cycle: two corroborating fixture reports → one task → coding-agent fixture → changed product hash → tests → verified winning route.
-- One hostile fixture check: a coding agent that edited `src/playtest.mjs` was rejected by the protected-tree gate.
+- `npm test`: 738 Node tests pass.
+- `npm run measure`: 0 server processes, 0 protocol tools, and 9 engine actions on the winning route.
+- `npm run playtest:smoke`: one deterministic scripted run reaches `beacon`.
+- A 48-run direct reviewed wave: 48 `beacon` outcomes and 0 failures.
 
 ## Repository map
 
